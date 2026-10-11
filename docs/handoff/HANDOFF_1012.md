@@ -16,6 +16,8 @@
 
 [`notebooks/R2H_1012_research_synthesis.ipynb`](../../notebooks/R2H_1012_research_synthesis.ipynb) — EDA·Track A·Track B 결과 해석과 그림 10장 (SA_ETF 공개 결과표를 SHA·sha256 로 고정해 읽음), R2H 계약 합성 시연.
 
+T11 (SVR–GARCH CUSUM × ETF 20종, 70/30 · 이동창 20/30/60/120/252 · Track A·EDA 대비): [`notebooks/R2H_T11_svr_garch_cusum_etf.ipynb`](../../notebooks/R2H_T11_svr_garch_cusum_etf.ipynb) · [`research/svr_garch_cusum_etf/README.md`](../../research/svr_garch_cusum_etf/README.md) — W04 판단 근거.
+
 ## 재사용 방법 (요약)
 
 - 새 탐지기: `Detector` 프로토콜 구현 → `build_signal_frame(...)` 로 출력 → `match_alarms` / `event_metrics`.

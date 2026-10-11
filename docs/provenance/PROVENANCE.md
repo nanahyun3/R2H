@@ -17,6 +17,7 @@
 
 | R2H 파일 | 원본 파일 (sha256) | 변경 |
 |---|---|---|
+| `src/r2h/paper2020/{__init__,cusum,volatility_proxy,svr_garch}.py` | Track B `research/track_b_paper2020/src/paper2020/` 같은 이름 4개 (sha256 앞 16자 `9c1a26d4…` · `bb686701…` · `14437996…` · `7ac250f2…`) | **없음 — 바이트 동일** (T11 ETF 적용용, `tests/unit/test_svrgarch_etf.py` 가 해시 검사) |
 | `src/r2h/detection/paper2020_cusum.py` | Track B `research/track_b_paper2020/src/paper2020/cusum.py` (`bb686701639743abb1e6e36f31ae1223bc04b03ad419db1f48bc910374aac0fd`) | **없음 — 바이트 동일** (ruff format·일부 lint 제외 설정) |
 | `src/r2h/features/correlation.py` | Track A `src/r2h/research_a/rolling_correlation.py` (`2ad8df279d5bd4ef4031f620cf599076c56e1b9ee4474a3f2dbf6660cc6b20d6`, = `a3f9e9b` 의 blob) | `rolling_corr`·`RegimeRule`·`sign_regimes`·`null_band` 만. 빈 창 경고 회피용 마스크 합, `confirm_lag_days` 직접 계산, 입력 검사 추가 — 수치 동일 (PARITY.md) |
 | `src/r2h/evaluation/null_tests.py` | Track A `src/r2h/research_a/event_matching.py` (`f1dda08a6f7ab5d3ddfdc021e2a15ac618de8dfe8e8e4d732e438cf12b80f5e5`) | `proximity_count`·`circular_shift_test_fast`·`bh_qvalues` — 계산식 변경 없음, 서식만 |

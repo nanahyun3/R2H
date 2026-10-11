@@ -5,7 +5,7 @@
   <a href="https://github.com/nanahyun3/R2H/actions/workflows/ci.yml?query=branch%3A1012"><img alt="CI" src="https://github.com/nanahyun3/R2H/actions/workflows/ci.yml/badge.svg?branch=1012"></a>
   <img alt="Python" src="https://img.shields.io/badge/python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white">
   <img alt="uv" src="https://img.shields.io/badge/env-uv%20%2B%20uv.lock-DE5FE9">
-  <img alt="tests" src="https://img.shields.io/badge/tests-83%20passed-2ea44f">
+  <img alt="tests" src="https://img.shields.io/badge/tests-98%20passed-2ea44f">
   <img alt="ruff" src="https://img.shields.io/badge/lint-ruff-D7FF64">
   <img alt="mypy" src="https://img.shields.io/badge/types-mypy-1F5082">
   <img alt="contract" src="https://img.shields.io/badge/contract-v0.1--proposed-orange">
@@ -21,7 +21,7 @@
 
 | 📓 노트북 | 📊 결과 | 📐 계약·결정 | 🔎 출처 |
 |---|---|---|---|
-| [**연구 종합 노트북**](notebooks/R2H_1012_research_synthesis.ipynb) · [nbviewer](https://nbviewer.org/github/nanahyun3/R2H/blob/1012/notebooks/R2H_1012_research_synthesis.ipynb) | [재현 상태표](research/REPRODUCTION_STATUS.md) · [Track A](research/cross_asset_track_a.md) · [Track B](research/svr_garch_cusum_track_b.md) · [EDA](research/etf_domain_eda.md) | [계약 v0.1](docs/architecture/CONTRACT_v0.1.md) · [열린 결정](docs/decisions/OPEN_DECISIONS.md) · [인계·일정](docs/handoff/HANDOFF_1012.md) | [코드 출처](docs/provenance/PROVENANCE.md) · [원본 parity](docs/provenance/PARITY.md) · [파일 manifest](research/SOURCE_TO_TARGET_MANIFEST.csv) |
+| [**연구 종합 노트북**](notebooks/R2H_1012_research_synthesis.ipynb) · [nbviewer](https://nbviewer.org/github/nanahyun3/R2H/blob/1012/notebooks/R2H_1012_research_synthesis.ipynb)<br>[**T11 SVR–GARCH CUSUM × ETF 20종**](notebooks/R2H_T11_svr_garch_cusum_etf.ipynb) · [nbviewer](https://nbviewer.org/github/nanahyun3/R2H/blob/1012/notebooks/R2H_T11_svr_garch_cusum_etf.ipynb) | [재현 상태표](research/REPRODUCTION_STATUS.md) · [Track A](research/cross_asset_track_a.md) · [Track B](research/svr_garch_cusum_track_b.md) · [EDA](research/etf_domain_eda.md) · [**T11**](research/svr_garch_cusum_etf/README.md) | [계약 v0.1](docs/architecture/CONTRACT_v0.1.md) · [열린 결정](docs/decisions/OPEN_DECISIONS.md) · [인계·일정](docs/handoff/HANDOFF_1012.md) | [코드 출처](docs/provenance/PROVENANCE.md) · [원본 parity](docs/provenance/PARITY.md) · [파일 manifest](research/SOURCE_TO_TARGET_MANIFEST.csv) |
 
 ---
 
@@ -32,6 +32,7 @@
 | **ETF Domain EDA** (20종) | ETF 들은 어떤 구조로 같이·따로 움직이나 | ✅ 결과표 309개 바이트 동일 | **CLOSED** | ✅ 유니버스·중복 노출·변동성 정규화 규칙으로 사용 |
 | **Track A — 상관 전환** | KOSPI200 과의 상관 부호 전환이 급등을 알려 주나 | ✅ 결과표 43종 독립 2회 동일 | **부정적 결과** — 같은 날 기계적 중복을 빼면 우연 수준 | ❌ 정답·조기경보로는 사용 불가 · ⚠️ 국면 기술용으로만 |
 | **Track B — SVR–GARCH CUSUM** ([Lee·Kim·Lee 2020](https://doi.org/10.3390/e22050578)) | 원 논문 결과가 재현되나 | ✅ 계산은 결정적으로 재현 (MC 400회 일치) | **METHOD_FIDELITY_UNRESOLVED** — 원문 수치 미재현 | ⚠️ 사후 검정(`posthoc`)으로만 · 온라인 경보 아님 |
+| **T11 — SVR–GARCH CUSUM × ETF 20종** | 이 탐지기를 ETF 에 70/30 으로 적용하면 무엇을 잡고, Track A·EDA 경계와 맞나 | ✅ 오토런 2회 결과표 바이트 동일 · 노트북 2회 동일 | 정책 A 경보율 **iid 기준 미만** (w=60 0.39 vs 1.71/년) · 사건 근접 **우연 수준** (1차 가족 34 검정, 최소 q 0.57) | ❌ 급등 탐지기로 사용 불가 · ⚠️ 변동성 국면 맥락으로만 (기준선) |
 | **R2H 1012 기준선** | 2조·4조가 같은 입력·출력·평가로 비교할 수 있나 | ✅ clean-room · 하한 의존성 · CI | 계약 **v0.1 제안** | ✅ CUSUM·BOCPD 를 같은 표로 교환·채점 |
 
 <p align="center">
@@ -46,9 +47,10 @@
 | 영역 | 사용 |
 |---|---|
 | 언어·환경 | Python 3.11+ (검증 3.12.3) · [uv](https://docs.astral.sh/uv/) + `uv.lock` · hatchling |
-| 계산 | numpy ≥ 2.0 · pandas ≥ 2.2 · scipy ≥ 1.13 (하한 버전으로도 CI 통과) |
+| 계산 | numpy ≥ 2.0 · pandas ≥ 2.2 · scipy ≥ 1.13 (하한 버전으로도 CI 통과) · scikit-learn (ε-SVR, `--extra research`) |
+| 데이터 수집 | FinanceDataReader (`--extra research`, 원시 시세는 저장소 밖 — 종가 해시로 버전 검증) |
 | 품질 | pytest (unit · integration · property · leakage) · [hypothesis](https://hypothesis.readthedocs.io/) (결정적 프로필) · ruff · mypy |
-| 시각화·노트북 | matplotlib · nbclient / ipykernel (`--extra notebook`) |
+| 시각화·노트북 | matplotlib · nbclient / ipykernel (`--extra notebook`) · **한글 폰트 나눔고딕** (+ 그리스 문자 DejaVu 대체) · 노트북 규칙 = 모든 코드 줄 한국어 주석 (테스트로 강제) |
 | CI | GitHub Actions — lint → type → test → 합성 예제 2회 바이트 비교 · 최저 의존성 job |
 | 연구 원본 | [Siegfriex/SA_ETF](https://github.com/Siegfriex/SA_ETF) — EDA `main` · [Track A 브랜치](https://github.com/Siegfriex/SA_ETF/tree/codex/r2h-track-a) · [Track B 브랜치](https://github.com/Siegfriex/SA_ETF/tree/research/track-b-paper2020/research/track_b_paper2020) |
 | 원 논문 | Lee, S., Kim, C. K., & Lee, S. (2020). *Hybrid CUSUM Change Point Test for Time Series with Time-Varying Volatilities Based on Support Vector Regression.* **Entropy** 22(5), 578 — [doi:10.3390/e22050578](https://doi.org/10.3390/e22050578) · [MDPI 원문 (open access)](https://www.mdpi.com/1099-4300/22/5/578) |
@@ -236,6 +238,89 @@ flowchart LR
 - 같은 정답·매칭 규칙에서 탐지기별 **탐지율–오탐 곡선**을 그리고, `recall_at_fp_cap` 으로 오탐 상한 안의 설정을 고른다. 2조 CUSUM·4조 BOCPD 도 같은 출력 계약만 지키면 이 그림에 같이 올라간다.
 - 실제 상한값·지연 허용·cooldown 은 미결정(D-02)이다.
 
+### 5.5 T11 — SVR–GARCH CUSUM 을 ETF 20종에 적용 (70/30 · 이동창 20/30/60/120/252 · Track A·EDA 대비)
+
+설계·데이터 카드·수식·결과표: [`research/svr_garch_cusum_etf/README.md`](research/svr_garch_cusum_etf/README.md) · 노트북: [`R2H_T11_svr_garch_cusum_etf.ipynb`](notebooks/R2H_T11_svr_garch_cusum_etf.ipynb) (그림 16장, 그림마다 해석)
+
+```mermaid
+flowchart LR
+  D["ETF 20종 종가<br>(FDR, 종가 해시 검증)"] --> S["시간순 분할<br>적합 70% (학습 49 / 검증 21) · 검정 30%"]
+  S --> F["ε-SVR grid 27점<br>ĝ(y²_t-1, σ̃²_t-1)"]
+  F --> A["정책 A 잔차<br>(관측 proxy)"]
+  F --> B["정책 B 잔차<br>(재귀, 검정만)"]
+  S --> Z["기준선 잔차<br>r / σ60"]
+  A & B & Z --> P["사후 CUSUM<br>검정 구간"]
+  A & Z --> W["이동창 CUSUM<br>w = 20·30·60·120·252"]
+  W --> C["부트스트랩 임계값 c_w<br>· 경보 에피소드"]
+  C --> O["Track A·EDA 사건 근접<br>P1 · P4 · 공통충격 · C3 · 고변동<br>원형 이동 p · BH"]
+  C --> G["흐름 겹침 · EDA 구간 표시"]
+```
+
+<p align="center"><img src="docs/figures/svrgarch/01_split_timeline.png" width="100%" alt="70/30 split"></p>
+<p align="center"><img src="docs/figures/svrgarch/02_anatomy_069500.png" width="100%" alt="069500 anatomy"></p>
+
+- **해부 (069500)**: 정책 A 의 σ̂² 는 직전 5일 proxy 를 거의 그대로 따라가 변동성 상승을 바로 흡수한다. 검정 구간 사후 CUSUM 은 **정책 A T=1.403 (기각) · B 2.026 (기각) · 기준선 0.695 (비기각)**.
+
+<p align="center"><img src="docs/figures/svrgarch/03_fullsample_tests.png" width="100%" alt="full-sample tests"></p>
+
+- **사후 검정 20종**: 기각 정책 A 2/20 · 정책 B 9/20 · 기준선 1/20. 원문에 없는 테스트 분산 입력 규칙 하나로 기각 수가 4.5배 달라진다. k̂ 는 대부분 2026-01 (알려진 고변동 국면 시작).
+
+<p align="center"><img src="docs/figures/svrgarch/04_rolling_heatmaps.png" width="100%" alt="rolling heatmaps"></p>
+<p align="center"><img src="docs/figures/svrgarch/05_window_vs_null.png" width="100%" alt="window vs null"></p>
+
+- **창 20·30·60·120·252**: 기준선은 모든 창에서 경보가 iid 기준값보다 많다 (w=60 연 3.82 vs 1.70, 20종 모두) — 2020·2026 변동성 국면을 잡는다. **정책 A 는 모든 창에서 적다** (0.39 vs 1.71, 초과 0/20) — 이 설정의 CUSUM 은 사실상 검정력이 없다. 기준값은 iid 재표집이라 변동성 군집 아래의 오탐 보정은 아니다. 짧은 창의 유한표본 임계값(1.14–1.18)은 점근 1.3397 보다 훨씬 낮다.
+
+<p align="center"><img src="docs/figures/svrgarch/06a_eda_cumret_intervals.png" width="100%" alt="EDA intervals"></p>
+
+<table><tr>
+<td><img src="docs/figures/svrgarch/06b_eda_detail_148070.png" alt="148070"></td>
+<td><img src="docs/figures/svrgarch/06b_eda_detail_261220.png" alt="261220"></td>
+</tr><tr>
+<td><img src="docs/figures/svrgarch/06b_eda_detail_069500.png" alt="069500"></td>
+<td><img src="docs/figures/svrgarch/06b_eda_detail_132030.png" alt="132030"></td>
+</tr></table>
+
+- **EDA 그래프 위 구간**: w=60 경보 에피소드 기준선 577개 · 정책 A 59개. 국고채10년(148070)은 정책 A 경보가 w=60·120 에서 0건. 경보는 사건(P1·P4·공통충격) **당일·직후**에 시작한다 — 선행이 아니라 반응.
+
+<p align="center"><img src="docs/figures/svrgarch/07_consistency_heatmap.png" width="100%" alt="consistency"></p>
+<p align="center"><img src="docs/figures/svrgarch/07b_precision_coverage.png" width="100%" alt="precision coverage"></p>
+
+- **정합성**: 23,442 검정의 p<0.05 비율 5.9% (우연 수준에 가까움, 대부분 in-sample). 사전 등록 1차 가족 **34 검정**(KOSPI200 그룹 1건, 검정 불가 행 p=1) 중 p<0.05 2개, **최소 q=0.57**. P1 사건일 잔차를 빼면 기준선 8.9%→4.6%, 정책 A 6.6%→2.6% — 남는 겹침은 같은 날 큰 수익률과 2026 기저율 때문 (Track A 와 같은 결론). 독립 검토로 1차 가족 크기·검정 구간 경계(분할일+w−1)를 정정한 뒤의 값이다.
+
+<p align="center"><img src="docs/figures/svrgarch/08a_flow_combinations.png" width="100%" alt="flow combinations"></p>
+<p align="center"><img src="docs/figures/svrgarch/08b_representative_episode.png" width="100%" alt="representative episode"></p>
+
+- **유의 경보일 때 겹치는 흐름**: 정책 A 경보 59개 중 P1 59% · P4 53% · 공통충격 46% · 고변동 49%. 대표 에피소드(사전 규칙으로 자동 선택) 261220 WTI원유 2024-08-29: 2024-08 세계 급락 직후의 변동성 군집 속에서 켜진 경보 — 새 국면의 조기경보가 아니라 진행 중인 충격에 대한 반응.
+
+<p align="center"><img src="docs/figures/svrgarch/09_bond_vs_kospi.png" width="100%" alt="bonds vs KOSPI"></p>
+<p align="center"><img src="docs/figures/svrgarch/10_yearly_blocks.png" width="100%" alt="yearly blocks"></p>
+
+- **채권↔KOSPI · 연도 블록**: CUSUM-of-squares(변동성 구조) · C3(상관 부호 국면) · P4(누적수익률 절대값 경계)는 서로 다른 것을 재며 우연 이상 겹치지 않는다 (148070 기준선 vs C3 p=0.23; 153130 의 정책 A 근접은 in-sample 적합 구간에서만). 기준선 연도 블록은 2020 85% · 2026 55% 기각으로 EDA 고변동 해와 정확히 맞는다.
+
+<details>
+<summary><b>그림을 그대로 재현하는 코드 셀 (예: 이동창 경보 지도의 한 칸)</b></summary>
+
+```python
+# 결과표만으로 재현 (원시 시세 불필요): 이동창 통계량과 ETF 별 부트스트랩 임계값
+import pandas as pd
+
+# 이동창 통계량 (날짜 × "ticker|잔차|창")
+roll = pd.read_csv("research/svr_garch_cusum_etf/results/rolling_stats.csv.gz", index_col=0, parse_dates=True)
+# 임계값 표
+crit = pd.read_csv("research/svr_garch_cusum_etf/results/critical_values.csv", dtype={"ticker": str})
+# 069500 · 정책 A · w=60 의 임계값
+c = crit.query("ticker == '069500' and rtype == 'svrA' and window == 60")["c_bootstrap"].iloc[0]
+# T/c ≥ 1 인 날 = 경보일
+alarm_days = roll.index[roll["069500|svrA|60"] / c >= 1]
+# 경보일 수와 처음 몇 날
+print(len(alarm_days), list(alarm_days[:5].date))
+```
+
+노트북의 모든 코드 셀이 같은 결과표(`research/svr_garch_cusum_etf/results/`, 정본)와 로컬 상태(`outputs/cache/t11_state.npz`, 원시 시세가 필요한 해부·EDA 그림용)에서 그림을 만든다.
+</details>
+
+**적용 가능성 판정** — ❌ 정책 A SVR–GARCH CUSUM 은 급등 탐지기로 쓸 수 없다 · ⚠️ 정책 B·기준선은 원문 미명시 선택에 결과가 좌우되므로 병기만 · ⚠️ 기준선 변동성 CUSUM 은 방향 없는 국면 맥락으로만 · ❌ Track A 경계(C3·P4)와 정합성 없음 → W04 다음 단계는 **평균·방향 CUSUM** 을 승인된 정답(D-01)으로 평가.
+
 ---
 
 ## Quickstart
@@ -248,6 +333,9 @@ uv run pytest                             # unit · integration · property · l
 uv run ruff check . && uv run ruff format --check . && uv run mypy
 uv run python examples/synthetic_demo.py --out outputs/synthetic_demo.json
 uv sync --extra dev --extra notebook && uv run jupyter execute notebooks/R2H_1012_research_synthesis.ipynb   # 노트북 (첫 실행만 네트워크)
+uv sync --extra dev --extra notebook --extra research                       # T11 (SVR–GARCH × ETF)
+uv run python scripts/run_svr_garch_cusum_etf.py                            # 오토런 (원시 시세: ETF_RAW_DIR 또는 FDR 자동, 종가 해시 검증)
+uv run jupyter execute notebooks/R2H_T11_svr_garch_cusum_etf.ipynb
 ```
 
 uv 없이: `python3 -m venv .venv && . .venv/bin/activate && pip install -e ".[dev]" && pytest` (버전은 lock 이 아니라 `pyproject.toml` 범위로 풀린다).
@@ -286,10 +374,12 @@ print(event_metrics(alarms, events, ticker_years=len(calendar) / 252))
 | [`src/r2h/detection/`](src/r2h/detection) | 출력 계약 · `Detector` · 참조 탐지기 · 사후 CUSUM-of-squares | REFERENCE / posthoc |
 | [`src/r2h/evaluation/`](src/r2h/evaluation) | 정답 계약 · 매칭 · 지표 · 분할(walk-forward) · 귀무검정 | 제안 v0.1 |
 | [`src/r2h/backtest/`](src/r2h/backtest) | 체결 시점 규칙 · 비용 함수 | **SCHEMA_ONLY** |
-| [`notebooks/`](notebooks) | [연구 종합 노트북](notebooks/R2H_1012_research_synthesis.ipynb) | 실행 결과 포함 |
+| [`notebooks/`](notebooks) | [연구 종합 노트북](notebooks/R2H_1012_research_synthesis.ipynb) · [T11 SVR–GARCH × ETF](notebooks/R2H_T11_svr_garch_cusum_etf.ipynb) | 실행 결과 포함 · 모든 코드 줄 한국어 주석 |
+| [`src/r2h/paper2020/`](src/r2h/paper2020) · [`src/r2h/svrgarch_etf/`](src/r2h/svrgarch_etf) | Track B 원본 모듈(바이트 동일) · T11 오토런 | sensitivity 적용 |
+| [`scripts/`](scripts) | [T11 오토런](scripts/run_svr_garch_cusum_etf.py) | |
 | [`research/`](research) | 감사된 연구 요약 · 재현 상태 · 출처 manifest · [후속 제안](research/proposals/README.md) | |
 | [`docs/`](docs) | [계약](docs/architecture/CONTRACT_v0.1.md) · [결정](docs/decisions/OPEN_DECISIONS.md) · [인계](docs/handoff/HANDOFF_1012.md) · [출처](docs/provenance/PROVENANCE.md) · [그림](docs/figures) | |
-| [`tests/`](tests) | unit · integration · property · leakage (83) | CI |
+| [`tests/`](tests) | unit · integration · property · leakage · 노트북 규칙 (98) | CI |
 
 ## 규칙
 

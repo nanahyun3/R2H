@@ -9,4 +9,5 @@
 | `cross_asset_track_a.md` | Track A — KOSPI200 대비 상관 전환과 가격 사건 (부정적 결과) |
 | `svr_garch_cusum_track_b.md` | Track B — Lee·Kim·Lee (2020) 재현 감사 (METHOD_FIDELITY_UNRESOLVED) |
 | `SOURCE_TO_TARGET_MANIFEST.csv` | 이식 파일 단위 출처·해시·테스트 |
+| `svr_garch_cusum_etf/` | **T11** — SVR–GARCH CUSUM 을 ETF 20종에 적용 (설계·데이터 카드·결과표·재현) |
 | `proposals/` | 구현되지 않은 후속 연구 제안 (성과 없음) |
