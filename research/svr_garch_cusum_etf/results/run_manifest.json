@@ -1,0 +1,79 @@
+{
+ "study": "T11 SVR-GARCH CUSUM on 20 ETFs",
+ "data_version": "5f20e3e0073b521a",
+ "data_source": "local raw dir (ETF_RAW_DIR)",
+ "close_hash_ok": {
+  "069500": true,
+  "102110": true,
+  "229200": true,
+  "122630": true,
+  "114800": true,
+  "091230": true,
+  "091170": true,
+  "091180": true,
+  "305540": true,
+  "143860": true,
+  "117680": true,
+  "161510": true,
+  "219480": true,
+  "133690": true,
+  "192090": true,
+  "148070": true,
+  "153130": true,
+  "132030": true,
+  "261220": true,
+  "261240": true
+ },
+ "n_returns": 1902,
+ "first": "2019-01-03",
+ "last": "2026-10-02",
+ "protocol": {
+  "fit_fraction": 0.7,
+  "train_fraction_of_fit": 0.7,
+  "grid_points": 27,
+  "windows": [
+   20,
+   30,
+   60,
+   120,
+   252
+  ],
+  "episode_gap": 5,
+  "lags": [
+   5,
+   10,
+   20
+  ],
+  "B": 2000,
+  "seed": 20261012,
+  "primary": {
+   "rtype": "svrA",
+   "mask": "none",
+   "window": 60,
+   "zone": "test",
+   "families": [
+    "P1",
+    "COMMON"
+   ],
+   "L": 10
+  }
+ },
+ "environment": {
+  "python": "3.12.3",
+  "numpy": "2.5.4",
+  "pandas": "3.0.6",
+  "scikit_learn": "1.9.1"
+ },
+ "outputs": {
+  "alarm_episodes.csv": "e65284e94bf9cf272a0dfea990c5f5e052b170a90d2c2fcd6293a1c4803687ff",
+  "critical_values.csv": "fe596a18d876ff0976f4b3fce5bdc9218cd99e0da21b294d5b5e870144065be6",
+  "episode_flows.csv": "d12887bf01b13f2eb45ceea1f9956066c90b957e95415ebb6bd56f9aa119c76c",
+  "fit_summary.csv": "5dccdb12accbe0ca1a02edf3dd51d2831d065b78e7b5a010ffadb17fc0b5ca23",
+  "fullsample_tests.csv": "9810d97ad2c80f008ee638952cfd1a230a35cf732942211efae72ff9e3cba771",
+  "null_alarm_rate.csv": "1690b4b2cd5baeaa2cff5141229852581ac7bb96130ac7415a22305f07c48d3c",
+  "overlap_metrics.csv": "1e6a9fc0109aa77f6326c8cc7b131cb8dce537e12cb824ff9fc9881567e4a9f3",
+  "rolling_stats.csv.gz": "3815e8fbb258b42ef91c9870892d1b4a806355d1d166f7c168b8ce5413429330",
+  "yearly_blocks.csv": "00fd1dfe6df87394233bd7f945dc59acfc6c0cee901430cf3b99e36217ca2f5f"
+ },
+ "runtime_seconds_excluded_from_hash": 122.0
+}
