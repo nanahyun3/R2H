@@ -22,6 +22,11 @@ dev = [
   "mypy>=1.11",
   "pandas-stubs>=2.2",
 ]
+research = [
+  "scikit-learn>=1.4",
+  "finance-datareader>=0.9.90",
+  "pyarrow>=15",
+]
 notebook = [
   "matplotlib>=3.8",
   "ipykernel>=6.29",
@@ -55,9 +60,16 @@ max-line-length = 125
 [tool.ruff.lint.per-file-ignores]
 # Byte-identical copy of SA_ETF Track B src/paper2020/cusum.py (sha256 bb686701…) — kept unmodified for provenance.
 "src/r2h/detection/paper2020_cusum.py" = ["UP042", "I001"]
+# Byte-identical copies of SA_ETF Track B src/paper2020/* (research/track-b-paper2020@031157d) — unmodified for provenance.
+"src/r2h/paper2020/*.py" = ["UP042", "I001", "E501", "RUF", "B", "UP"]
+# Notebooks: Korean text counts double width (E501); loop variables used inside pandas .query("@var") strings are
+# invisible to ruff (B007); E402/E731 for imports after the font-setup cell and tiny lambdas; E701/E702: short axis-setting
+# statements share one line (and one comment).
+"notebooks/*.ipynb" = ["E501", "B007", "E402", "E731", "E701", "E702"]
 
 [tool.ruff.format]
-exclude = ["src/r2h/detection/paper2020_cusum.py"]
+# Notebooks are not auto-formatted: the formatter would wrap lines and break the "one Korean comment per code line" rule.
+exclude = ["src/r2h/detection/paper2020_cusum.py", "src/r2h/paper2020/*.py", "notebooks/*.ipynb"]
 
 [tool.mypy]
 python_version = "3.11"
@@ -68,6 +80,15 @@ warn_redundant_casts = true
 disallow_untyped_defs = true
 check_untyped_defs = true
 no_implicit_optional = true
+
+[[tool.mypy.overrides]]
+# Verbatim Track B modules (provenance); type-checked upstream, not modified here.
+module = ["r2h.paper2020", "r2h.paper2020.*"]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = ["sklearn", "sklearn.*", "FinanceDataReader", "FinanceDataReader.*"]
+ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 # scipy ships no type information (no py.typed / stubs package).
