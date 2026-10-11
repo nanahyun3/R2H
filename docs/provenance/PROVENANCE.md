@@ -8,16 +8,16 @@
 | 출처 | 식별자 | 원격 공개 여부 (2026-10-11) |
 |---|---|---|
 | ETF Domain EDA (Phase 00/00.5) | SA_ETF `main` = `d5c2f792022d3c8efdbc52bdecd246b04bf32c45` | 공개 |
-| Track A (Cross-Asset) | SA_ETF 브랜치 `codex/r2h-track-a` @ `a3f9e9b14a6980c84d2d417c7024e97c3e0eeee5` | **LOCAL_ONLY** — 원격에 없음. 아래 파일 sha256 으로만 확인 가능 |
-| Track B (SVR–GARCH CUSUM 재현) | SA_ETF 워크트리 `codex/r2h-track-b` 의 **커밋되지 않은** 파일 + 독립 패키지 사본 | **LOCAL_ONLY** — 커밋 없음. 파일 sha256 으로만 확인 가능 |
+| Track A (Cross-Asset) | SA_ETF 브랜치 [`codex/r2h-track-a`](https://github.com/Siegfriex/SA_ETF/tree/codex/r2h-track-a) @ `a3f9e9b14a6980c84d2d417c7024e97c3e0eeee5` | 공개 (2026-10-12 push, 커밋 그대로) |
+| Track B (SVR–GARCH CUSUM 재현) | SA_ETF 브랜치 [`research/track-b-paper2020`](https://github.com/Siegfriex/SA_ETF/tree/research/track-b-paper2020/research/track_b_paper2020) @ `031157d27a715f108acee55d1dac30bd69fac78e`, 경로 `research/track_b_paper2020/` | 공개 (2026-10-12) — 원래 미커밋이던 로컬 패키지를 정리해 커밋. 반복별 MC·ablation 결과와 Yahoo 원시 시계열은 제외 (`EXCLUDED_ARTIFACTS.md` 에 digest) |
 
-LOCAL_ONLY 출처를 팀이 열람할 수 있게 SA_ETF 에 브랜치를 올릴지는 별도 결정 사항이다.
+두 출처 모두 2026-10-12 에 SA_ETF 원격 브랜치로 공개했다 (`main` 은 그대로). 아래 sha256 은 공개 브랜치의 같은 파일과 일치한다.
 
 ## 파일 대응
 
 | R2H 파일 | 원본 파일 (sha256) | 변경 |
 |---|---|---|
-| `src/r2h/detection/paper2020_cusum.py` | Track B `src/paper2020/cusum.py` (`bb686701639743abb1e6e36f31ae1223bc04b03ad419db1f48bc910374aac0fd`) | **없음 — 바이트 동일** (ruff format·일부 lint 제외 설정) |
+| `src/r2h/detection/paper2020_cusum.py` | Track B `research/track_b_paper2020/src/paper2020/cusum.py` (`bb686701639743abb1e6e36f31ae1223bc04b03ad419db1f48bc910374aac0fd`) | **없음 — 바이트 동일** (ruff format·일부 lint 제외 설정) |
 | `src/r2h/features/correlation.py` | Track A `src/r2h/research_a/rolling_correlation.py` (`2ad8df279d5bd4ef4031f620cf599076c56e1b9ee4474a3f2dbf6660cc6b20d6`, = `a3f9e9b` 의 blob) | `rolling_corr`·`RegimeRule`·`sign_regimes`·`null_band` 만. 빈 창 경고 회피용 마스크 합, `confirm_lag_days` 직접 계산, 입력 검사 추가 — 수치 동일 (PARITY.md) |
 | `src/r2h/evaluation/null_tests.py` | Track A `src/r2h/research_a/event_matching.py` (`f1dda08a6f7ab5d3ddfdc021e2a15ac618de8dfe8e8e4d732e438cf12b80f5e5`) | `proximity_count`·`circular_shift_test_fast`·`bh_qvalues` — 계산식 변경 없음, 서식만 |
 | `src/r2h/features/price.py` | Track A `data.py::log_returns` (`a12b2542…`), `price_events.py` P1 점수 (`2fb4ccab…`) | 재작성 (행 보존형 `log_returns`, 일반화한 `vol_scaled_return`). 수치 동일 (PARITY.md) |

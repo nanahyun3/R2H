@@ -2,7 +2,7 @@
 
 - 논문: Lee, S., Kim, C. K., & Lee, S. (2020). *Hybrid CUSUM Change Point Test for Time Series with Time-Varying Volatilities Based on
   Support Vector Regression.* Entropy 22(5), 578. [doi:10.3390/e22050578](https://doi.org/10.3390/e22050578) (PDF 는 저장소에 넣지 않음)
-- 원본: 로컬 미커밋 패키지 (**LOCAL_ONLY**). R2H 에는 CUSUM-of-squares 검정 모듈만 바이트 동일로 이식 (`src/r2h/detection/paper2020_cusum.py`)
+- 원본: SA_ETF [`research/track-b-paper2020@031157d`](https://github.com/Siegfriex/SA_ETF/tree/research/track-b-paper2020/research/track_b_paper2020) (로컬 패키지를 정리해 공개, 반복별 원시 결과·원시 시계열 제외). R2H 에는 CUSUM-of-squares 검정 모듈만 바이트 동일로 이식 (`src/r2h/detection/paper2020_cusum.py`)
 - 상태: **METHOD_FIDELITY_UNRESOLVED** — 감사는 종결, 원문 수치는 재현되지 않음
 
 ## 재실행 확인 (2026-10-11)

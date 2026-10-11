@@ -1,6 +1,6 @@
 # Track A — KOSPI200 대비 상관 전환과 가격 급등·급락 (부정적 결과로 종결)
 
-- 원본: SA_ETF 브랜치 `codex/r2h-track-a` @ `a3f9e9b` (**LOCAL_ONLY**), 최종 보고서 `RESEARCH_A_FINAL_REPORT.md`
+- 원본: SA_ETF 브랜치 `codex/r2h-track-a` @ `a3f9e9b` ([공개 브랜치](https://github.com/Siegfriex/SA_ETF/tree/codex/r2h-track-a)), 최종 보고서 `RESEARCH_A_FINAL_REPORT.md`
 - 입력: ETF Domain EDA 와 같은 20종 (sha256 동일), 일간 로그수익률 1,902일, `dq_trim_canonical` (261240 2019-03-14·15 두 셀만 NaN)
 - 재현: 독립 2회 실행 → 파이프라인 결과표 43종 재생성·원본과 동일. 보고서 claim 29개 중 27 MATCH, 2 MISMATCH (REPRODUCTION_STATUS.md)
 
