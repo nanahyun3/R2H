@@ -12,6 +12,10 @@
 | 11/2 | 시장 지표 코드 4조 전달 (수익률·MA·변동성·거래량) | `features/price.py` (테스트·누수 검사 포함) | 4조 입력 형식 확인 후 필요한 feature 추가 |
 | 11/9 | 교차검증 보고 · DB증권 중간점검 | — | 승인된 Ground Truth 로 walk-forward 평가 |
 
+## 연구 근거를 한 번에 보려면
+
+[`notebooks/R2H_1012_research_synthesis.ipynb`](../../notebooks/R2H_1012_research_synthesis.ipynb) — EDA·Track A·Track B 결과 해석과 그림 10장 (SA_ETF 공개 결과표를 SHA·sha256 로 고정해 읽음), R2H 계약 합성 시연.
+
 ## 재사용 방법 (요약)
 
 - 새 탐지기: `Detector` 프로토콜 구현 → `build_signal_frame(...)` 로 출력 → `match_alarms` / `event_metrics`.
