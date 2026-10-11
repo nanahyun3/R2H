@@ -218,3 +218,17 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---- R2H project rules (1012) ----
+# Raw/licensed market data and generated outputs never go into git (hashes live in research/ manifests).
+data/raw/
+data/interim/
+data/processed/
+outputs/
+*.parquet
+# Papers / reports with unclear redistribution rights: link by DOI instead.
+*.pdf
+*.docx
+# Notebook checkpoints and editor/OS noise
+.DS_Store
+.hypothesis/

@@ -1,0 +1,56 @@
+name: ci
+
+on:
+  push:
+    branches: ["1012", "main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.10.8"
+      - name: Install (locked)
+        run: uv sync --locked --extra dev --python ${{ matrix.python-version }}
+      - name: Lint
+        run: uv run ruff check . && uv run ruff format --check .
+      - name: Type check
+        run: uv run mypy
+      - name: Tests (unit · integration · property · leakage)
+        run: uv run pytest -q
+      - name: Smoke reproduction (synthetic, twice, must be identical)
+        run: |
+          uv run python examples/synthetic_demo.py --out outputs/run1.json
+          uv run python examples/synthetic_demo.py --out outputs/run2.json
+          cmp outputs/run1.json outputs/run2.json
+      - name: Upload summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-demo-${{ matrix.python-version }}
+          path: outputs/run1.json
+          if-no-files-found: ignore
+
+  lowest-deps:
+    # Lower bounds declared in pyproject.toml (numpy 2.0 / pandas 2.2 / scipy 1.13) must also pass.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.10.8"
+      - name: Install lowest direct dependencies
+        run: |
+          uv venv --python 3.12 .venv-low
+          uv pip install --python .venv-low/bin/python --resolution lowest-direct -e ".[dev]"
+      - name: Tests
+        run: .venv-low/bin/python -m pytest -q
