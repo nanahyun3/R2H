@@ -22,6 +22,12 @@ dev = [
   "mypy>=1.11",
   "pandas-stubs>=2.2",
 ]
+notebook = [
+  "matplotlib>=3.8",
+  "ipykernel>=6.29",
+  "nbclient>=0.10",
+  "nbformat>=5.10",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/r2h"]
