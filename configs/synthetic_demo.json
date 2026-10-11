@@ -1,0 +1,14 @@
+{
+  "experiment_id": "synthetic-demo-v0.1",
+  "note": "합성 데이터 전용 예제. 실제 ETF 성능 수치가 아니다.",
+  "seed": 20261012,
+  "n_days": 1500,
+  "sigma": 0.01,
+  "tickers": ["SYN_A", "SYN_B", "SYN_C"],
+  "surges": [[300, 10, 0.012], [800, 10, 0.012], [1250, 10, 0.012]],
+  "match": {"max_delay": 5, "pre_tolerance": 0, "cooldown": 5, "direction": 1},
+  "detectors": {
+    "vol_scaled_threshold": {"window": 60, "k": 3.0},
+    "page_cusum_reference": {"window": 60, "drift": 0.5, "threshold": 4.0}
+  }
+}
