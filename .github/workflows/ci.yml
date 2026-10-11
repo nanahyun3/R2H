@@ -63,9 +63,9 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           version: "0.10.8"
-      - name: Korean font (notebook rule: NanumGothic, strict)
+      - name: "Korean font (notebook rule - NanumGothic, strict)"
         run: sudo apt-get update -q && sudo apt-get install -y -q fonts-nanum
       - name: Install (locked, notebook extra)
         run: uv sync --locked --extra dev --extra notebook --python 3.12
-      - name: Execute notebook (T11 needs raw ETF prices and is verified locally, see research/svr_garch_cusum_etf/README.md)
+      - name: "Execute synthesis notebook (T11 needs raw ETF prices - verified locally, see research/svr_garch_cusum_etf/README.md)"
         run: uv run jupyter execute notebooks/R2H_1012_research_synthesis.ipynb
