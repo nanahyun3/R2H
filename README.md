@@ -23,7 +23,7 @@
 
 ## 0. 세 줄 요약
 
-1. **계산은 믿을 수 있다.** 같은 커밋을 서로 다른 두 환경에서 다시 돌리면 결과표 9종이 바이트 단위로 같고, 검정 구간 안에서 미래 자료가 과거 판단에 새지 않는다.
+1. **계산은 믿을 수 있다.** 같은 커밋을 서로 다른 두 환경에서 다시 돌리면 결과표 9종이 바이트 단위로 같고, KODEX 200 교란 검사에서 검정 구간의 미래 자료가 과거 판단에 새지 않았다.
 2. **검정의 성질이 좋지 않다.** 합성 GARCH 자료에서 이 파이프라인의 거짓 기각률(크기)은 정책 A 2.4% · 정책 B 34% · 기준선 24.6% (목표 5%), 분산이 3배로 바뀌어도 정책 A 가 잡는 비율(검정력)은 19% 다. 크기와 검정력을 함께 만족하는 설정이 없다.
 3. **그래서 ETF 결과(기각 A 2 · B 9 · 기준선 1 /20)로는 '구조변화가 있다/없다' 를 확정할 수 없다.** 같은 KOSPI200 을 따르는 KODEX 200 과 TIGER 200 도 SVR 설정 선택에 따라 결론이 갈린다. 다음 단계는 탐지기 개선이 아니라 **시장 상태의 정의와 식별 가능성 검증**이다.
 
@@ -121,7 +121,7 @@ R2H 의 큰 목표는 **ETF 가격이 급등하는 국면을 포착**하는 것�
 
 **CUSUM 은 어떻게 변화를 잡나?** 아래 교육용 예시에서 251번째 날부터 표준편차를 1.6배로 바꾸면, 잔차 제곱의 누적합이 '분산 일정' 직선에서 점점 멀어지다가 변화 시점 근처에서 가장 멀어진다. 그 최대 거리(정규화)가 $T_n$, 그 위치가 $\hat k$ 다.
 
-<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig10_cusum_toy.png" width="100%" alt="cusum toy"><br><sub>그림 D. CUSUM-of-squares 의 작동 원리 (합성 예시, 실제 ETF 아님). 변화 없는 경우 $T_n$ 이 임계값 아래, 변화 있는 경우 위로 크게 벗어난다.</sub></p>
+<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig10_cusum_toy.png" width="100%" alt="cusum toy"><br><sub>그림 D. CUSUM-of-squares 의 작동 원리 (합성 예시, 실제 ETF 아님). 변화 없는 경우 Tₙ 이 임계값 아래, 변화 있는 경우 위로 크게 벗어난다.</sub></p>
 
 $$T_n=\max_{1\le k\le n}\frac{\left|\sum_{t=1}^{k}\hat\varepsilon_t^2-\frac{k}{n}\sum_{t=1}^{n}\hat\varepsilon_t^2\right|}{\sqrt n\,\hat\tau},\qquad H_0:\ \mathbb E[\varepsilon_t^2]\ \text{일정}\quad\text{vs}\quad H_1:\ k^*\ \text{에서 변화}$$
 

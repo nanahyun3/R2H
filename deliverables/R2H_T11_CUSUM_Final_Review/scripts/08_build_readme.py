@@ -32,6 +32,8 @@ def v(k: str) -> str:
 
 
 def img(path: str, alt: str, cap: str, width: str = "100%") -> str:
+    # HTML 블록 안의 $…$ 는 GitHub 에서 수식으로 렌더되지 않는다 → 캡션은 일반 문자로
+    cap = cap.replace("$T_n$", "Tₙ").replace("$\\hat k$", "k̂").replace("$", "")
     return f'<p align="center"><img src="{path}" width="{width}" alt="{alt}"><br><sub>{cap}</sub></p>\n'
 
 
@@ -79,7 +81,7 @@ def main() -> None:
       f"[T11 노트북](notebooks/R2H_T11_svr_garch_cusum_etf.ipynb) · [Track B 감사](research/svr_garch_cusum_track_b.md) · [1012 공통 README](docs/README_1012_baseline.md) |\n")
 
     a("---\n\n## 0. 세 줄 요약\n")
-    a(f"1. **계산은 믿을 수 있다.** 같은 커밋을 서로 다른 두 환경에서 다시 돌리면 결과표 9종이 바이트 단위로 같고, 검정 구간 안에서 미래 자료가 과거 판단에 새지 않는다.")
+    a(f"1. **계산은 믿을 수 있다.** 같은 커밋을 서로 다른 두 환경에서 다시 돌리면 결과표 9종이 바이트 단위로 같고, KODEX 200 교란 검사에서 검정 구간의 미래 자료가 과거 판단에 새지 않았다.")
     a(f"2. **검정의 성질이 좋지 않다.** 합성 GARCH 자료에서 이 파이프라인의 거짓 기각률(크기)은 정책 A {v('E2_null_A_rej13397')}% · 정책 B {v('E2_null_B_rej13397')}% · 기준선 {v('E2_null_base_rej13397')}% (목표 5%), "
       f"분산이 3배로 바뀌어도 정책 A 가 잡는 비율(검정력)은 {v('E2_break_A_rej13397')}% 다. 크기와 검정력을 함께 만족하는 설정이 없다.")
     a(f"3. **그래서 ETF 결과(기각 A {v('fs_reject_A')} · B {v('fs_reject_B')} · 기준선 {v('fs_reject_base')} /20)로는 '구조변화가 있다/없다' 를 확정할 수 없다.** 같은 KOSPI200 을 따르는 "
