@@ -46,6 +46,8 @@ filterwarnings = ["error"]
 line-length = 110
 target-version = "py311"
 src = ["src", "tests"]
+# 보고서 산출물 폴더의 생성 스크립트(긴 한국어 본문 문자열)는 lint·format 대상에서 뺀다
+extend-exclude = ["deliverables"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "NPY", "PD", "RUF", "BLE"]

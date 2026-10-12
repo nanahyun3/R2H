@@ -1,0 +1,12 @@
+series,data_label,training,test_policy,nonpos_policy,paper_T,repl_T,critical_5pct,repl_reject,paper_date,repl_date,date_match,n_returns,n_test,nonpos_var
+sp500,SOURCE_SUBSTITUTED (Yahoo),first half (2012-01-04..2014-05-20),A observed-proxy,raise,2.4751,0.754,1.3397,False,2015-08-18,2015-06-26,False,1194.0,597,0
+sp500,SOURCE_SUBSTITUTED (Yahoo),first half (2012-01-04..2014-05-20),A observed-proxy,clip,2.4751,0.754,1.3397,False,2015-08-18,2015-06-26,False,1194.0,597,0
+sp500,SOURCE_SUBSTITUTED (Yahoo),first half (2012-01-04..2014-05-20),B recursive,clip,2.4751,1.0963,1.3397,False,2015-08-18,2015-08-18,True,1194.0,597,0
+kospi,SOURCE_SUBSTITUTED (Yahoo),first half (2012-10-04..2016-02-11),A observed-proxy,raise,1.5081,0.791,1.3397,False,2018-01-22,2018-03-22,False,1652.0,826,0
+kospi,SOURCE_SUBSTITUTED (Yahoo),first half (2012-10-04..2016-02-11),A observed-proxy,clip,1.5081,0.791,1.3397,False,2018-01-22,2018-03-22,False,1652.0,826,0
+kospi,SOURCE_SUBSTITUTED (Yahoo),first half (2012-10-04..2016-02-11),B recursive,clip,1.5081,1.1071,1.3397,False,2018-01-22,2017-11-24,False,1652.0,826,0
+krw_usd,SOURCE_SUBSTITUTED (Yahoo),first half (2012-01-03..2014-05-19),A observed-proxy,raise,4.2754,0.7939,1.3397,False,2014-09-26,2014-09-09,False,1237.0,619,0
+krw_usd,SOURCE_SUBSTITUTED (Yahoo),first half (2012-01-03..2014-05-19),A observed-proxy,clip,4.2754,0.7939,1.3397,False,2014-09-26,2014-09-09,False,1237.0,619,0
+krw_usd,SOURCE_SUBSTITUTED (Yahoo),first half (2012-01-03..2014-05-19),B recursive,clip,4.2754,1.0238,1.3397,False,2014-09-26,2014-09-09,False,1237.0,619,0
+sp500,SOURCE_SUBSTITUTED (Yahoo),paper example 2012-04-02..2014-04-16 (SUSPECTED_SOURCE_INCONSISTENCY with 'first half'),A observed-proxy,clip,2.4751,0.8134,1.3397,False,2015-08-18,2015-06-26,False,,620,0
+sp500,SOURCE_SUBSTITUTED (Yahoo),paper example 2012-04-02..2014-04-16 (SUSPECTED_SOURCE_INCONSISTENCY with 'first half'),B recursive,clip,2.4751,1.3372,1.3397,False,2015-08-18,2015-08-18,True,,620,0

@@ -1,0 +1,3 @@
+tests/conftest.py:1: in <module>
+    from hypothesis import settings
+E   ModuleNotFoundError: No module named 'hypothesis'

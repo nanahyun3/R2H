@@ -1,0 +1,1545 @@
+{
+ "kolmogorov_q95": {
+  "value": 1.3581,
+  "source": "01_recompute.kolmogorov_quantile (해석적 급수)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "paper_cv": {
+  "value": 1.3397,
+  "source": "src/r2h/paper2020/cusum.py PAPER_CRITICAL_VALUE_5_PERCENT",
+  "status": "REPORTED",
+  "note": ""
+ },
+ "paper_cv_implied_level": {
+  "value": 0.0552,
+  "source": "01_recompute.kolmogorov_cdf(1.3397)",
+  "status": "VERIFIED",
+  "note": "1.3397 을 Kolmogorov 분포로 읽으면 이 상측 확률 — 원문 값의 유도 근거는 확인하지 못함"
+ },
+ "c_normal_n571": {
+  "value": 1.3298,
+  "source": "01_recompute: iid N(0,1) MC 20,000회, n=571, seed [20261012,571,9]",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_max_abs_diff": {
+  "value": 4.857376488587306e-06,
+  "source": "analysis/fullsample_recomputed.csv abs_diff (vs results/fullsample_tests.csv T)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_khat_match": {
+  "value": 60,
+  "source": "fullsample_recomputed.csv khat == khat_committed",
+  "status": "VERIFIED",
+  "note": "60행 중"
+ },
+ "fs_reject_match": {
+  "value": 60,
+  "source": "fullsample_recomputed.csv",
+  "status": "VERIFIED",
+  "note": "60행 중"
+ },
+ "fs_reject_A": {
+  "value": 2,
+  "source": "fullsample_recomputed.csv reject_1.3397",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_reject_A_kolm": {
+  "value": 1,
+  "source": "fullsample_recomputed.csv reject_kolmogorov",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_reject_A_normal": {
+  "value": 2,
+  "source": "fullsample_recomputed.csv reject_normal_n571",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_reject_A_boot": {
+  "value": 4,
+  "source": "fullsample_recomputed.csv reject_boot_n",
+  "status": "VERIFIED",
+  "note": "EXTENSION 성격의 재판정 — ETF 별 iid 부트스트랩 임계값 (n_test 길이)"
+ },
+ "fs_rejected_A": {
+  "value": "069500, 091230",
+  "source": "fullsample_recomputed.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_T_median_A": {
+  "value": 0.859,
+  "source": "fullsample_recomputed.csv T 중앙값",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_reject_B": {
+  "value": 9,
+  "source": "fullsample_recomputed.csv reject_1.3397",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_reject_B_kolm": {
+  "value": 8,
+  "source": "fullsample_recomputed.csv reject_kolmogorov",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_reject_B_normal": {
+  "value": 9,
+  "source": "fullsample_recomputed.csv reject_normal_n571",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_reject_B_boot": {
+  "value": 11,
+  "source": "fullsample_recomputed.csv reject_boot_n",
+  "status": "VERIFIED",
+  "note": "EXTENSION 성격의 재판정 — ETF 별 iid 부트스트랩 임계값 (n_test 길이)"
+ },
+ "fs_rejected_B": {
+  "value": "069500, 122630, 114800, 091230, 161510, 133690, 153130, 132030, 261220",
+  "source": "fullsample_recomputed.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_T_median_B": {
+  "value": 1.323,
+  "source": "fullsample_recomputed.csv T 중앙값",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_reject_base": {
+  "value": 1,
+  "source": "fullsample_recomputed.csv reject_1.3397",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_reject_base_kolm": {
+  "value": 1,
+  "source": "fullsample_recomputed.csv reject_kolmogorov",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_reject_base_normal": {
+  "value": 1,
+  "source": "fullsample_recomputed.csv reject_normal_n571",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_reject_base_boot": {
+  "value": 1,
+  "source": "fullsample_recomputed.csv reject_boot_n",
+  "status": "VERIFIED",
+  "note": "EXTENSION 성격의 재판정 — ETF 별 iid 부트스트랩 임계값 (n_test 길이)"
+ },
+ "fs_rejected_base": {
+  "value": "153130",
+  "source": "fullsample_recomputed.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_T_median_base": {
+  "value": 0.812,
+  "source": "fullsample_recomputed.csv T 중앙값",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "ab_T_B_gt_A": {
+  "value": 17,
+  "source": "policy_pairs.csv T_B > T_A",
+  "status": "VERIFIED",
+  "note": "20종 중"
+ },
+ "ab_disagree": {
+  "value": 7,
+  "source": "policy_pairs.csv rej_A != rej_B",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "ab_both_reject": {
+  "value": 2,
+  "source": "policy_pairs.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "ab_khat_same": {
+  "value": 5,
+  "source": "policy_pairs.csv khat_gap_days == 0",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "ab_cvB_lt_cvA": {
+  "value": 20,
+  "source": "policy_pairs.csv cv_var_B < cv_var_A",
+  "status": "VERIFIED",
+  "note": "검정 구간 σ̂² 변동계수 — B 가 덜 변동하는 ETF 수"
+ },
+ "ab_cv_A_median": {
+  "value": 1.064,
+  "source": "policy_pairs.csv cv_var_A 중앙값",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "ab_cv_B_median": {
+  "value": 0.765,
+  "source": "policy_pairs.csv cv_var_B 중앙값",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "k200_corr_r": {
+  "value": 0.9994,
+  "source": "kospi200_group.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "k200_corr_eA": {
+  "value": 0.9891,
+  "source": "kospi200_group.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "k200_TA_069500": {
+  "value": 1.403,
+  "source": "fullsample_recomputed.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "k200_TA_102110": {
+  "value": 0.646,
+  "source": "fullsample_recomputed.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "k200_TB_069500": {
+  "value": 2.026,
+  "source": "fullsample_recomputed.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "k200_TB_102110": {
+  "value": 0.731,
+  "source": "fullsample_recomputed.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "k200_params_069500": {
+  "value": "C=1, γ²=0.5, ε=0.1",
+  "source": "results/fit_summary.csv",
+  "status": "REPORTED",
+  "note": ""
+ },
+ "k200_params_102110": {
+  "value": "C=100, γ²=1, ε=0.1",
+  "source": "results/fit_summary.csv",
+  "status": "REPORTED",
+  "note": ""
+ },
+ "k200_roll60_corr": {
+  "value": 0.868,
+  "source": "rolling_cusum(res svrA, 60) 069500 vs 102110",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "k200_sigma_ratio_p05": {
+  "value": 0.682,
+  "source": "sqrt(varA 069500 / varA 102110) 검정 구간 5% 분위",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "k200_sigma_ratio_p95": {
+  "value": 1.062,
+  "source": "같은 비의 95% 분위",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "grid_eps_floor": {
+  "value": 20,
+  "source": "results/fit_summary.csv epsilon == 0.1 (grid 하한)",
+  "status": "VERIFIED",
+  "note": "20종 중"
+ },
+ "grid_C_counts": {
+  "value": {
+   "1": 10,
+   "10": 9,
+   "100": 1
+  },
+  "source": "results/fit_summary.csv C 분포",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "crit_max_abs_diff": {
+  "value": 4.990471596855173e-06,
+  "source": "critical_recomputed.csv",
+  "status": "VERIFIED",
+  "note": "CSV 반올림 6자리 대비"
+ },
+ "crit_boot_A_w20_range": {
+  "value": "1.13–1.18",
+  "source": "results/critical_values.csv svrA",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "crit_normal_w20": {
+  "value": 1.182,
+  "source": "results/critical_values.csv c_normal",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "crit_boot_A_w30_range": {
+  "value": "1.16–1.22",
+  "source": "results/critical_values.csv svrA",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "crit_normal_w30": {
+  "value": 1.211,
+  "source": "results/critical_values.csv c_normal",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "crit_boot_A_w60_range": {
+  "value": "1.20–1.25",
+  "source": "results/critical_values.csv svrA",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "crit_normal_w60": {
+  "value": 1.258,
+  "source": "results/critical_values.csv c_normal",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "crit_boot_A_w120_range": {
+  "value": "1.21–1.29",
+  "source": "results/critical_values.csv svrA",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "crit_normal_w120": {
+  "value": 1.289,
+  "source": "results/critical_values.csv c_normal",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "crit_boot_A_w252_range": {
+  "value": "1.19–1.31",
+  "source": "results/critical_values.csv svrA",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "crit_normal_w252": {
+  "value": 1.308,
+  "source": "results/critical_values.csv c_normal",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "roll_max_abs_diff": {
+  "value": 4.9999989254478905e-06,
+  "source": "rolling_cusum(npz 잔차) vs results/rolling_stats.csv.gz",
+  "status": "VERIFIED",
+  "note": "CSV 반올림 대비"
+ },
+ "obs_rate_max_diff": {
+  "value": 4.95268138811511e-06,
+  "source": "zone_rates.csv rate_all vs null_alarm_rate.observed",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_denominator": {
+  "value": "전 기간 1902 거래일 / 252 = 7.548년",
+  "source": "pipeline.py obs_rate = size / (len(idx)/252)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "null_max_diff": {
+  "value": 0.0013286750788643609,
+  "source": "zone_rates.csv null_recomputed vs committed",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w20_all": {
+  "value": 2.23,
+  "source": "zone_rates.csv 20종 평균 (전 기간 분모)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w20_fit": {
+  "value": 2.1,
+  "source": "zone_rates.csv 20종 평균 (적합 구간, in-sample)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w20_test": {
+  "value": 2.63,
+  "source": "zone_rates.csv 20종 평균 (순수 검정 구간)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w20_null": {
+  "value": 4.05,
+  "source": "results/null_alarm_rate.csv 20종 평균 (iid 재표집)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w20_test_gt_null": {
+  "value": 3,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w20_test_zero": {
+  "value": 0,
+  "source": "zone_rates.csv episodes_test == 0",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w20_all_gt_null": {
+  "value": 1,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w30_all": {
+  "value": 0.87,
+  "source": "zone_rates.csv 20종 평균 (전 기간 분모)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w30_fit": {
+  "value": 0.75,
+  "source": "zone_rates.csv 20종 평균 (적합 구간, in-sample)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w30_test": {
+  "value": 1.26,
+  "source": "zone_rates.csv 20종 평균 (순수 검정 구간)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w30_null": {
+  "value": 3.02,
+  "source": "results/null_alarm_rate.csv 20종 평균 (iid 재표집)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w30_test_gt_null": {
+  "value": 0,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w30_test_zero": {
+  "value": 1,
+  "source": "zone_rates.csv episodes_test == 0",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w30_all_gt_null": {
+  "value": 0,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w60_all": {
+  "value": 0.39,
+  "source": "zone_rates.csv 20종 평균 (전 기간 분모)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w60_fit": {
+  "value": 0.35,
+  "source": "zone_rates.csv 20종 평균 (적합 구간, in-sample)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w60_test": {
+  "value": 0.47,
+  "source": "zone_rates.csv 20종 평균 (순수 검정 구간)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w60_null": {
+  "value": 1.71,
+  "source": "results/null_alarm_rate.csv 20종 평균 (iid 재표집)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w60_test_gt_null": {
+  "value": 2,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w60_test_zero": {
+  "value": 10,
+  "source": "zone_rates.csv episodes_test == 0",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w60_all_gt_null": {
+  "value": 0,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w120_all": {
+  "value": 0.25,
+  "source": "zone_rates.csv 20종 평균 (전 기간 분모)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w120_fit": {
+  "value": 0.22,
+  "source": "zone_rates.csv 20종 평균 (적합 구간, in-sample)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w120_test": {
+  "value": 0.39,
+  "source": "zone_rates.csv 20종 평균 (순수 검정 구간)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w120_null": {
+  "value": 0.99,
+  "source": "results/null_alarm_rate.csv 20종 평균 (iid 재표집)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w120_test_gt_null": {
+  "value": 3,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w120_test_zero": {
+  "value": 13,
+  "source": "zone_rates.csv episodes_test == 0",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w120_all_gt_null": {
+  "value": 2,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w252_all": {
+  "value": 0.21,
+  "source": "zone_rates.csv 20종 평균 (전 기간 분모)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w252_fit": {
+  "value": 0.21,
+  "source": "zone_rates.csv 20종 평균 (적합 구간, in-sample)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w252_test": {
+  "value": 0.47,
+  "source": "zone_rates.csv 20종 평균 (순수 검정 구간)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w252_null": {
+  "value": 0.56,
+  "source": "results/null_alarm_rate.csv 20종 평균 (iid 재표집)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w252_test_gt_null": {
+  "value": 6,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w252_test_zero": {
+  "value": 14,
+  "source": "zone_rates.csv episodes_test == 0",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_svrA_w252_all_gt_null": {
+  "value": 2,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w20_all": {
+  "value": 6.26,
+  "source": "zone_rates.csv 20종 평균 (전 기간 분모)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w20_fit": {
+  "value": 6.33,
+  "source": "zone_rates.csv 20종 평균 (적합 구간, in-sample)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w20_test": {
+  "value": 6.76,
+  "source": "zone_rates.csv 20종 평균 (순수 검정 구간)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w20_null": {
+  "value": 4.04,
+  "source": "results/null_alarm_rate.csv 20종 평균 (iid 재표집)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w20_test_gt_null": {
+  "value": 19,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w20_test_zero": {
+  "value": 0,
+  "source": "zone_rates.csv episodes_test == 0",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w20_all_gt_null": {
+  "value": 20,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w30_all": {
+  "value": 5.31,
+  "source": "zone_rates.csv 20종 평균 (전 기간 분모)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w30_fit": {
+  "value": 5.44,
+  "source": "zone_rates.csv 20종 평균 (적합 구간, in-sample)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w30_test": {
+  "value": 5.86,
+  "source": "zone_rates.csv 20종 평균 (순수 검정 구간)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w30_null": {
+  "value": 2.93,
+  "source": "results/null_alarm_rate.csv 20종 평균 (iid 재표집)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w30_test_gt_null": {
+  "value": 20,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w30_test_zero": {
+  "value": 0,
+  "source": "zone_rates.csv episodes_test == 0",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w30_all_gt_null": {
+  "value": 20,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w60_all": {
+  "value": 3.82,
+  "source": "zone_rates.csv 20종 평균 (전 기간 분모)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w60_fit": {
+  "value": 3.84,
+  "source": "zone_rates.csv 20종 평균 (적합 구간, in-sample)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w60_test": {
+  "value": 4.48,
+  "source": "zone_rates.csv 20종 평균 (순수 검정 구간)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w60_null": {
+  "value": 1.7,
+  "source": "results/null_alarm_rate.csv 20종 평균 (iid 재표집)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w60_test_gt_null": {
+  "value": 19,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w60_test_zero": {
+  "value": 0,
+  "source": "zone_rates.csv episodes_test == 0",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w60_all_gt_null": {
+  "value": 20,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w120_all": {
+  "value": 2.73,
+  "source": "zone_rates.csv 20종 평균 (전 기간 분모)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w120_fit": {
+  "value": 2.81,
+  "source": "zone_rates.csv 20종 평균 (적합 구간, in-sample)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w120_test": {
+  "value": 3.62,
+  "source": "zone_rates.csv 20종 평균 (순수 검정 구간)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w120_null": {
+  "value": 0.97,
+  "source": "results/null_alarm_rate.csv 20종 평균 (iid 재표집)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w120_test_gt_null": {
+  "value": 19,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w120_test_zero": {
+  "value": 0,
+  "source": "zone_rates.csv episodes_test == 0",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w120_all_gt_null": {
+  "value": 20,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w252_all": {
+  "value": 1.28,
+  "source": "zone_rates.csv 20종 평균 (전 기간 분모)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w252_fit": {
+  "value": 1.4,
+  "source": "zone_rates.csv 20종 평균 (적합 구간, in-sample)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w252_test": {
+  "value": 2.09,
+  "source": "zone_rates.csv 20종 평균 (순수 검정 구간)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w252_null": {
+  "value": 0.57,
+  "source": "results/null_alarm_rate.csv 20종 평균 (iid 재표집)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w252_test_gt_null": {
+  "value": 20,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w252_test_zero": {
+  "value": 0,
+  "source": "zone_rates.csv episodes_test == 0",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "rate_base_w252_all_gt_null": {
+  "value": 19,
+  "source": "zone_rates.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_max_abs_diff": {
+  "value": 4.92921035655236e-06,
+  "source": "yearly_blocks() vs results/yearly_blocks.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_svrA_2019": {
+  "value": 0,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_svrA_2020": {
+  "value": 5,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_svrA_2021": {
+  "value": 0,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_svrA_2022": {
+  "value": 5,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_svrA_2023": {
+  "value": 0,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_svrA_2024": {
+  "value": 0,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_svrA_2025": {
+  "value": 0,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_svrA_2026": {
+  "value": 0,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_base_2019": {
+  "value": 0,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_base_2020": {
+  "value": 85,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_base_2021": {
+  "value": 10,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_base_2022": {
+  "value": 10,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_base_2023": {
+  "value": 5,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_base_2024": {
+  "value": 0,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_base_2025": {
+  "value": 5,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "yearly_base_2026": {
+  "value": 55,
+  "source": "analysis/yearly_reject_share.csv (%, 1.3397)",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "trackb_in_ci": {
+  "value": {
+   "clip": "1/45",
+   "raise": "9/45",
+   "recursive": "10/45"
+  },
+  "source": "outputs/cache/031157d…ORIGINAL_VS_REPRODUCED.csv n=500 *_paper_in_ci",
+  "status": "REPORTED",
+  "note": "원 감사 패키지의 Wilson 95% CI 판정을 그대로 집계 (반복은 재실행하지 않음)"
+ },
+ "trackb_size_n500": {
+  "value": {
+   "paper": 0.023,
+   "clip_rate_cond_ok": 0.0,
+   "raise_rate_cond_ok": 0.0,
+   "recursive_rate_cond_ok": 0.05
+  },
+  "source": "ORIGINAL_VS_REPRODUCED.csv t1_size n=500",
+  "status": "REPORTED",
+  "note": ""
+ },
+ "data_version": {
+  "value": "5f20e3e0073b521a",
+  "source": "results/run_manifest.json",
+  "status": "REPORTED",
+  "note": ""
+ },
+ "n_returns": {
+  "value": 1902,
+  "source": "t11_state.npz dates",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "first_last": {
+  "value": "2019-01-03 ~ 2026-10-02",
+  "source": "t11_state.npz dates",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "split_date": {
+  "value": "2024-05-29",
+  "source": "results/fit_summary.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "n_test": {
+  "value": 571,
+  "source": "results/fit_summary.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "n_train": {
+  "value": 932,
+  "source": "results/fit_summary.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "n_val": {
+  "value": 399,
+  "source": "results/fit_summary.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "E1_iid_normal_n60_paper": {
+  "value": 2.7,
+  "source": "extension/E1_residual_size.csv (iid_normal, n=60, paper_1.3397)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.2%p · R=10000"
+ },
+ "E1_iid_normal_n60_kolmogorov": {
+  "value": 2.3,
+  "source": "extension/E1_residual_size.csv (iid_normal, n=60, kolmogorov_1.3581)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.2%p · R=10000"
+ },
+ "E1_iid_normal_n60_normal": {
+  "value": 4.7,
+  "source": "extension/E1_residual_size.csv (iid_normal, n=60, normal_mc95)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.2%p · R=10000"
+ },
+ "E1_iid_t5_n60_paper": {
+  "value": 2.2,
+  "source": "extension/E1_residual_size.csv (iid_t5, n=60, paper_1.3397)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.1%p · R=10000"
+ },
+ "E1_iid_t5_n60_kolmogorov": {
+  "value": 1.8,
+  "source": "extension/E1_residual_size.csv (iid_t5, n=60, kolmogorov_1.3581)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.1%p · R=10000"
+ },
+ "E1_iid_t5_n60_normal": {
+  "value": 3.7,
+  "source": "extension/E1_residual_size.csv (iid_t5, n=60, normal_mc95)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.2%p · R=10000"
+ },
+ "E1_garch_unstandardized_n60_paper": {
+  "value": 16.9,
+  "source": "extension/E1_residual_size.csv (garch_unstandardized, n=60, paper_1.3397)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.4%p · R=10000"
+ },
+ "E1_garch_unstandardized_n60_kolmogorov": {
+  "value": 15.9,
+  "source": "extension/E1_residual_size.csv (garch_unstandardized, n=60, kolmogorov_1.3581)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.4%p · R=10000"
+ },
+ "E1_garch_unstandardized_n60_normal": {
+  "value": 22.7,
+  "source": "extension/E1_residual_size.csv (garch_unstandardized, n=60, normal_mc95)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.4%p · R=10000"
+ },
+ "E1_iid_normal_n571_paper": {
+  "value": 4.5,
+  "source": "extension/E1_residual_size.csv (iid_normal, n=571, paper_1.3397)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.2%p · R=10000"
+ },
+ "E1_iid_normal_n571_kolmogorov": {
+  "value": 4.0,
+  "source": "extension/E1_residual_size.csv (iid_normal, n=571, kolmogorov_1.3581)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.2%p · R=10000"
+ },
+ "E1_iid_normal_n571_normal": {
+  "value": 4.8,
+  "source": "extension/E1_residual_size.csv (iid_normal, n=571, normal_mc95)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.2%p · R=10000"
+ },
+ "E1_iid_t5_n571_paper": {
+  "value": 3.4,
+  "source": "extension/E1_residual_size.csv (iid_t5, n=571, paper_1.3397)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.2%p · R=10000"
+ },
+ "E1_iid_t5_n571_kolmogorov": {
+  "value": 3.0,
+  "source": "extension/E1_residual_size.csv (iid_t5, n=571, kolmogorov_1.3581)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.2%p · R=10000"
+ },
+ "E1_iid_t5_n571_normal": {
+  "value": 3.6,
+  "source": "extension/E1_residual_size.csv (iid_t5, n=571, normal_mc95)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.2%p · R=10000"
+ },
+ "E1_garch_unstandardized_n571_paper": {
+  "value": 85.7,
+  "source": "extension/E1_residual_size.csv (garch_unstandardized, n=571, paper_1.3397)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.4%p · R=10000"
+ },
+ "E1_garch_unstandardized_n571_kolmogorov": {
+  "value": 85.1,
+  "source": "extension/E1_residual_size.csv (garch_unstandardized, n=571, kolmogorov_1.3581)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.4%p · R=10000"
+ },
+ "E1_garch_unstandardized_n571_normal": {
+  "value": 86.1,
+  "source": "extension/E1_residual_size.csv (garch_unstandardized, n=571, normal_mc95)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.3%p · R=10000"
+ },
+ "E1_c_normal_n60": {
+  "value": 1.256,
+  "source": "E1_residual_size.csv",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E2_break_A_rej13397": {
+  "value": 19.0,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, A, posthoc_reject@paper_1.3397)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 1.8 · R=500"
+ },
+ "E2_break_A_rej13581": {
+  "value": 18.6,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, A, posthoc_reject@kolmogorov_1.3581)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 1.7 · R=500"
+ },
+ "E2_break_A_w60_prebreak_episodes_per_year": {
+  "value": 0.09,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, A, w60_prebreak_episodes_per_year)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · 연간 에피소드 · MC SE 0.02 · R=500"
+ },
+ "E2_break_A_w60_detect_share_by_end": {
+  "value": 27.0,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, A, w60_detect_share_by_end)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 2.0 · R=500"
+ },
+ "E2_break_A_w60_first_alarm_delay_median_days": {
+  "value": 138.0,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, A, w60_first_alarm_delay_median_days)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · 거래일 · R=500"
+ },
+ "E2_break_A_w60_detect_within_20d": {
+  "value": 2.0,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, A, w60_detect_within_20d)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.6 · R=500"
+ },
+ "E2_break_A_w60_detect_within_60d": {
+  "value": 6.4,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, A, w60_detect_within_60d)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 1.1 · R=500"
+ },
+ "E2_break_B_rej13397": {
+  "value": 73.0,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, B, posthoc_reject@paper_1.3397)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 2.0 · R=500"
+ },
+ "E2_break_B_rej13581": {
+  "value": 72.0,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, B, posthoc_reject@kolmogorov_1.3581)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 2.0 · R=500"
+ },
+ "E2_break_B_w60_prebreak_episodes_per_year": {
+  "value": 2.34,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, B, w60_prebreak_episodes_per_year)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · 연간 에피소드 · MC SE 0.07 · R=500"
+ },
+ "E2_break_B_w60_detect_share_by_end": {
+  "value": 87.4,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, B, w60_detect_share_by_end)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 1.5 · R=500"
+ },
+ "E2_break_B_w60_first_alarm_delay_median_days": {
+  "value": 41.0,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, B, w60_first_alarm_delay_median_days)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · 거래일 · R=500"
+ },
+ "E2_break_B_w60_detect_within_20d": {
+  "value": 28.2,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, B, w60_detect_within_20d)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 2.0 · R=500"
+ },
+ "E2_break_B_w60_detect_within_60d": {
+  "value": 51.2,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, B, w60_detect_within_60d)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 2.2 · R=500"
+ },
+ "E2_break_base_rej13397": {
+  "value": 28.8,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, base, posthoc_reject@paper_1.3397)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 2.0 · R=500"
+ },
+ "E2_break_base_rej13581": {
+  "value": 27.6,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, base, posthoc_reject@kolmogorov_1.3581)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 2.0 · R=500"
+ },
+ "E2_break_base_w60_prebreak_episodes_per_year": {
+  "value": 4.34,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, base, w60_prebreak_episodes_per_year)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · 연간 에피소드 · MC SE 0.08 · R=500"
+ },
+ "E2_break_base_w60_detect_share_by_end": {
+  "value": 99.6,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, base, w60_detect_share_by_end)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.3 · R=500"
+ },
+ "E2_break_base_w60_first_alarm_delay_median_days": {
+  "value": 12.0,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, base, w60_first_alarm_delay_median_days)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · 거래일 · R=500"
+ },
+ "E2_break_base_w60_detect_within_20d": {
+  "value": 61.8,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, base, w60_detect_within_20d)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 2.2 · R=500"
+ },
+ "E2_break_base_w60_detect_within_60d": {
+  "value": 84.6,
+  "source": "extension/E2_pipeline_size_power_summary.csv (break, base, w60_detect_within_60d)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 1.6 · R=500"
+ },
+ "E2_null_A_rej13397": {
+  "value": 2.4,
+  "source": "extension/E2_pipeline_size_power_summary.csv (null, A, posthoc_reject@paper_1.3397)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.7 · R=500"
+ },
+ "E2_null_A_rej13581": {
+  "value": 2.4,
+  "source": "extension/E2_pipeline_size_power_summary.csv (null, A, posthoc_reject@kolmogorov_1.3581)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 0.7 · R=500"
+ },
+ "E2_null_A_w60_test_episodes_per_year": {
+  "value": 0.1,
+  "source": "extension/E2_pipeline_size_power_summary.csv (null, A, w60_test_episodes_per_year)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · 연간 에피소드 · MC SE 0.01 · R=500"
+ },
+ "E2_null_A_w60_test_any_alarm_share": {
+  "value": 12.8,
+  "source": "extension/E2_pipeline_size_power_summary.csv (null, A, w60_test_any_alarm_share)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · R=500"
+ },
+ "E2_null_B_rej13397": {
+  "value": 34.0,
+  "source": "extension/E2_pipeline_size_power_summary.csv (null, B, posthoc_reject@paper_1.3397)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 2.1 · R=500"
+ },
+ "E2_null_B_rej13581": {
+  "value": 32.4,
+  "source": "extension/E2_pipeline_size_power_summary.csv (null, B, posthoc_reject@kolmogorov_1.3581)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 2.1 · R=500"
+ },
+ "E2_null_B_w60_test_episodes_per_year": {
+  "value": 2.41,
+  "source": "extension/E2_pipeline_size_power_summary.csv (null, B, w60_test_episodes_per_year)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · 연간 에피소드 · MC SE 0.06 · R=500"
+ },
+ "E2_null_B_w60_test_any_alarm_share": {
+  "value": 98.2,
+  "source": "extension/E2_pipeline_size_power_summary.csv (null, B, w60_test_any_alarm_share)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · R=500"
+ },
+ "E2_null_base_rej13397": {
+  "value": 24.6,
+  "source": "extension/E2_pipeline_size_power_summary.csv (null, base, posthoc_reject@paper_1.3397)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 1.9 · R=500"
+ },
+ "E2_null_base_rej13581": {
+  "value": 23.2,
+  "source": "extension/E2_pipeline_size_power_summary.csv (null, base, posthoc_reject@kolmogorov_1.3581)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · MC SE 1.9 · R=500"
+ },
+ "E2_null_base_w60_test_episodes_per_year": {
+  "value": 4.1,
+  "source": "extension/E2_pipeline_size_power_summary.csv (null, base, w60_test_episodes_per_year)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · 연간 에피소드 · MC SE 0.05 · R=500"
+ },
+ "E2_null_base_w60_test_any_alarm_share": {
+  "value": 100.0,
+  "source": "extension/E2_pipeline_size_power_summary.csv (null, base, w60_test_any_alarm_share)",
+  "status": "VERIFIED",
+  "note": "EXTENSION · % · R=500"
+ },
+ "E2_R": {
+  "value": 500,
+  "source": "E2_pipeline_size_power_reps.csv",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E2_eps_floor_share": {
+  "value": 98.8,
+  "source": "E2 reps eps == 0.1",
+  "status": "VERIFIED",
+  "note": "EXTENSION · 합성 자료에서도 ε grid 하한 선택 비율 %"
+ },
+ "E3_c571_iid_median": {
+  "value": 1.31,
+  "source": "E3_stationary_bootstrap.csv",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E3_c571_sb_median": {
+  "value": 1.04,
+  "source": "E3_stationary_bootstrap.csv",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E3_c60_iid_median": {
+  "value": 1.22,
+  "source": "E3_stationary_bootstrap.csv",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E3_c60_sb_median": {
+  "value": 1.0,
+  "source": "E3_stationary_bootstrap.csv",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E3_reject_iid": {
+  "value": "069500, 091230, 153130, 261220",
+  "source": "E3_stationary_bootstrap.csv reject_iid",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E3_reject_sb": {
+  "value": "069500, 091230, 143860, 132030",
+  "source": "E3_stationary_bootstrap.csv reject_sb20",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E3_reject_both": {
+  "value": 2,
+  "source": "E3_stationary_bootstrap.csv",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E3_rate_iid": {
+  "value": 0.47,
+  "source": "E3 rate_test_w60_iid 평균",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E3_rate_sb": {
+  "value": 1.62,
+  "source": "E3 rate_test_w60_sb20 평균",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E3_c571_sb_153130": {
+  "value": 2.19,
+  "source": "E3 153130",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E4_identical": {
+  "value": "18/18",
+  "source": "extension/E4_time_integrity.json *_identical_before_t0",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E4_t0": {
+  "value": "2025-08-22",
+  "source": "E4_time_integrity.json",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E4_control": {
+  "value": true,
+  "source": "E4_time_integrity.json control_*",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E5_rate_A": {
+  "value": 0.47,
+  "source": "E5_policyB_rolling_w60.csv",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E5_rate_B": {
+  "value": 2.41,
+  "source": "E5_policyB_rolling_w60.csv",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E5_zero_A": {
+  "value": 10,
+  "source": "E5_policyB_rolling_w60.csv",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E5_zero_B": {
+  "value": 0,
+  "source": "E5_policyB_rolling_w60.csv",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_base_fit_lrv": {
+  "value": 1.82,
+  "source": "E6_residual_dependence_etf.csv 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_base_fit_lt1": {
+  "value": 0,
+  "source": "E6_residual_dependence_etf.csv lrv < 1 개수",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_base_fit_acf": {
+  "value": 0.59,
+  "source": "E6 acf lag1–5 합 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_base_test_lrv": {
+  "value": 1.49,
+  "source": "E6_residual_dependence_etf.csv 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_base_test_lt1": {
+  "value": 0,
+  "source": "E6_residual_dependence_etf.csv lrv < 1 개수",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_base_test_acf": {
+  "value": 0.35,
+  "source": "E6 acf lag1–5 합 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_svrA_fit_lrv": {
+  "value": 0.68,
+  "source": "E6_residual_dependence_etf.csv 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_svrA_fit_lt1": {
+  "value": 19,
+  "source": "E6_residual_dependence_etf.csv lrv < 1 개수",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_svrA_fit_acf": {
+  "value": -0.27,
+  "source": "E6 acf lag1–5 합 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_svrA_test_lrv": {
+  "value": 0.91,
+  "source": "E6_residual_dependence_etf.csv 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_svrA_test_lt1": {
+  "value": 18,
+  "source": "E6_residual_dependence_etf.csv lrv < 1 개수",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_svrA_test_acf": {
+  "value": -0.17,
+  "source": "E6 acf lag1–5 합 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_svrB_test_lrv": {
+  "value": 1.19,
+  "source": "E6_residual_dependence_etf.csv 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_svrB_test_lt1": {
+  "value": 2,
+  "source": "E6_residual_dependence_etf.csv lrv < 1 개수",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_svrB_test_acf": {
+  "value": 0.14,
+  "source": "E6 acf lag1–5 합 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_sim_A_lrv": {
+  "value": 0.66,
+  "source": "E6_residual_dependence_sim.csv 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_sim_A_lt1": {
+  "value": 100,
+  "source": "E6_residual_dependence_sim.csv lrv < 1 개수 (100회 중)",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_sim_B_lrv": {
+  "value": 1.02,
+  "source": "E6_residual_dependence_sim.csv 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_sim_B_lt1": {
+  "value": 46,
+  "source": "E6_residual_dependence_sim.csv lrv < 1 개수 (100회 중)",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_sim_base_lrv": {
+  "value": 1.38,
+  "source": "E6_residual_dependence_sim.csv 중앙값",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "E6_sim_base_lt1": {
+  "value": 2,
+  "source": "E6_residual_dependence_sim.csv lrv < 1 개수 (100회 중)",
+  "status": "VERIFIED",
+  "note": "EXTENSION"
+ },
+ "fs_A_khat_2026_01": {
+  "value": 8,
+  "source": "fullsample_recomputed.csv 정책 A k̂ 2026-01",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_B_boot_list": {
+  "value": "069500, 229200, 122630, 114800, 091230, 161510, 133690, 148070, 153130, 132030, 261220",
+  "source": "fullsample_recomputed.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "fs_A_boot_list": {
+  "value": "069500, 091230, 153130, 261220",
+  "source": "fullsample_recomputed.csv",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "vol_069500_fit": {
+  "value": 19.6,
+  "source": "t11_state.npz r__069500 적합 구간 std×√252",
+  "status": "VERIFIED",
+  "note": "%/년"
+ },
+ "vol_069500_test": {
+  "value": 42.4,
+  "source": "t11_state.npz r__069500 검정 구간 std×√252",
+  "status": "VERIFIED",
+  "note": "%/년"
+ },
+ "vol_test_gt_fit": {
+  "value": 16,
+  "source": "t11_state.npz 검정 구간 변동성 > 적합 구간인 ETF 수",
+  "status": "VERIFIED",
+  "note": ""
+ },
+ "vol_ratio_median": {
+  "value": 1.29,
+  "source": "검정/적합 연율화 변동성 비 중앙값 (20종)",
+  "status": "VERIFIED",
+  "note": ""
+ }
+}

@@ -1,0 +1,28 @@
+{
+ "E1": {
+  "rows": 18,
+  "elapsed_s": 2.6
+ },
+ "E3": {
+  "rows": 20,
+  "elapsed_s": 4.6
+ },
+ "E4": {
+  "all_identical": true,
+  "elapsed_s": 2.2
+ },
+ "E5": {
+  "rows": 20,
+  "elapsed_s": 0.2
+ },
+ "E2": {
+  "seconds": 57,
+  "R_per_scenario": 500,
+  "elapsed_s": 57.0
+ },
+ "E6": {
+  "rows": 100,
+  "sims": 100,
+  "elapsed_s": 5.6
+ }
+}

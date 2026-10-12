@@ -1,352 +1,346 @@
-# R2H
-주가 급등 국면 포착 에이전트 (2026.9~2027.6, 홍익대학교 졸업 프로젝트)
+# R2H · `1012_SVR-GARCH-CUSUM` — SVR–GARCH CUSUM 을 ETF 20종에 적용한 연구의 최종 재평가
 
 <p>
-  <a href="https://github.com/nanahyun3/R2H/actions/workflows/ci.yml?query=branch%3A1012"><img alt="CI" src="https://github.com/nanahyun3/R2H/actions/workflows/ci.yml/badge.svg?branch=1012"></a>
-  <img alt="Python" src="https://img.shields.io/badge/python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white">
-  <img alt="uv" src="https://img.shields.io/badge/env-uv%20%2B%20uv.lock-DE5FE9">
+  <img alt="branch" src="https://img.shields.io/badge/branch-1012_SVR--GARCH--CUSUM-1F3864">
+  <img alt="base" src="https://img.shields.io/badge/base-1012%20%40%20a346faf-555">
+  <img alt="repro" src="https://img.shields.io/badge/결과표-2개%20환경%20바이트%20동일-2ea44f">
   <img alt="tests" src="https://img.shields.io/badge/tests-98%20passed-2ea44f">
-  <img alt="ruff" src="https://img.shields.io/badge/lint-ruff-D7FF64">
-  <img alt="mypy" src="https://img.shields.io/badge/types-mypy-1F5082">
-  <img alt="contract" src="https://img.shields.io/badge/contract-v0.1--proposed-orange">
-  <img alt="data" src="https://img.shields.io/badge/raw%20prices-not%20in%20repo-lightgrey">
-  <img alt="license" src="https://img.shields.io/badge/license-undecided%20(D--07)-lightgrey">
+  <img alt="check" src="https://img.shields.io/badge/DOCX↔PDF↔claims-PASS-2ea44f">
+  <img alt="paper" src="https://img.shields.io/badge/원%20논문%20수치-UNRESOLVED-orange">
+  <img alt="report" src="https://img.shields.io/badge/보고서-DOCX%20%2B%20PDF%2032쪽-blue">
 </p>
 
-> **1012 브랜치 = 2조·4조 공통 연구 기준선.** 지금까지의 연구 3건(ETF EDA · 상관 전환 · SVR–GARCH CUSUM 논문 재현)을 **다시 실행해 재현 여부를 감사**했다.
-> 그 결과에서 검증된 최소 코드(데이터 계약 · feature · 탐지 인터페이스 · 사건 평가)만 이 브랜치에 올렸다.
-> 실제 ETF 탐지 성능 수치는 아직 없다. 정답(Ground Truth)이 승인되지 않았기 때문이다.
+> 이 브랜치는 `1012` (`a346faf`) 에서 갈라져, **T11 연구(SVR–GARCH CUSUM × ETF 20종)의 최종 재평가 결과만** 담는다. 코드·결과표는 `1012` 와 같고, 추가된 것은 [`deliverables/R2H_T11_CUSUM_Final_Review/`](deliverables/R2H_T11_CUSUM_Final_Review) (보고서·재계산·확장 실험·그림·검증 문서) 와 이 README 다.
+> 연구자가 정의한 가격·상관 사건(P1·P4·C3·공통충격)을 정답으로 쓰는 평가는 **판단 근거에서 뺐다**. 대신 검정 자체의 통계적 성질 — 크기(size)·검정력(power)·모형 의존성 — 을 재계산과 합성 자료 실험으로 평가했다.
 
-### 바로 가기
+## 바로 가기
 
-| 📓 노트북 | 📊 결과 | 📐 계약·결정 | 🔎 출처 |
+| 📄 최종 보고서 | 🔎 검증 | 🧪 실행 | 📚 배경 |
 |---|---|---|---|
-| [**연구 종합 노트북**](notebooks/R2H_1012_research_synthesis.ipynb) · [nbviewer](https://nbviewer.org/github/nanahyun3/R2H/blob/1012/notebooks/R2H_1012_research_synthesis.ipynb)<br>[**T11 SVR–GARCH CUSUM × ETF 20종**](notebooks/R2H_T11_svr_garch_cusum_etf.ipynb) · [nbviewer](https://nbviewer.org/github/nanahyun3/R2H/blob/1012/notebooks/R2H_T11_svr_garch_cusum_etf.ipynb) | [재현 상태표](research/REPRODUCTION_STATUS.md) · [Track A](research/cross_asset_track_a.md) · [Track B](research/svr_garch_cusum_track_b.md) · [EDA](research/etf_domain_eda.md) · [**T11**](research/svr_garch_cusum_etf/README.md) | [계약 v0.1](docs/architecture/CONTRACT_v0.1.md) · [열린 결정](docs/decisions/OPEN_DECISIONS.md) · [인계·일정](docs/handoff/HANDOFF_1012.md) | [코드 출처](docs/provenance/PROVENANCE.md) · [원본 parity](docs/provenance/PARITY.md) · [파일 manifest](research/SOURCE_TO_TARGET_MANIFEST.csv) |
+| [**PDF (32쪽)**](deliverables/R2H_T11_CUSUM_Final_Review/R2H_T11_SVR_GARCH_CUSUM_최종연구보고서.pdf) · [DOCX (편집용)](deliverables/R2H_T11_CUSUM_Final_Review/R2H_T11_SVR_GARCH_CUSUM_최종연구보고서.docx) | [소스–주장 대응표](deliverables/R2H_T11_CUSUM_Final_Review/SOURCE_EVIDENCE_MATRIX.md) · [재현성 감사](deliverables/R2H_T11_CUSUM_Final_Review/REPRODUCIBILITY_AUDIT.md) · [변경·미해결](deliverables/R2H_T11_CUSUM_Final_Review/CHANGELOG_AND_OPEN_ISSUES.md) · [일치성 검수 결과](deliverables/R2H_T11_CUSUM_Final_Review/analysis/consistency_check.json) | [스크립트 01–08](deliverables/R2H_T11_CUSUM_Final_Review/scripts) · [claims.json](deliverables/R2H_T11_CUSUM_Final_Review/claims.json) · [확장 실험 결과](deliverables/R2H_T11_CUSUM_Final_Review/extension) | [T11 원 README](research/svr_garch_cusum_etf/README.md) · [T11 노트북](notebooks/R2H_T11_svr_garch_cusum_etf.ipynb) · [Track B 감사](research/svr_garch_cusum_track_b.md) · [1012 공통 README](docs/README_1012_baseline.md) |
 
 ---
 
-## 1. 한눈에 보는 결론
+## 0. 세 줄 요약
 
-| 연구 | 질문 | 재현 | 판정 | 실무 적용 |
-|---|---|---|---|---|
-| **ETF Domain EDA** (20종) | ETF 들은 어떤 구조로 같이·따로 움직이나 | ✅ 결과표 309개 바이트 동일 | **CLOSED** | ✅ 유니버스·중복 노출·변동성 정규화 규칙으로 사용 |
-| **Track A — 상관 전환** | KOSPI200 과의 상관 부호 전환이 급등을 알려 주나 | ✅ 결과표 43종 독립 2회 동일 | **부정적 결과** — 같은 날 기계적 중복을 빼면 우연 수준 | ❌ 정답·조기경보로는 사용 불가 · ⚠️ 국면 기술용으로만 |
-| **Track B — SVR–GARCH CUSUM** ([Lee·Kim·Lee 2020](https://doi.org/10.3390/e22050578)) | 원 논문 결과가 재현되나 | ✅ 계산은 결정적으로 재현 (MC 400회 일치) | **METHOD_FIDELITY_UNRESOLVED** — 원문 수치 미재현 | ⚠️ 사후 검정(`posthoc`)으로만 · 온라인 경보 아님 |
-| **T11 — SVR–GARCH CUSUM × ETF 20종** | 이 탐지기를 ETF 에 70/30 으로 적용하면 무엇을 잡고, Track A·EDA 경계와 맞나 | ✅ 오토런 2회 결과표 바이트 동일 · 노트북 2회 동일 | 정책 A 경보율 **iid 기준 미만** (w=60 0.39 vs 1.71/년) · 사건 근접 **우연 수준** (1차 가족 34 검정, 최소 q 0.57) | ❌ 급등 탐지기로 사용 불가 · ⚠️ 변동성 국면 맥락으로만 (기준선) |
-| **R2H 1012 기준선** | 2조·4조가 같은 입력·출력·평가로 비교할 수 있나 | ✅ clean-room · 하한 의존성 · CI | 계약 **v0.1 제안** | ✅ CUSUM·BOCPD 를 같은 표로 교환·채점 |
-
-<p align="center">
-  <img src="docs/figures/trackA_mechanical_leadlag.png" width="100%" alt="Track A mechanical effect and lead-lag">
-  <br><sub>Track A — 사건일 수익률을 지우면 같은 날 근접 18→1건, 유의 검정 9/48→0/48. lead-lag 은 lag 0 이 지배적.</sub>
-</p>
+1. **계산은 믿을 수 있다.** 같은 커밋을 서로 다른 두 환경에서 다시 돌리면 결과표 9종이 바이트 단위로 같고, 검정 구간 안에서 미래 자료가 과거 판단에 새지 않는다.
+2. **검정의 성질이 좋지 않다.** 합성 GARCH 자료에서 이 파이프라인의 거짓 기각률(크기)은 정책 A 2.4% · 정책 B 34% · 기준선 24.6% (목표 5%), 분산이 3배로 바뀌어도 정책 A 가 잡는 비율(검정력)은 19% 다. 크기와 검정력을 함께 만족하는 설정이 없다.
+3. **그래서 ETF 결과(기각 A 2 · B 9 · 기준선 1 /20)로는 '구조변화가 있다/없다' 를 확정할 수 없다.** 같은 KOSPI200 을 따르는 KODEX 200 과 TIGER 200 도 SVR 설정 선택에 따라 결론이 갈린다. 다음 단계는 탐지기 개선이 아니라 **시장 상태의 정의와 식별 가능성 검증**이다.
 
 ---
 
-## 2. 기술 스택
+## 1. 이 연구가 묻는 것 — 처음 보는 사람을 위한 설명
 
-| 영역 | 사용 |
+R2H 의 큰 목표는 **ETF 가격이 급등하는 국면을 포착**하는 것이다. 그 후보 도구로 Lee·Kim·Lee (2020, *Entropy* 22(5):578, [doi:10.3390/e22050578](https://doi.org/10.3390/e22050578)) 의 **SVR–GARCH CUSUM 검정**을 ETF 에 적용해 봤다. 이 검정이 실제로 보는 것은 다음과 같다.
+
+| 질문 | 이 검정이 답하는가? |
 |---|---|
-| 언어·환경 | Python 3.11+ (검증 3.12.3) · [uv](https://docs.astral.sh/uv/) + `uv.lock` · hatchling |
-| 계산 | numpy ≥ 2.0 · pandas ≥ 2.2 · scipy ≥ 1.13 (하한 버전으로도 CI 통과) · scikit-learn (ε-SVR, `--extra research`) |
-| 데이터 수집 | FinanceDataReader (`--extra research`, 원시 시세는 저장소 밖 — 종가 해시로 버전 검증) |
-| 품질 | pytest (unit · integration · property · leakage) · [hypothesis](https://hypothesis.readthedocs.io/) (결정적 프로필) · ruff · mypy |
-| 시각화·노트북 | matplotlib · nbclient / ipykernel (`--extra notebook`) · **한글 폰트 나눔고딕** (+ 그리스 문자 DejaVu 대체) · 노트북 규칙 = 모든 코드 줄 한국어 주석 (테스트로 강제) |
-| CI | GitHub Actions — lint → type → test → 합성 예제 2회 바이트 비교 · 최저 의존성 job |
-| 연구 원본 | [Siegfriex/SA_ETF](https://github.com/Siegfriex/SA_ETF) — EDA `main` · [Track A 브랜치](https://github.com/Siegfriex/SA_ETF/tree/codex/r2h-track-a) · [Track B 브랜치](https://github.com/Siegfriex/SA_ETF/tree/research/track-b-paper2020/research/track_b_paper2020) |
-| 원 논문 | Lee, S., Kim, C. K., & Lee, S. (2020). *Hybrid CUSUM Change Point Test for Time Series with Time-Varying Volatilities Based on Support Vector Regression.* **Entropy** 22(5), 578 — [doi:10.3390/e22050578](https://doi.org/10.3390/e22050578) · [MDPI 원문 (open access)](https://www.mdpi.com/1099-4300/22/5/578) |
-| 데이터 소스 | [FinanceDataReader](https://github.com/FinanceData/FinanceDataReader) 0.9.202 (KRX 상장 ETF 일봉) · [Yahoo Finance](https://finance.yahoo.com/) chart API (`^GSPC` `^KS11` `KRW=X`, 원문 [Investing.com](https://www.investing.com/) 대체) |
+| 가격이 **오르는가/내리는가** (방향) | ❌ 보지 않는다. 제곱을 쓰므로 +5% 와 −5% 가 같다 |
+| 수익률의 **흔들림(분산)이 어느 시점에 바뀌었는가** | ✅ 이것만 본다 — '분산 구조변화' 검정 |
+| 그 변화가 **투자에 쓸모 있는가** | ❌ 측정하지 않았다 |
+
+즉 이 검정은 '급등 탐지기' 가 아니라 **'조건부 변동성을 모형으로 걷어낸 뒤에도 남는 분산 변화가 있는가'** 를 묻는 통계 검정이다. 이 보고서의 질문도 그렇게 다시 세웠다.
+
+> **RQ1** SVR–GARCH 로 표준화한 잔차에 구조변화가 남는가 · **RQ2** 분산 입력 정책 A/B 에 따라 결과가 어떻게 바뀌는가 · **RQ3** 관측창(20–252일)에 따라 · **RQ4** 임계값의 귀무모형(iid 재표집)은 타당한가 · **RQ5** 같은 지수 ETF 끼리 일관적인가 · **RQ6** 검출 결과를 '시장 상태' 로 해석하려면 무엇이 더 필요한가
+
+**왜 기존 사건 평가를 뺐나?** 기존 T11 은 경보가 P1(급등·급락 후보), P4(누적수익률 경계), C3(상관 부호전환), 공통충격일과 가까운지를 검정했다. 그런데 이 사건들은 연구자가 임계값·기간을 정해 만든 것이라 '정답' 이 아니고, P1 의 점수(r/σ₆₀)는 기준선 잔차와 **같은 식**이라 겹침의 일부는 기계적이다. 그래서 결과 파일은 그대로 두고, 판단에는 쓰지 않았다. 대신 **변화 시점을 알고 만든 합성 자료**로 검정력을 쟀다.
 
 ---
 
-## 3. 데이터 명세 · 카드
-
-> 원시 시세는 재배포 권리를 확인하지 못해 **이 저장소에 넣지 않는다**. 각자 받은 파일이 기준 연구와 같은 바이트인지 `r2h.data.verify_manifest` 로 확인한다
-> (기준 해시: SA_ETF [`data/raw/MANIFEST.csv`](https://github.com/Siegfriex/SA_ETF/blob/main/data/raw/MANIFEST.csv)).
-> 노트북은 원시 시세 대신 SA_ETF 의 **공개 결과표**(커밋 SHA 고정 + sha256 검증)만 읽는다.
-
-### 3.1 데이터 카드 — 국내 상장 ETF 20종 (ETF EDA · Track A)
+## 2. 데이터 — 무엇을 넣었나
 
 | 항목 | 내용 |
 |---|---|
-| 출처 | `FinanceDataReader.DataReader(ticker, "2019-01-01")` — KRX 상장 ETF 일봉 OHLCV |
-| 기간·크기 | 2019-01-02 ~ 2026-10-02 · ticker 당 1,903행 · 공통 거래일 1,902 수익률 |
-| 버전 | 데이터 버전 = sorted `ticker:sha256` 의 sha256 → `fd9713f7f985e950…` (20/20 해시 일치 확인) |
-| 가격 조정 | FDR `Close` 는 분배 소급조정으로 **추정** (069500/KS200 누적비 1.155 ≈ TR 1.163). O/H/L 조정 일관성은 보장되지 않음 (D-06) |
-| 품질 이슈 | 261240 2019-03-14·15 이상치 → `dq_trim_canonical` 은 그 두 셀만 NaN (행 유지·보간 없음) · 153130 수익률이 정확히 0 인 날 16.8% · OHLC 위반 212건 (Close 기반 분석엔 영향 없음) |
-| 중복 노출 | 069500·102110·122630·114800 은 KOSPI200 동일 노출 → **사건 1건** |
-| 편향 | 현재 상장·규모 기준 선정 (survivorship) — PROVISIONAL 유니버스 (D-04) |
-| 2026 | 069500 변동성이 2019–25 평균의 3.3배인 특이 국면, 탐색에 이미 쓰인 구간 → blind holdout 아님 |
+| 대상 | 국내 상장 ETF 20종 (아래 표) |
+| 출처 | [FinanceDataReader](https://github.com/FinanceData/FinanceDataReader) 0.9.202, KRX 일봉 종가. 원시 시세는 저장소에 넣지 않는다 |
+| 기간 | 종가 2019-01-02 ~ 2026-10-02 → 공통 거래일 수익률 **1902개** |
+| 변환 | 일간 로그수익률 × 100 → 단위 %. 261240 은 품질 문제 2일을 결측 처리 |
+| 버전 고정 | 종가 원문 sha256 20/20 대조 (다르면 실행 중단) · data_version `5f20e3e0073b521a` |
+| 분할 | 시간순 **앞 70% 적합** (학습 932 / 검증 399일) → **뒤 30% 검정** 571일, 분할일 **2024-05-29** |
 
-<details>
-<summary><b>ETF 20종 명세 (클릭)</b> — 연환산 변동성·KOSPI200(069500) 상관은 전체표본 raw 기준</summary>
+| 코드 | 종목 | 분류 | 연율화 변동성 적합 구간 | 검정 구간 | 코드 | 종목 | 분류 | 적합 | 검정 |
+|---|---|---|--:|--:|---|---|---|--:|--:|
+| 069500 | KODEX 200 | 시장 지수 | 19.6% | 42.4% | 117680 | KODEX 철강 | 업종 | 28.1% | 41.5% |
+| 102110 | TIGER 200 | 시장 지수 | 19.4% | 42.5% | 161510 | PLUS 고배당주 | 전략 | 19.7% | 24.2% |
+| 229200 | KODEX 코스닥150 | 시장 지수 | 28.9% | 42.3% | 219480 | KODEX 미국S&P500선물(H) | 시장 지수 | 19.4% | 17.5% |
+| 122630 | KODEX 레버리지 | 레버리지·인버스 | 38.8% | 84.6% | 133690 | TIGER 미국나스닥100 | 시장 지수 | 20.9% | 21.9% |
+| 114800 | KODEX 인버스 | 레버리지·인버스 | 20.0% | 43.2% | 192090 | TIGER 차이나CSI300 | 시장 지수 | 19.5% | 21.9% |
+| 091230 | TIGER 반도체 | 업종 | 29.6% | 54.8% | 148070 | KIWOOM 국고채10년 | 국채 10년 | 6.3% | 5.5% |
+| 091170 | KODEX 은행 | 업종 | 25.8% | 30.7% | 153130 | KODEX 단기채권 | 단기채 | 0.4% | 0.2% |
+| 091180 | KODEX 자동차 | 업종 | 27.3% | 39.0% | 132030 | KODEX 골드선물(H) | 원자재 | 15.5% | 24.8% |
+| 305540 | TIGER 2차전지테마 | 테마 | 36.6% | 49.4% | 261220 | KODEX WTI원유선물(H) | 원자재 | 48.5% | 46.4% |
+| 143860 | TIGER 헬스케어 | 업종 | 28.7% | 35.1% | 261240 | KODEX 미국달러선물 | 통화 | 8.7% | 9.4% |
 
-| ticker | 이름 | 분류 | 기초지수 | 환헤지 | 배율 | 연변동성 | ρ(069500) |
-|---|---|---|---|---|---|---|---|
-| 069500 | KODEX 200 | broad_market | KOSPI 200 | KRW | – | 28.5% | 1.00 |
-| 102110 | TIGER 200 | broad_market | KOSPI 200 | KRW | – | 28.4% | 1.00 |
-| 229200 | KODEX 코스닥150 | broad_market | KOSDAQ 150 | KRW | – | 33.5% | 0.69 |
-| 122630 | KODEX 레버리지 | leveraged_inverse | KOSPI 200 (일간 2배) | KRW | 2x | 56.6% | 1.00 |
-| 114800 | KODEX 인버스 | leveraged_inverse | KOSPI 200 선물 (일간 −1배) | KRW | −1x | 29.1% | −1.00 |
-| 091230 | TIGER 반도체 | sector | KRX 반도체 (추정) | KRW | – | 39.0% | 0.86 |
-| 091170 | KODEX 은행 | sector | KRX 은행 (추정) | KRW | – | 27.4% | 0.53 |
-| 091180 | KODEX 자동차 | sector | KRX 자동차 (추정) | KRW | – | 31.3% | 0.66 |
-| 305540 | TIGER 2차전지테마 | theme | FnGuide 2차전지 (추정) | KRW | – | 40.8% | 0.57 |
-| 143860 | TIGER 헬스케어 | sector | KRX 헬스케어 (추정) | KRW | – | 30.8% | 0.51 |
-| 117680 | KODEX 철강 | sector | KRX 철강 (추정) | KRW | – | 32.7% | 0.59 |
-| 161510 | PLUS 고배당주 | strategy | FnGuide 고배당주 (추정) | KRW | – | 21.2% | 0.65 |
-| 219480 | KODEX 미국S&P500선물(H) | broad_market | S&P 500 선물 | 헤지 | – | 18.9% | 0.54 |
-| 133690 | TIGER 미국나스닥100 | broad_market | NASDAQ-100 | 비헤지 | – | 21.2% | 0.45 |
-| 192090 | TIGER 차이나CSI300 | broad_market | CSI 300 | 비헤지 (추정) | – | 20.3% | 0.28 |
-| 148070 | KIWOOM 국고채10년 | rates | 국고채 10년 (추정) | KRW | – | 6.1% | 0.13 |
-| 153130 | KODEX 단기채권 | money_market | 단기채 (추정) | KRW | – | 0.3% | 0.05 |
-| 132030 | KODEX 골드선물(H) | commodity | S&P GSCI Gold (추정) | 헤지 | – | 18.8% | 0.27 |
-| 261220 | KODEX WTI원유선물(H) | commodity | S&P GSCI Crude Oil (추정) | 헤지 | – | 47.9% | 0.06 |
-| 261240 | KODEX 미국달러선물 | currency | KRX USD/KRW 선물 | USD 롱 | – | 13.5% | −0.31 (DQ 2일 제외 시 −0.46) |
+<sub>연율화 변동성 = 일간 수익률(%) 표준편차 × √252. KOSPI200 그룹(같은 기초지수) = 069500 · 102110 · 122630(2배) · 114800(−1배).</sub>
 
-</details>
+<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig11_vol_overview.png" width="78%" alt="volatility overview"><br><sub>그림 A. 20종 중 16종은 검정 구간의 변동성이 더 높다 (검정/적합 비 중앙값 1.29). KODEX 200 은 19.6% → 42.4%. 즉 검정 구간에 2026년 고변동기가 들어 있다.</sub></p>
 
-### 3.2 데이터 카드 — 논문 재현용 지수 3종 (Track B)
+<p align="center"><img src="docs/figures/svrgarch/02_anatomy_069500.png" width="92%" alt="anatomy 069500"><br><sub>그림 B. KODEX 200 한 종목의 해부 — 위에서부터 누적수익률, 일간 수익률, 분산(관측 proxy·정책 A·정책 B), 잔차², 사후 CUSUM 경로, 이동창 통계량/임계값. 빨강 점선 = 적합/검정 분할 (기존 T11 그림)</sub></p>
 
-| series | 원문 출처 | 사용 출처 (SOURCE_SUBSTITUTED) | 기간 (= 원문) | 관측치 |
-|---|---|---|---|---|
-| S&P 500 | Investing.com (HTTP 403) | Yahoo `^GSPC` 종가 | 2012-01-03 ~ 2016-09-30 | 1,195 |
-| KOSPI | Investing.com | Yahoo `^KS11` 종가 | 2012-10-02 ~ 2019-06-28 | 1,653 |
-| KRW/USD | Investing.com | Yahoo `KRW=X` | 2012-01-02 ~ 2016-09-30 | 1,238 |
+---
 
-수익률 = 100·Δlog (원문 그림 축이 % 라서 그렇게 추정). 시계열의 URL·sha256 은 [`data_manifest.json`](https://github.com/Siegfriex/SA_ETF/blob/research/track-b-paper2020/research/track_b_paper2020/data/raw/data_manifest.json) 에 있다.
+## 3. 지표 사전 — 보고서에 나오는 모든 숫자의 뜻
 
-### 3.3 입력 계약 (요약 — 전체는 [CONTRACT_v0.1](docs/architecture/CONTRACT_v0.1.md))
-
-| 객체 | 필수 필드 | 규칙 |
+| 기호·이름 | 정의 | 읽는 법 |
 |---|---|---|
-| 관측 | `ticker` (str, 선행 0 유지) · `date` (tz-naive 거래일) · `adj_close` > 0 · `volume` ≥ 0 | (ticker, date) 중복 금지 · 오름차순 · 해외자산은 `observed_at` (tz-aware) |
-| 탐지 출력 | `ticker, signal_at, score, is_alarm, method_id, mode, model_version, data_version, available_until, params_hash` | `mode="online"` 이면 **`available_until ≤ signal_at`** 강제 |
-| 정답 사건 | `label_version, event_id, ticker, event_start, event_end, direction, threshold_definition, created_from_window` | 오프라인 전용 · 탐지기 출력으로 만들지 않음 |
-| 체결 | `signal_at ≤ decision_at < fill_at` | 같은 봉 체결 금지 |
+| $y_t$ 수익률 | $100\cdot\Delta\log(\text{종가})$ | 하루 %. 2.0 이면 약 +2% |
+| $\tilde\sigma_t^2$ 변동성 proxy | 직전 5일 수익률 제곱의 평균 $\frac15\sum_{j=0}^{4}y_{t-j}^2$ | 관측으로 바로 계산되는 '요즘 흔들림' |
+| $\hat\sigma_t^2$ SVR–GARCH 조건부분산 | $\hat g(y_{t-1}^2,\tilde\sigma_{t-1}^2)$, $\hat g$ = 적합 구간에서 학습한 ε-SVR (RBF) | 어제까지 정보로 예측한 오늘의 분산 |
+| 정책 A / 정책 B | 검정 구간에서 $\hat g$ 의 둘째 입력에 **관측 proxy** (A) / **직전 예측값** $\hat\sigma_{t-1}^2$ (B) 를 넣음 | 원 논문이 정하지 않은 선택. A = 1차, B = 민감도 |
+| 기준선 | $r_t/\sigma_{t-1}(60)$ — 모형 없이 직전 60일 표준편차로 나눔 | SVR 이 주는 차이를 보기 위한 비교군 |
+| $\hat\varepsilon_t$ 표준화 잔차 | $y_t/\hat\sigma_t$ | 모형이 맞으면 평균 0·분산 1 인 '놀람' |
+| $T_n$ CUSUM-of-squares 통계량 | $\max_k\lvert\sum_{t\le k}\hat\varepsilon_t^2-\frac kn\sum\hat\varepsilon_t^2\rvert/(\sqrt n\,\hat\tau)$ | 잔차 제곱의 누적합이 '일정 분산 직선' 에서 가장 멀리 벗어난 정도. 클수록 분산 변화 의심 |
+| $\hat\tau^2$ | $\overline{\hat\varepsilon^4}-(\overline{\hat\varepsilon^2})^2$ | 잔차 제곱의 분산 — 정규화 분모. **잔차가 독립이라고 가정** |
+| $\hat k$ 변화점 추정 | $T_n$ 이 최대가 되는 위치 | 표본 전체를 본 **사후** 추정. 그날 실시간으로 알 수 있었다는 뜻이 아님 |
+| 임계값 $c$ | 원문 1.3397 · Kolmogorov 이론값 1.3581 · iid N(0,1) 모의 95% · ETF 별 부트스트랩 95% | $T_n\ge c$ 이면 기각(분산 변화 있음) |
+| $T_t(w)$ 이동창 통계량 | 최근 $w$ 일 창 $[t-w+1,t]$ 에 같은 검정, $w\in\{20,30,60,120,252\}$ | 매일 다시 계산 — 시점 $t$ 까지 정보만 사용 |
+| 경보 · 에피소드 | $T_t(w)\ge c_w$ 인 날 = 경보일. 경보 사이 공백 ≤5일이면 한 에피소드 | 연간 경보 에피소드 = 에피소드 수 / (일수/252) |
+| 크기 (size) | 변화가 **없는** 자료에서 기각하는 비율 | 5% 에 가까워야 정상. 크면 '없는 변화를 있다' 고 함 |
+| 검정력 (power) | 변화가 **있는** 자료에서 기각하는 비율 | 클수록 좋음. 크기가 지켜질 때만 의미 |
+| MC SE | 모의실험 비율의 표준오차 $\sqrt{p(1-p)/R}$ | R=500 이면 최대 ±2.2%p |
+| 장기분산/τ̂² 비 | 잔차 제곱의 자기상관까지 반영한 분산 ÷ $\hat\tau^2$ | 1 미만 → 검정이 보수적(덜 기각), 1 초과 → 과다 기각 |
+| iid 재표집 / stationary bootstrap | 적합 구간 잔차를 하루씩 독립 추출 / 평균 20일 블록으로 추출 | 서로 **다른 귀무가설**. 후자는 시계열 의존을 보존 |
+| in-sample / out-of-sample | $\hat g$ 를 학습한 적합 구간 / 학습에 안 쓴 검정 구간 | 성능 판단은 out-of-sample 로만 |
 
 ---
 
-## 4. 수식 · 알고리즘
+## 4. 적용 절차 — 한 단계씩
 
-<details open>
-<summary><b>4.1 Feature (과거 정보만 — t 종가 이후 이용 가능)</b></summary>
+<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig01_pipeline.png" width="100%" alt="pipeline"><br><sub>그림 C. 파이프라인과 네 가지 사용 형태. 이 연구가 평가한 것은 ① 사후 검정과 ② 이동창 반복 검정의 통계적 성질뿐이다.</sub></p>
 
-$$r_t=\ln C_t-\ln C_{t-1},\qquad z_t=\frac{r_t}{\hat\sigma_{t-1}(w)},\quad \hat\sigma_{t-1}(w)=\operatorname{sd}(r_{t-w},\dots,r_{t-1})$$
+| 단계 | 하는 일 | 코드 | 산출물 |
+|---|---|---|---|
+| S0 데이터 | 종가 로드 → 해시 대조 → 공통 거래일 → 로그수익률(%) | `src/r2h/svrgarch_etf/data.py` | 1,902 × 20 수익률 |
+| S1 적합 | 앞 70% 안에서 학습/검증 70:30, grid 27점(C·γ²·ε) 중 검증 MAE 최소 선택 → 앞 70% 전체로 재적합 | `model.fit_etf` ← `paper2020.svr_garch` | `results/fit_summary.csv` |
+| S2 잔차 | 정책 A·B·기준선 세 가지 표준화 잔차 | `EtfFit.residuals`, `baseline_residuals` | `outputs/cache/t11_state.npz` |
+| S3 사후 검정 | 검정 구간 571일 전체에 식 $T_n$ 한 번 → 기각·$\hat k$ | `paper2020.cusum_squares_test` | `results/fullsample_tests.csv` |
+| S4 임계값 | 적합 구간 잔차 iid 재표집 5,000회 → 창 길이별 95% 분위 | `rolling.bootstrap_critical_value` | `results/critical_values.csv` |
+| S5 이동창 | 매일 최근 w일 창에 $T_t(w)$ → 경보 → 에피소드 | `rolling.rolling_cusum`, `episodes` | `results/rolling_stats.csv.gz` |
+| S6 재계산 (이번) | S3–S5 를 캐시 잔차에서 독립 재계산, 구간별 분모 분리 | `deliverables/R2H_T11_CUSUM_Final_Review/scripts/01_recompute.py` | `analysis/` |
+| S7 확장 실험 (이번) | E1–E6 합성 자료 크기·검정력, 귀무 민감도, 시점 무결성, 잔차 의존성 | `deliverables/R2H_T11_CUSUM_Final_Review/scripts/02_extension.py` | `extension/` |
 
-$$\rho_t(w)=\operatorname{corr}\big(r^{(a)}_{t-w+1:t},\,r^{(b)}_{t-w+1:t}\big)\quad(\text{pairwise-complete; }n_\text{eff}<\text{min\_periods}\text{ 또는 분산 }0\Rightarrow\text{NaN})$$
+**CUSUM 은 어떻게 변화를 잡나?** 아래 교육용 예시에서 251번째 날부터 표준편차를 1.6배로 바꾸면, 잔차 제곱의 누적합이 '분산 일정' 직선에서 점점 멀어지다가 변화 시점 근처에서 가장 멀어진다. 그 최대 거리(정규화)가 $T_n$, 그 위치가 $\hat k$ 다.
 
-**지속 부호 국면 (C3)**: $|\rho_t|>b$ 이고 같은 부호가 $k$ 거래일 연속이면 국면 확정. 확정 시점 $=$ 후보 시점 $+(k-1)$ 거래일이다 (주 정의 $b=0.1,k=10$ ⇒ 9 거래일 지연).
-</details>
+<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig10_cusum_toy.png" width="100%" alt="cusum toy"><br><sub>그림 D. CUSUM-of-squares 의 작동 원리 (합성 예시, 실제 ETF 아님). 변화 없는 경우 $T_n$ 이 임계값 아래, 변화 있는 경우 위로 크게 벗어난다.</sub></p>
 
-<details>
-<summary><b>4.2 참조 온라인 탐지기 (합성 데이터에서만 검증)</b></summary>
+$$T_n=\max_{1\le k\le n}\frac{\left|\sum_{t=1}^{k}\hat\varepsilon_t^2-\frac{k}{n}\sum_{t=1}^{n}\hat\varepsilon_t^2\right|}{\sqrt n\,\hat\tau},\qquad H_0:\ \mathbb E[\varepsilon_t^2]\ \text{일정}\quad\text{vs}\quad H_1:\ k^*\ \text{에서 변화}$$
 
-- `VolScaledThreshold`: $\;\text{alarm}_t=\mathbb 1[z_t\ge k]$ (SA_ETF Track A 가격 사건 P1 과 같은 점수, `min_periods=40` 이면 비트 동일).
-- `PageCUSUM` (Page 1954, 단측):
-
-$$\tilde z_t=\frac{r_t-\bar r_{t-w:t-1}}{\hat\sigma_{t-1}(w)},\qquad S_t=\max\big(0,\;S_{t-1}+\tilde z_t-\delta\big),\qquad \text{alarm}_t=\mathbb 1[S_t\ge h]\;\Rightarrow S_t\leftarrow 0$$
-</details>
-
-<details>
-<summary><b>4.3 Lee·Kim·Lee (2020) Hybrid SVR–GARCH CUSUM — 사후 검정</b></summary>
-
-1. 변동성 proxy: $\tilde\sigma^2_t=\frac1m\sum_{j=0}^{m-1}y^2_{t-j}$, $m=5$ (Eq. 9).
-2. ε-SVR(RBF) 로 $\hat\sigma^2_t=\hat g\big(y^2_{t-1},\tilde\sigma^2_{t-1}\big)$ 를 적합한다. 커널 $\exp(-\lVert x-x'\rVert^2/2\gamma^2)$ ↔ sklearn `gamma = 1/(2γ²)`. 파라미터는 grid 와 검증 MAE 로 고른다.
-3. 표준화 잔차 $\hat\epsilon_t=y_t/\hat\sigma_t$ 의 CUSUM of squares:
-
-$$T_n=\max_{1\le k\le n}\frac{\big|\sum_{t\le k}\hat\epsilon_t^2-\tfrac kn\sum_{t\le n}\hat\epsilon_t^2\big|}{\sqrt n\,\hat\tau},\qquad \hat\tau^2=\overline{\hat\epsilon^4}-\big(\overline{\hat\epsilon^2}\big)^2,\qquad T_n\ge 1.3397\Rightarrow\text{기각 (5\%)}$$
-
-변화점 추정은 $\hat k=\arg\max_k|\cdot|$ 이다. 표본 전체를 보는 **사후 검정**이므로 R2H 에서는 `PosthocCUSUMSquares` (`mode="posthoc"`) 로만 쓴다.
-테스트 구간에서 $\hat g$ 에 넣을 분산 lag(관측 proxy A / 재귀 예측 B)는 **원문에 명시되어 있지 않다**.
-</details>
-
-<details>
-<summary><b>4.4 평가 — 사건 매칭 · 지표 · 우연 수준</b></summary>
-
-- **매칭**: cooldown 을 먼저 적용한다. 사건 $e$ 의 창 $[s_e-\text{pre},\,s_e+\text{max\_delay}]$ 안의 첫 경보가 TP 이고, 같은 사건의 이후 경보는 DUPLICATE, 어느 창에도 들지 않으면 FP 다.
-- **지표**: $\text{recall}=\frac{\#\text{탐지 사건}}{\#\text{사건}}$, $\;\text{FP}/\text{ticker-year}=\frac{\#\text{FP}}{\sum_\text{ticker}N_\text{days}/252}$. 지연은 탐지된 사건만 평균하고 미탐 수를 따로 보고한다. 주 지표는 **오탐 상한 하 탐지율** `recall_at_fp_cap`.
-- **근접의 우연 수준 (원형 이동)**: $T=\#\{c:\exists p,\ |p-c|\le L\}$, $\;p=\frac{1+\#\{T^*\ge T\}}{B+1}$. 여러 검정은 Benjamini–Hochberg q 로 보정한다.
-</details>
-
-```mermaid
-flowchart LR
-  A["관측 OHLCV<br>validate_observations"] --> B["features<br>r, σ, z, ρ"]
-  B --> C["Detector.run<br>online / posthoc"]
-  C -->|online only| D["match_alarms<br>cooldown · max_delay"]
-  G["Ground Truth<br>label_version (D-01)"] --> D
-  D --> E["event_metrics<br>recall · FP/yr · delay"]
-  E --> F["recall_at_fp_cap<br>(개발 구간에서만 선택)"]
-  C -.->|posthoc| H["사후 구조변화 해석<br>(평가 금지)"]
-```
+> **임계값 주의.** 코드와 원 논문은 5% 임계값으로 **1.3397** 을 쓴다. 그런데 이 극한분포(Kolmogorov, sup|브라운 다리|)의 95% 분위를 직접 계산하면 **1.3581** 이고, 1.3397 은 상측 확률 0.0552 에 해당한다. 원문 값의 근거는 확인하지 못했다(UNRESOLVED). 짧은 창에서는 유한표본 분위가 훨씬 작다 (w=20: 1.182).
 
 ---
 
-## 5. 실험 결과 — 재현되었나, 적용 가능한가
+## 5. 결과 — 무엇이 나왔나
 
-전체 그림과 해석은 [**연구 종합 노트북**](notebooks/R2H_1012_research_synthesis.ipynb) 에 있다 (그림 10장, 핵심 수치는 `assert` 로 검증).
+### 5.1 검정 구간 사후 검정 (RQ1·RQ2)
 
-### 5.1 ETF Domain EDA
+| 잔차 | 원문 1.3397 | Kolmogorov 1.3581 | N(0,1) 모의 1.3298 | ETF 별 부트스트랩 | T 중앙값 |
+|---|--:|--:|--:|--:|--:|
+| 정책 A | **2**/20 | 1 | 2 | 4 | 0.859 |
+| 정책 B | **9**/20 | 8 | 9 | 11 | 1.323 |
+| 기준선 | **1**/20 | 1 | 1 | 1 | 0.812 |
 
-<p align="center"><img src="docs/figures/eda_corr_vol.png" width="100%" alt="EDA correlation and volatility"></p>
-<p align="center"><img src="docs/figures/eda_comovement_shocks.png" width="100%" alt="EDA co-movement and shocks"></p>
+- 기각: 정책 A = 069500, 091230 · 정책 B = 069500, 122630, 114800, 091230, 161510, 133690, 153130, 132030, 261220 · 기준선 = 153130
+- 정책 A 의 $\hat k$ 는 8/20 종이 **2026년 1월** — 그림 A 의 고변동기 시작과 겹친다. 단 사후 추정 위치다.
+- 재계산 확인: 결과표와 차이 10⁻⁵ 미만, $\hat k$ 60/60 · 기각 60/60 일치.
 
-- 국내 주식형 ETF 끼리는 상관이 0.5–1.0 이다. KOSPI200 계열 4종은 사실상 같은 노출이라 사건 1건으로 센다.
-- 채권·금·원유는 KOSPI200 과 거의 독립(ρ 0.05–0.27)이고, 달러선물만 일관되게 음(−0.46, DQ 제외)이다.
-- 평균 상관은 충격 국면에서 계단식으로 오른다. 공통충격일 40일 중 2020-03(9일)·2026-03(5일)·2024-08(3일)이 가장 크다.
-  따라서 "상관 변화" 와 "변동성 국면" 은 독립 신호가 아니다.
-- **재현**: SA_ETF `d5c2f79` 을 clean clone 에서 다시 실행 → csv·png 309개 바이트 동일, 노트북 21개는 메타데이터만 다름. **적용**: 유니버스 정의·중복 노출 규칙·변동성 정규화(r/σ) 의 근거로 쓴다.
+<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig02_fullsample_T.png" width="80%" alt="fullsample T"><br><sub>그림 1. ETF 별 사후 통계량. 채운 마커 = 1.3397 이상(기각). 정책 B(■)가 대체로 오른쪽 — 그러나 5.6절에서 보듯 B 는 변화가 없어도 자주 기각한다.</sub></p>
 
-### 5.2 Track A — 상관 전환 vs 가격 급등·급락 (부정적 결과)
+<details><summary><b>ETF 20종 전체 표 펼치기</b></summary>
 
-<p align="center"><img src="docs/figures/trackA_yearly_corr_flips.png" width="100%" alt="Track A yearly correlation and flips"></p>
-<p align="center"><img src="docs/figures/trackA_c3_timeline.png" width="100%" alt="Track A C3 timeline"></p>
+| 코드 | 종목 | SVR C/γ²/ε | T_A | k̂_A | T_B | k̂_B | T_기준선 |
+|---|---|---|--:|---|--:|---|--:|
+| 069500 | KODEX 200 | 1/0.5/0.1 | **1.403** | 2026-01-26 | **2.026** | 2026-01-26 | 0.695 |
+| 102110 | TIGER 200 | 100/1/0.1 | 0.646 | 2026-01-26 | 0.731 | 2026-01-26 | 0.693 |
+| 229200 | KODEX 코스닥150 | 10/0.5/0.1 | 0.702 | 2026-01-20 | 1.318 | 2026-01-20 | 0.659 |
+| 122630 | KODEX 레버리지 | 10/1/0.1 | 0.699 | 2026-01-26 | **1.625** | 2025-09-25 | 0.625 |
+| 114800 | KODEX 인버스 | 10/0.5/0.1 | 0.899 | 2026-01-26 | **2.298** | 2026-01-30 | 0.610 |
+| 091230 | TIGER 반도체 | 1/1/0.1 | **1.354** | 2026-01-26 | **1.493** | 2026-02-25 | 0.833 |
+| 091170 | KODEX 은행 | 1/1/0.1 | 0.647 | 2025-05-23 | 0.912 | 2026-01-19 | 0.692 |
+| 091180 | KODEX 자동차 | 10/1/0.1 | 0.510 | 2026-01-06 | 0.732 | 2025-10-01 | 0.977 |
+| 305540 | TIGER 2차전지테마 | 10/1/0.1 | 0.330 | 2024-11-29 | 0.840 | 2025-04-10 | 0.719 |
+| 143860 | TIGER 헬스케어 | 1/1/0.1 | 1.028 | 2025-10-24 | 0.780 | 2026-01-20 | 0.792 |
+| 117680 | KODEX 철강 | 1/0.5/0.1 | 0.429 | 2026-03-05 | 0.474 | 2025-04-07 | 0.898 |
+| 161510 | PLUS 고배당주 | 1/0.1/0.1 | 0.758 | 2025-05-22 | **1.879** | 2026-01-28 | 0.862 |
+| 219480 | KODEX 미국S&P500선물(H) | 1/0.5/0.1 | 1.065 | 2025-04-25 | 0.840 | 2025-04-10 | 1.137 |
+| 133690 | TIGER 미국나스닥100 | 10/1/0.1 | 0.910 | 2025-05-14 | **2.334** | 2025-04-25 | 1.168 |
+| 192090 | TIGER 차이나CSI300 | 10/1/0.1 | 0.847 | 2025-04-08 | 0.798 | 2025-04-08 | 1.160 |
+| 148070 | KIWOOM 국고채10년 | 10/1/0.1 | 0.871 | 2026-02-24 | 1.329 | 2025-11-05 | 1.044 |
+| 153130 | KODEX 단기채권 | 10/1/0.1 | 1.317 | 2025-01-31 | **1.353** | 2025-01-31 | **1.578** |
+| 132030 | KODEX 골드선물(H) | 1/0.5/0.1 | 1.271 | 2026-01-08 | **1.544** | 2025-12-11 | 1.108 |
+| 261220 | KODEX WTI원유선물(H) | 1/0.1/0.1 | 1.253 | 2026-02-27 | **2.971** | 2025-04-10 | 0.750 |
+| 261240 | KODEX 미국달러선물 | 1/1/0.1 | 0.461 | 2025-12-23 | 0.547 | 2025-04-03 | 0.654 |
 
-| 확인한 수치 (원 표에서 재계산) | 값 |
+굵게 = 1.3397 이상. 출처 `analysis/fullsample_recomputed.csv`.
+</details>
+
+### 5.2 정책 A 대 B — 같은 자료, 다른 선택 (RQ2)
+
+- 같은 ETF 에서 B 의 통계량이 더 큰 경우 **17/20**, 기각 판정이 엇갈린 ETF 7종, $\hat k$ 가 같은 날 5종.
+- 검정 구간 $\hat\sigma^2$ 의 변동계수는 **20종 모두** B 가 작다 (중앙값 B 0.765 vs A 1.064). 재귀 입력은 충격을 늦게 반영해 분산 경로가 평평해지고, 그만큼 실제 변동성 변화가 잔차에 남는다 → B 의 큰 통계량은 '덜 된 표준화' 와 맞는다.
+
+<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig07_timeline_069500.png" width="92%" alt="timeline"><br><sub>그림 2. KODEX 200 — 회색 = 적합 구간(in-sample), 흰색 = 검정 구간. 가운데: 정책 A(실선)·B(주황 점선)·기준선(점선) σ. 아래: w=60 통계량/임계값 (1 이상 = 경보).</sub></p>
+
+### 5.3 같은 지수, 다른 결론 (RQ5)
+
+| 코드 | 종목 | SVR C/γ²/ε | T_A | T_B | 수익률 상관 (vs 069500) | 정책 A 잔차 상관 |
+|---|---|---|--:|--:|--:|--:|
+| 069500 | KODEX 200 | 1/0.5/0.1 | 1.403 | 2.026 | 1.0000 | 1.0000 |
+| 102110 | TIGER 200 | 100/1/0.1 | 0.646 | 0.731 | 0.9994 | 0.9891 |
+| 122630 | KODEX 레버리지 | 10/1/0.1 | 0.699 | 1.625 | 0.9980 | 0.9892 |
+| 114800 | KODEX 인버스 | 10/0.5/0.1 | 0.899 | 2.298 | -0.9955 | -0.9867 |
+
+KODEX 200 과 TIGER 200 은 수익률 상관 **0.9994** — 사실상 같은 시계열이다. 그런데 정책 A 통계량은 **1.403 (기각) vs 0.646 (비기각)**. 차이는 SVR 초모수(C=1 vs C=100) 선택에서 나왔고, 2026년 고변동기에 TIGER 200 의 $\hat g$ 가 σ̂ 를 더 크게 잡아 잔차를 더 눌렀다. 이동창 통계량 상관도 0.868 에 그친다. → **결과가 시장보다 모형 선택에 더 크게 좌우된다.**
+
+<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig06_kospi200_pair.png" width="88%" alt="kospi pair"><br><sub>그림 3. 위: 두 ETF 의 정책 A σ̂ (검정 구간). 아래: 정규화 CUSUM 경로 — 절대값 최대가 T_n. 069500 만 ±1.3397 선에 닿는다.</sub></p>
+
+### 5.4 관측창별 경보 빈도 — 분모를 나눠 보면 (RQ3)
+
+기존 요약 '정책 A 0.39 vs 귀무 1.71 회/년' 의 분모는 **전 기간 1902 거래일 / 252 = 7.548년** 이고 in-sample 적합 구간이 섞여 있다. 나눠 보면:
+
+| 잔차 | w | 전 기간 | 적합 구간 (in-sample) | **검정 구간 (out-of-sample)** | iid 귀무 기대 | 검정 경보 0건 ETF |
+|---|--:|--:|--:|--:|--:|--:|
+| 정책 A | 20 | 2.23 | 2.1 | **2.63** | 4.05 | 0/20 |
+| 정책 A | 30 | 0.87 | 0.75 | **1.26** | 3.02 | 1/20 |
+| 정책 A | 60 | 0.39 | 0.35 | **0.47** | 1.71 | 10/20 |
+| 정책 A | 120 | 0.25 | 0.22 | **0.39** | 0.99 | 13/20 |
+| 정책 A | 252 | 0.21 | 0.21 | **0.47** | 0.56 | 14/20 |
+| 기준선 | 20 | 6.26 | 6.33 | **6.76** | 4.04 | 0/20 |
+| 기준선 | 30 | 5.31 | 5.44 | **5.86** | 2.93 | 0/20 |
+| 기준선 | 60 | 3.82 | 3.84 | **4.48** | 1.7 | 0/20 |
+| 기준선 | 120 | 2.73 | 2.81 | **3.62** | 0.97 | 0/20 |
+| 기준선 | 252 | 1.28 | 1.4 | **2.09** | 0.57 | 0/20 |
+
+단위: 연간 경보 에피소드, 20종 평균. 임계값 = ETF 별 iid 부트스트랩 95%.
+
+<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig03_critical_values.png" width="70%" alt="critical values"><br><sub>그림 4. 창이 짧을수록 유한표본 임계값이 작다 — 짧은 창에 1.3397 을 쓰면 지나치게 보수적.</sub></p>
+
+<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig04_alarm_rates.png" width="88%" alt="alarm rates"><br><sub>그림 5. 정책 A 는 모든 창에서 귀무 기대보다 적고, 기준선은 모든 창에서 많다. 그러나 귀무 기대(iid)는 시계열 의존을 반영하지 않는다 → 5.7절.</sub></p>
+
+<p align="center"><img src="docs/figures/svrgarch/04_rolling_heatmaps.png" width="92%" alt="heatmap"><br><sub>그림 6. 20종 × 날짜 × 5개 창의 T/c 지도 (기존 T11 그림). 진할수록 경보에 가깝다. 청록선 = 분할.</sub></p>
+
+<p align="center"><img src="docs/figures/svrgarch/10_yearly_blocks.png" width="92%" alt="yearly"><br><sub>그림 7. 달력연도별 사후 통계량 (굵게 = 1.3397 이상). 기준선은 2020년 85%·2026년 55% 기각, 정책 A 는 2020·2022년 5% 외 0%. 정책 A 2019–2024.5 는 in-sample.</sub></p>
+
+### 5.5 시점 무결성 — 미래가 과거에 새지 않나 (E4)
+
+KODEX 200 의 검정 구간 2025-08-22 이후 수익률만 3배로 바꾸고 전체를 다시 돌렸다 → $\hat g$ 동일, 그 이전의 잔차·이동창 통계량 **18/18 비트 동일**. 반대로 적합 구간을 바꾸면 $\hat g$ 와 이후 전부가 바뀐다 — 적합 구간 값은 설계상 in-sample 이므로 성능 판단에 쓰지 않는다.
+
+### 5.6 합성 자료로 잰 크기·검정력 — 핵심 결과 (RQ4, E1·E2)
+
+정답(변화 시점)을 알고 만든 GARCH(1,1) 자료(ω=0.05, α=0.08, β=0.90, n=1,902, 70/30 동일)에 **T11 파이프라인 전체**(grid 선택 포함)를 500회씩 돌렸다. 대립은 검정 구간 286번째 날부터 ω×3 (무조건분산 3배).
+
+| 측정 | 정책 A | 정책 B | 기준선 | 바람직한 값 |
+|---|--:|--:|--:|---|
+| 사후 검정 **크기** (변화 없음, %) | 2.4 | 34 | 24.6 | ≈ 5 |
+| 사후 검정 **검정력** (분산 3배, %) | 19 | 73 | 28.8 | 높을수록 |
+| w=60 귀무 연간 경보 (회/년) | 0.1 | 2.41 | 4.1 | 낮을수록 |
+| w=60 변화 후 20일 안 경보 (%) | 2 | 28.2 | 61.8 | 높을수록 |
+| w=60 변화 후 60일 안 경보 (%) | 6.4 | 51.2 | 84.6 | 높을수록 |
+| w=60 첫 경보 지연 중앙값 (거래일) | 138 | 41 | 12 | 짧을수록 |
+
+<sub>MC 표준오차 ≤ 2.2%p (R=500). 참고: 변동성 모형 없이 GARCH 수익률을 그대로 검정하면 크기가 85.7% (E1) — 표준화가 필수인 이유.</sub>
+
+<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig05_size_power.png" width="100%" alt="size power"><br><sub>그림 8. 왼쪽 = 크기(점선 5%), 가운데 = 검정력, 오른쪽 = 변화 후 첫 경보까지의 누적 비율. 정책 A 는 크기는 지키지만 거의 못 잡고, B·기준선은 잘 잡는 듯하지만 변화가 없어도 자주 울린다.</sub></p>
+
+**읽는 법**: 정책 B 의 실제 ETF 기각 9/20 은, 변화가 없을 때도 34% 를 기각하는 검정의 결과라서 **구조변화 증거로 읽을 수 없다**. 정책 A 의 비기각 18/20 은 검정력이 19% 인 검정의 결과라서 **'변화 없음' 의 증거도 아니다**.
+
+### 5.7 왜 정책 A 는 이렇게 조용한가 — 잔차 의존성과 귀무 선택 (RQ4, E3·E6)
+
+- **잔차 제곱의 음의 자기상관 (E6)**: 정책 A 는 직전 5일 proxy 를 입력으로 쓰므로, 큰 충격 다음 날 σ̂ 가 커져 잔차 제곱이 작아진다. 장기분산/τ̂² 비 중앙값: 정책 A 검정 구간 **0.91** (18/20 < 1), 합성 귀무 **0.66** (100/100 < 1). 1 미만이면 τ̂ 정규화가 통계량을 눌러 덜 기각한다. 기준선은 반대로 1.49 (양의 군집) → 과다 기각.
+- **귀무를 바꾸면 결론이 바뀐다 (E3)**: 임계값을 iid 재표집 대신 stationary bootstrap(블록 20)으로 만들면 n=571 임계값 중앙값 1.31 → 1.04, 정책 A 기각 ETF 가 {069500, 091230, 153130, 261220} → {069500, 091230, 143860, 132030} 로 **절반이 바뀐다** (겹침 2). 이것은 개선이 아니라 **다른 귀무가설**이다.
+- **정책 B 이동창 (E5)**: 같은 임계값으로 검정 구간 경보 0.47 → 2.41 회/년 — 귀무에서의 B 경보율(E2 2.41)과 같은 수준.
+
+<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig08_dependence_and_null.png" width="100%" alt="dependence"><br><sub>그림 9. 왼쪽: 잔차 제곱의 장기분산/τ̂² (1 미만 = 보수적). 오른쪽: 두 귀무 방식의 n=571 임계값과 정책 A 의 T.</sub></p>
+
+### 5.8 원 논문 충실도 (Track B, 재인용)
+
+| 계열 | 원문 T / 변화점 | 재현 정책 A | 재현 정책 B |
+|---|---|---|---|
+| sp500 | 2.4751 / 2015-08-18 | 0.754 / 2015-06-26 | 1.0963 / 2015-08-18 |
+| kospi | 1.5081 / 2018-01-22 | 0.791 / 2018-03-22 | 1.1071 / 2017-11-24 |
+| krw_usd | 4.2754 / 2014-09-26 | 0.7939 / 2014-09-09 | 1.0238 / 2014-09-09 |
+
+원문 통계량은 모두 기각, 재현은 모두 비기각. 원문 Monte Carlo 45셀 중 재현 95% CI 안: clip 1/45 · raise 9/45 · recursive 10/45. → **계산은 결정적으로 재현되지만 원문 수치는 재현되지 않는다** (METHOD_FIDELITY_UNRESOLVED). 그래서 위 ETF 결과를 '원 논문 방법의 결과' 라고 부르지 않는다.
+
+---
+
+## 6. 그래서 무엇을 말할 수 있나
+
+| RQ | 판정 | 근거 | 상태 |
+|---|---|---|---|
+| RQ1 구조변화가 남는가 | **확정 불가** | A 2/20 기각이나 검정력 19%·보수적, B·기준선은 크기 왜곡 | UNRESOLVED |
+| RQ2 정책 민감도 | 정책 선택이 결과를 지배 | 기각 2 → 9/20, B 의 귀무 크기 34% | VERIFIED |
+| RQ3 관측창 | 창↑ → 임계값↑·경보↓, 짧은 창에 점근값은 과보수 | 5.4절, E1 | VERIFIED |
+| RQ4 귀무모형 | iid 임계값은 잔차 의존을 무시, 귀무 선택에 따라 기각 집합 절반 변화 | E1·E3·E6 | VERIFIED (EXTENSION) |
+| RQ5 동일 지수 일관성 | 갈린다 (초모수 의존) | 069500 1.403 vs 102110 0.646 | VERIFIED |
+| RQ6 시장 상태로 해석 | 상태의 조작적 정의·관측모형 없이는 불가 | 7절 | HYPOTHESIS |
+
+**하지 말아야 할 해석**
+
+- ❌ '기각하지 않았으니 시장이 안정적이었다' · ❌ '기각했으니 투자자가 느끼는 국면 전환이 있었다'
+- ❌ '경보가 적으니 오탐이 적은 좋은 탐지기' · ❌ '정책 B 가 더 많이 잡으니 더 낫다'
+- ❌ '$\hat k$ = 그날 실시간으로 잡았다' · ❌ '이 검정으로 급등을 탐지한다' (방향이 없는 분산 검정)
+
+---
+
+## 7. 한계와 다음 연구
+
+**한계**: 원 논문 미재현 · 합성 자료는 정규 GARCH(1,1) 하나와 ω 변화 하나 · 검정 구간 571일 하나(2026 고변동기 포함) · 시장 상태의 정답 부재 · 이미 여러 번 분석된 자료(탐색적) · SVR grid 하한 ε=0.1 이 실제 20/20·합성 98.8% 에서 선택(grid 확장 미실행).
+
+**다음 연구는 탐지기 개선이 아니다.** 먼저 '시장 상태' 를 조작적으로 정의하고, 자료에서 식별되는지 검증한다.
+
+| 기호 | 뜻 |
 |---|---|
-| 148070(국고채10년)–KOSPI200 연도별 ρ | 2019 **−0.40** → 2026 **+0.37** (부호가 바뀜) |
-| 148070 60일 0선 교차 → 지속 전환 | 45 → **13** (나머지는 잡음) |
-| 같은 날 근접 / 유의 검정 (사건일 제거 전→후) | **18→1** / **9/48→0/48** |
-| p<0.05 비율 L=0/5/10/20 (45,280 검정) | 11.2 / 8.0 / 6.8 / **5.1%** (우연 수준으로 수렴) |
-| 사전 지정 1차 가족 BH q<0.10 | 586 중 3 (모두 사건 2–6개 조합) |
+| $O_t$ | 관측 — 수익률, 변동성, 거래량, 자산 간 관계, (후보로서) CUSUM 통계량 |
+| $S_t$ | 관측되지 않는 잠재 시장 상태 |
+| $P(S_t\mid S_{t-1})$ · $P(O_t\mid S_t)$ | 상태전이 모형 · 관측모형 |
+| $P(S_t\mid O_{1:t})$ | 시점 t 까지의 관측으로 얻은 사후 믿음 (belief) |
 
-<p align="center"><img src="docs/figures/trackA_price_def_jaccard.png" width="60%" alt="price definition Jaccard"></p>
+<p align="center"><img src="deliverables/R2H_T11_CUSUM_Final_Review/figures/fig09_state_concept.png" width="85%" alt="state concept"><br><sub>그림 10. 후속 연구 개념도 — 가설 단계, 이번에 추정하지 않음.</sub></p>
 
-- "급등" 정의끼리도 겹침이 작다 (robust-z 3종 Jaccard 0.73–0.85, 일간 vs 누적 0.02–0.09). **정답 정의(D-01)를 먼저 확정해야** 탐지율을 매길 수 있다.
-- **재현**: 독립 2회 실행에서 결과표 43종이 동일했다. 보고서 claim 29개 중 27개가 일치하고 2개는 문구를 정정했다 (11.1 달력일 → 주 정의 9거래일 ≈ 13.4일 · lag 0 최대 → WTI 예외).
-- **적용**: ❌ 급등 정답·조기경보로는 쓰지 않는다 · ⚠️ 채권·금·원유의 국면 기술과 사건일 제거 후 진단에만 쓴다 · `features.correlation` + `evaluation.null_tests` 로 이식했다.
-
-### 5.3 Track B — SVR–GARCH CUSUM 논문 재현 (원문 미재현)
-
-<p align="center"><img src="docs/figures/trackB_tables_paper_vs_repro.png" width="100%" alt="Track B paper vs reproduced"></p>
-<p align="center"><img src="docs/figures/trackB_empirical_cusum.png" width="100%" alt="Track B empirical CUSUM"></p>
-<p align="center"><img src="docs/figures/trackB_ablation_policy.png" width="85%" alt="Track B ablation"></p>
-
-| | 원문 | 재현 |
-|---|---|---|
-| Tables 1–6 (n=500, 45행) — 원문이 재현 95% CI 안 | — | clip(1000회) **1/45** · raise 9/45 · recursive 10/45 |
-| S&P500 / KOSPI / KRW·USD 통계량 | 2.48 / 1.51 / 4.28 (모두 기각) | 0.75 / 0.79 / 0.79 (정책 A, 모두 비기각) |
-| 결정성 | — | pytest 84/84 · 실증 바이트 동일 · MC 400회 재생성 완전 일치 |
-
-- 원문에 명시되지 않은 테스트 구간 분산 lag 정책이 결과를 크게 바꾼다 (같은 경로 McNemar p≈1e-152). 그러나 **어느 정책으로도 원문 표가 재현되지 않는다**. 원문에 가까운 정책을 사후에 고르지 않았다.
-- **적용**: ⚠️ 검정 모듈만 원본과 바이트 동일하게 이식했다 (`detection/paper2020_cusum.py`). R2H 에서는 **사후 검정** `mode="posthoc"` 로만 쓰고, 온라인 평가에 넣으면 오류가 난다.
-  ETF 결과를 "원문 방법의 결과" 라고 부르지 않는다. prefix-only 온라인 변형은 W04 과제다.
-
-### 5.4 R2H 계약 시연 (합성 데이터 — 실제 성능 아님)
-
-<p align="center"><img src="docs/figures/r2h_synthetic_tradeoff.png" width="100%" alt="R2H synthetic recall-FP trade-off"></p>
-
-- 같은 정답·매칭 규칙에서 탐지기별 **탐지율–오탐 곡선**을 그리고, `recall_at_fp_cap` 으로 오탐 상한 안의 설정을 고른다. 2조 CUSUM·4조 BOCPD 도 같은 출력 계약만 지키면 이 그림에 같이 올라간다.
-- 실제 상한값·지연 허용·cooldown 은 미결정(D-02)이다.
-
-### 5.5 T11 — SVR–GARCH CUSUM 을 ETF 20종에 적용 (70/30 · 이동창 20/30/60/120/252 · Track A·EDA 대비)
-
-설계·데이터 카드·수식·결과표: [`research/svr_garch_cusum_etf/README.md`](research/svr_garch_cusum_etf/README.md) · 노트북: [`R2H_T11_svr_garch_cusum_etf.ipynb`](notebooks/R2H_T11_svr_garch_cusum_etf.ipynb) (그림 16장, 그림마다 해석)
-
-```mermaid
-flowchart LR
-  D["ETF 20종 종가<br>(FDR, 종가 해시 검증)"] --> S["시간순 분할<br>적합 70% (학습 49 / 검증 21) · 검정 30%"]
-  S --> F["ε-SVR grid 27점<br>ĝ(y²_t-1, σ̃²_t-1)"]
-  F --> A["정책 A 잔차<br>(관측 proxy)"]
-  F --> B["정책 B 잔차<br>(재귀, 검정만)"]
-  S --> Z["기준선 잔차<br>r / σ60"]
-  A & B & Z --> P["사후 CUSUM<br>검정 구간"]
-  A & Z --> W["이동창 CUSUM<br>w = 20·30·60·120·252"]
-  W --> C["부트스트랩 임계값 c_w<br>· 경보 에피소드"]
-  C --> O["Track A·EDA 사건 근접<br>P1 · P4 · 공통충격 · C3 · 고변동<br>원형 이동 p · BH"]
-  C --> G["흐름 겹침 · EDA 구간 표시"]
-```
-
-<p align="center"><img src="docs/figures/svrgarch/01_split_timeline.png" width="100%" alt="70/30 split"></p>
-<p align="center"><img src="docs/figures/svrgarch/02_anatomy_069500.png" width="100%" alt="069500 anatomy"></p>
-
-- **해부 (069500)**: 정책 A 의 σ̂² 는 직전 5일 proxy 를 거의 그대로 따라가 변동성 상승을 바로 흡수한다. 검정 구간 사후 CUSUM 은 **정책 A T=1.403 (기각) · B 2.026 (기각) · 기준선 0.695 (비기각)**.
-
-<p align="center"><img src="docs/figures/svrgarch/03_fullsample_tests.png" width="100%" alt="full-sample tests"></p>
-
-- **사후 검정 20종**: 기각 정책 A 2/20 · 정책 B 9/20 · 기준선 1/20. 원문에 없는 테스트 분산 입력 규칙 하나로 기각 수가 4.5배 달라진다. k̂ 는 대부분 2026-01 (알려진 고변동 국면 시작).
-
-<p align="center"><img src="docs/figures/svrgarch/04_rolling_heatmaps.png" width="100%" alt="rolling heatmaps"></p>
-<p align="center"><img src="docs/figures/svrgarch/05_window_vs_null.png" width="100%" alt="window vs null"></p>
-
-- **창 20·30·60·120·252**: 기준선은 모든 창에서 경보가 iid 기준값보다 많다 (w=60 연 3.82 vs 1.70, 20종 모두) — 2020·2026 변동성 국면을 잡는다. **정책 A 는 모든 창에서 적다** (0.39 vs 1.71, 초과 0/20) — 이 설정의 CUSUM 은 사실상 검정력이 없다. 기준값은 iid 재표집이라 변동성 군집 아래의 오탐 보정은 아니다. 짧은 창의 유한표본 임계값(1.14–1.18)은 점근 1.3397 보다 훨씬 낮다.
-
-<p align="center"><img src="docs/figures/svrgarch/06a_eda_cumret_intervals.png" width="100%" alt="EDA intervals"></p>
-
-<table><tr>
-<td><img src="docs/figures/svrgarch/06b_eda_detail_148070.png" alt="148070"></td>
-<td><img src="docs/figures/svrgarch/06b_eda_detail_261220.png" alt="261220"></td>
-</tr><tr>
-<td><img src="docs/figures/svrgarch/06b_eda_detail_069500.png" alt="069500"></td>
-<td><img src="docs/figures/svrgarch/06b_eda_detail_132030.png" alt="132030"></td>
-</tr></table>
-
-- **EDA 그래프 위 구간**: w=60 경보 에피소드 기준선 577개 · 정책 A 59개. 국고채10년(148070)은 정책 A 경보가 w=60·120 에서 0건. 경보는 사건(P1·P4·공통충격) **당일·직후**에 시작한다 — 선행이 아니라 반응.
-
-<p align="center"><img src="docs/figures/svrgarch/07_consistency_heatmap.png" width="100%" alt="consistency"></p>
-<p align="center"><img src="docs/figures/svrgarch/07b_precision_coverage.png" width="100%" alt="precision coverage"></p>
-
-- **정합성**: 23,442 검정의 p<0.05 비율 5.9% (우연 수준에 가까움, 대부분 in-sample). 사전 등록 1차 가족 **34 검정**(KOSPI200 그룹 1건, 검정 불가 행 p=1) 중 p<0.05 2개, **최소 q=0.57**. P1 사건일 잔차를 빼면 기준선 8.9%→4.6%, 정책 A 6.6%→2.6% — 남는 겹침은 같은 날 큰 수익률과 2026 기저율 때문 (Track A 와 같은 결론). 독립 검토로 1차 가족 크기·검정 구간 경계(분할일+w−1)를 정정한 뒤의 값이다.
-
-<p align="center"><img src="docs/figures/svrgarch/08a_flow_combinations.png" width="100%" alt="flow combinations"></p>
-<p align="center"><img src="docs/figures/svrgarch/08b_representative_episode.png" width="100%" alt="representative episode"></p>
-
-- **유의 경보일 때 겹치는 흐름**: 정책 A 경보 59개 중 P1 59% · P4 53% · 공통충격 46% · 고변동 49%. 대표 에피소드(사전 규칙으로 자동 선택) 261220 WTI원유 2024-08-29: 2024-08 세계 급락 직후의 변동성 군집 속에서 켜진 경보 — 새 국면의 조기경보가 아니라 진행 중인 충격에 대한 반응.
-
-<p align="center"><img src="docs/figures/svrgarch/09_bond_vs_kospi.png" width="100%" alt="bonds vs KOSPI"></p>
-<p align="center"><img src="docs/figures/svrgarch/10_yearly_blocks.png" width="100%" alt="yearly blocks"></p>
-
-- **채권↔KOSPI · 연도 블록**: CUSUM-of-squares(변동성 구조) · C3(상관 부호 국면) · P4(누적수익률 절대값 경계)는 서로 다른 것을 재며 우연 이상 겹치지 않는다 (148070 기준선 vs C3 p=0.23; 153130 의 정책 A 근접은 in-sample 적합 구간에서만). 기준선 연도 블록은 2020 85% · 2026 55% 기각으로 EDA 고변동 해와 정확히 맞는다.
-
-<details>
-<summary><b>그림을 그대로 재현하는 코드 셀 (예: 이동창 경보 지도의 한 칸)</b></summary>
-
-```python
-# 결과표만으로 재현 (원시 시세 불필요): 이동창 통계량과 ETF 별 부트스트랩 임계값
-import pandas as pd
-
-# 이동창 통계량 (날짜 × "ticker|잔차|창")
-roll = pd.read_csv("research/svr_garch_cusum_etf/results/rolling_stats.csv.gz", index_col=0, parse_dates=True)
-# 임계값 표
-crit = pd.read_csv("research/svr_garch_cusum_etf/results/critical_values.csv", dtype={"ticker": str})
-# 069500 · 정책 A · w=60 의 임계값
-c = crit.query("ticker == '069500' and rtype == 'svrA' and window == 60")["c_bootstrap"].iloc[0]
-# T/c ≥ 1 인 날 = 경보일
-alarm_days = roll.index[roll["069500|svrA|60"] / c >= 1]
-# 경보일 수와 처음 몇 날
-print(len(alarm_days), list(alarm_days[:5].date))
-```
-
-노트북의 모든 코드 셀이 같은 결과표(`research/svr_garch_cusum_etf/results/`, 정본)와 로컬 상태(`outputs/cache/t11_state.npz`, 원시 시세가 필요한 해부·EDA 그림용)에서 그림을 만든다.
-</details>
-
-**적용 가능성 판정** — ❌ 정책 A SVR–GARCH CUSUM 은 급등 탐지기로 쓸 수 없다 · ⚠️ 정책 B·기준선은 원문 미명시 선택에 결과가 좌우되므로 병기만 · ⚠️ 기준선 변동성 CUSUM 은 방향 없는 국면 맥락으로만 · ❌ Track A 경계(C3·P4)와 정합성 없음 → W04 다음 단계는 **평균·방향 CUSUM** 을 승인된 정답(D-01)으로 평가.
+1. 상태의 조작적 정의 (사건 집합을 정답으로 쓰지 않음, 팀 승인) → 2. 알려진 HMM 합성 자료로 식별 실험 → 3. 실제 ETF 에 HMM/상태공간 적합·안정성 → 4. CUSUM 통계량을 관측 후보로 넣었을 때의 정보 기여 (out-of-sample 로그우도) → 5. belief 위의 의사결정 (DP 또는 Active Inference — 서로 다른 방법, 보상·선호 정의 후).
 
 ---
 
-## Quickstart
+## 8. 재현
 
 ```bash
-git clone https://github.com/nanahyun3/R2H.git && cd R2H
-git checkout 1012
-uv sync --extra dev                       # uv.lock 기준으로 .venv 생성
-uv run pytest                             # unit · integration · property · leakage
-uv run ruff check . && uv run ruff format --check . && uv run mypy
-uv run python examples/synthetic_demo.py --out outputs/synthetic_demo.json
-uv sync --extra dev --extra notebook && uv run jupyter execute notebooks/R2H_1012_research_synthesis.ipynb   # 노트북 (첫 실행만 네트워크)
-uv sync --extra dev --extra notebook --extra research                       # T11 (SVR–GARCH × ETF)
-uv run python scripts/run_svr_garch_cusum_etf.py                            # 오토런 (원시 시세: ETF_RAW_DIR 또는 FDR 자동, 종가 해시 검증)
-uv run jupyter execute notebooks/R2H_T11_svr_garch_cusum_etf.ipynb
+git clone -b 1012_SVR-GARCH-CUSUM https://github.com/nanahyun3/R2H.git && cd R2H
+uv sync --frozen --extra dev --extra notebook --extra research
+uv run pytest -q                                                    # 98 passed
+ETF_RAW_DIR=<원시 시세 폴더> uv run python scripts/run_svr_garch_cusum_etf.py   # 결과표 9종 + outputs/cache/t11_state.npz (약 2–3분)
+D=deliverables/R2H_T11_CUSUM_Final_Review/scripts
+uv run python $D/01_recompute.py      # 결과표 독립 재계산 → analysis/
+uv run python $D/02_extension.py      # E1–E6 → extension/ (E2 는 20 프로세스로 약 1분)
+uv pip install python-docx==1.2.0 latex2mathml==3.81.1 pymupdf==1.28.2   # 보고서 도구만
+uv run python $D/03_claims.py && uv run python $D/04_figures.py && uv run python $D/05_build_docx.py
+# Windows Word: powershell.exe -ExecutionPolicy Bypass -File $D/06_export_pdf.ps1 -Docx <docx> -Pdf <pdf>
+uv run python $D/07_check_consistency.py && uv run python $D/08_build_readme.py
 ```
 
-uv 없이: `python3 -m venv .venv && . .venv/bin/activate && pip install -e ".[dev]" && pytest` (버전은 lock 이 아니라 `pyproject.toml` 범위로 풀린다).
+원시 시세가 없으면 FinanceDataReader 로 자동 수집하고 종가 해시를 대조한다 (FDR 이 분배를 소급 조정했으면 `DataVersionDiffers` 로 멈춘다). seed 20261012.
 
-`examples/synthetic_demo.py` 는 **합성 데이터**(주입한 상승 drift 를 정답으로 둠)에서 두 참조 탐지기를 돌려 사건 수준 지표를 출력한다.
-같은 config 로 두 번 실행하면 출력 JSON 이 같아야 하며, CI 가 이를 확인한다. 이 수치는 실제 ETF 성능이 아니다.
+## 9. 이 브랜치에 추가된 파일
 
-## 사용 예
+```
+deliverables/R2H_T11_CUSUM_Final_Review/
+├── R2H_T11_SVR_GARCH_CUSUM_최종연구보고서.docx / .pdf   최종 보고서 (32쪽, 표 19 · 그림 13 · 수식 6)
+├── SOURCE_EVIDENCE_MATRIX.md      본문 수치 186개 ↔ 원천 파일·열·함수·상태
+├── REPRODUCIBILITY_AUDIT.md       데이터 버전 · 환경 · 명령 · 테스트 · 미실행 범위
+├── CHANGELOG_AND_OPEN_ISSUES.md   기존 T11 해석에서 제거·수정·보존한 것, 남은 과제
+├── claims.json                    보고서·README 숫자의 단일 출처
+├── analysis/                      재계산 결과 · 재현 로그 · 일치성 검수
+├── extension/                     E1–E6 확장 실험 결과 (T11 원본 결과와 분리)
+├── figures/                       그림 11종 PNG + SVG
+└── scripts/                       01 재계산 → 02 확장 → 03 claims → 04 그림 → 05 DOCX → 06 PDF → 07 검수 → 08 README
+docs/README_1012_baseline.md      1012 공통 README (변경 없이 보존)
+pyproject.toml                    [tool.ruff] extend-exclude = ["deliverables"] 한 줄 (보고서 생성 스크립트를 lint 대상에서 제외)
+```
 
-아래 블록은 테스트(`tests/integration/test_readme_example.py`)가 그대로 실행한다. 실제 데이터에서는 `returns` 를 일간 로그수익률
-(`r2h.features.log_returns`)로, `truth` 를 승인된 정답 표로 바꾼다.
+`research/`·`src/`·`results/` 등 기존 T11 코드와 결과표는 **수정하지 않았다** (`1012` @ `a346faf` 와 동일). `main` 은 건드리지 않았다.
+
+## 사용 예 — 결과 읽기와 R2H 공통 인터페이스
+
+R2H 공통 인터페이스 (1012 와 동일, **합성 자료** — 실제 ETF 성능 아님):
 
 ```python
 from r2h.detection import VolScaledThreshold
@@ -362,33 +356,18 @@ alarms, events = match_alarms(signals, truth, calendar, MatchConfig(max_delay=5,
 print(event_metrics(alarms, events, ticker_years=len(calendar) / 252))
 ```
 
-새 탐지기(CUSUM 최종본·BOCPD 등)는 `r2h.detection.Detector` 프로토콜(`method_id`·`model_version`·`mode`·`params()`·`run()`)을 따르고
-`build_signal_frame` 으로 출력하면 매칭·지표를 그대로 쓸 수 있다.
+이 연구의 결과 읽기 (원시 시세 불필요):
 
-## 저장소 구조
+```python
+import json
+import pandas as pd
 
-| 경로 | 내용 | 상태 |
-|---|---|---|
-| [`src/r2h/data/`](src/r2h/data) | 관측 계약 검증 · as-of 절단 · manifest/데이터 버전 | 제안 v0.1 |
-| [`src/r2h/features/`](src/r2h/features) | 로그수익률 · 변동성 · 이동평균 · 거래량비 · r/σ · rolling 상관 · 부호 국면 | 원본과 비트 동일 parity |
-| [`src/r2h/detection/`](src/r2h/detection) | 출력 계약 · `Detector` · 참조 탐지기 · 사후 CUSUM-of-squares | REFERENCE / posthoc |
-| [`src/r2h/evaluation/`](src/r2h/evaluation) | 정답 계약 · 매칭 · 지표 · 분할(walk-forward) · 귀무검정 | 제안 v0.1 |
-| [`src/r2h/backtest/`](src/r2h/backtest) | 체결 시점 규칙 · 비용 함수 | **SCHEMA_ONLY** |
-| [`notebooks/`](notebooks) | [연구 종합 노트북](notebooks/R2H_1012_research_synthesis.ipynb) · [T11 SVR–GARCH × ETF](notebooks/R2H_T11_svr_garch_cusum_etf.ipynb) | 실행 결과 포함 · 모든 코드 줄 한국어 주석 |
-| [`src/r2h/paper2020/`](src/r2h/paper2020) · [`src/r2h/svrgarch_etf/`](src/r2h/svrgarch_etf) | Track B 원본 모듈(바이트 동일) · T11 오토런 | sensitivity 적용 |
-| [`scripts/`](scripts) | [T11 오토런](scripts/run_svr_garch_cusum_etf.py) | |
-| [`research/`](research) | 감사된 연구 요약 · 재현 상태 · 출처 manifest · [후속 제안](research/proposals/README.md) | |
-| [`docs/`](docs) | [계약](docs/architecture/CONTRACT_v0.1.md) · [결정](docs/decisions/OPEN_DECISIONS.md) · [인계](docs/handoff/HANDOFF_1012.md) · [출처](docs/provenance/PROVENANCE.md) · [그림](docs/figures) | |
-| [`tests/`](tests) | unit · integration · property · leakage · 노트북 규칙 (98) | CI |
+D = "deliverables/R2H_T11_CUSUM_Final_Review"
+claims = json.load(open(f"{D}/claims.json", encoding="utf-8"))  # 보고서·README 숫자의 단일 출처
+print(claims["E2_null_B_rej13397"])  # 값 · 원천 파일 · 상태(VERIFIED/REPORTED) · 비고
+fs = pd.read_csv(f"{D}/analysis/fullsample_recomputed.csv", dtype={"ticker": str})  # ETF × 정책 사후 검정
+print(fs.pivot(index="ticker", columns="policy", values="T").round(3).head())
+e2 = pd.read_csv(f"{D}/extension/E2_pipeline_size_power_summary.csv", keep_default_na=False)  # 합성 크기·검정력
+print(e2[e2.measure.str.startswith("posthoc_reject@paper")][["scenario", "residual", "value", "mc_se"]])
+```
 
-## 규칙
-
-- 온라인 신호는 `available_until <= signal_at` (검증 함수가 강제). 사후 검정은 `mode="posthoc"` 이며 온라인 평가에 넣을 수 없다.
-- 정답 라벨은 탐지기와 독립된 정의로 만든다. 미래 구간을 본 라벨은 평가에만 쓴다.
-- 임계값·하이퍼파라미터는 개발 구간에서만 고른다. 2026 은 기존 EDA 가 이미 본 데이터라 blind holdout 이 아니다.
-- 원시 시세·API 키·개인정보·저작권 PDF 는 커밋하지 않는다 (`.gitignore`).
-
-## 열린 결정 (교수·4조 확인 필요)
-
-D-01 Ground Truth 정의 · D-02 오탐 상한/지연/cooldown · D-03 개발·검증·관찰 구간과 2026 처리 · D-04 공식 유니버스 · D-05 robust-z 표준 ·
-D-06 수정주가 정책 · D-07 LICENSE · D-08 패키지 관리자 · D-09 Track B 테스트 lag 정책 → [OPEN_DECISIONS.md](docs/decisions/OPEN_DECISIONS.md)
