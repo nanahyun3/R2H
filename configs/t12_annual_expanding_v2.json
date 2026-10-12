@@ -1,0 +1,80 @@
+{
+  "study_id": "t12_20etf_expanding_diagnostic_v2",
+  "protocol_version": "T12v2-lock-1",
+  "based_on": "t12_annual_expanding_v0.1 + v2 diagnostic override",
+  "base_ref": "1012@a346faf78ff47b2695fab438f7397d7958b8d655",
+  "expected_data_version": "5f20e3e0073b521a",
+  "expected_n_tickers": 20,
+  "seed": 20261012,
+  "returns": "100*diff(log(Close))",
+  "folds": {
+    "initial_train_calendar_year": 2019,
+    "test_calendar_years": [2020, 2021, 2022, 2023, 2024, 2025, 2026],
+    "core_completed_years": [2021, 2022, 2023, 2024, 2025],
+    "pilot_short_history_years": [2020],
+    "partial_nonblind_years": [2026],
+    "inner_train_fraction": 0.7,
+    "min_inner_train_n": 150,
+    "min_inner_val_n": 50
+  },
+  "models": {
+    "grid": "T11 GRID (C in 1,10,100 x gamma2 in 0.1,0.5,1 x eps in 0.1,0.5,1)",
+    "m": 5, "p": 1, "q": 1,
+    "history_strategies": ["expanding", "trailing_2y", "frozen_2019"],
+    "policies": ["A", "B", "base"],
+    "baseline_window": 60,
+    "baseline_min_periods": 40
+  },
+  "cusum": {
+    "windows": [20, 30, 60, 120, 252],
+    "primary_window": 60,
+    "boundary_modes": ["CARRY", "YEAR_CONTAINED"],
+    "primary_inference_mask": "PURE_OOS_WINDOW",
+    "episode_gap_trading_days": 5,
+    "min_valid_fraction": 0.9,
+    "asymptotic_critical_5pct": 1.3397
+  },
+  "calibration": {
+    "pointwise_quantile": 0.95,
+    "methods": ["iid_insample", "iid_prequential", "normal_mc", "block_insample"],
+    "iid_reps": 5000,
+    "normal_reps": 20000,
+    "block_reps": 2000,
+    "block_length": 10,
+    "null_sims": 200
+  },
+  "diagnostics": {
+    "acf_lags": [1, 5, 10, 20],
+    "ljungbox_lag": 10,
+    "archlm_lag": 5,
+    "tail_abs_threshold": 3.0,
+    "bh_alpha": 0.05
+  },
+  "flag_rules": {
+    "rv_up_ratio": 1.25,
+    "rv_down_ratio": 0.8,
+    "rv_high_prior_quantile": 0.9,
+    "calib_under_mean_e2": 1.5,
+    "calib_over_mean_e2": 0.6667,
+    "low_coverage": 0.9,
+    "heavy_tail_excess_kurtosis": 3.0,
+    "alarms_exceed_null_ratio": 2.0,
+    "h_qlike_gap": 0.1
+  },
+  "synthetic": {
+    "n_year": 245,
+    "n_history": 490,
+    "detector_reps": 1000,
+    "pipeline_reps": 200
+  },
+  "parallel": {
+    "default_max_workers": 4,
+    "per_worker_threads": 1,
+    "modes": ["sequential", "parallel_2", "parallel_4"]
+  },
+  "release": {
+    "results_dir": "research/t12_annual_expanding_v2/results",
+    "work_dir": "outputs/t12/work",
+    "commit_daily_series": false
+  }
+}
