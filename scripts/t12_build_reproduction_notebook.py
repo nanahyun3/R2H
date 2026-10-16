@@ -325,16 +325,16 @@ code(
 # fold 생성 함수와 전략 목록
 from r2h.annual_expanding.folds import STRATEGIES, build_fold
 
-# 069500 (KODEX 200) 의 연도 × 전략 fold
-fold_rows = [build_fold("069500", returns["069500"], y, s, cfg).__dict__ for y in cfg["folds"]["test_calendar_years"] for s in STRATEGIES]
-# 표로 변환
-folds_069500 = pd.DataFrame(fold_rows)
-# 보기 좋게 날짜만 남긴다
-for c in ("train_start", "train_end", "test_start", "test_end"):
-    # Timestamp → 날짜 (없으면 그대로 None)
-    folds_069500[c] = folds_069500[c].map(lambda v: v.date() if v is not None else None)
+# 069500 (KODEX 200) 의 연도 × 전략 fold 객체
+fold_objs = [build_fold("069500", returns["069500"], y, s, cfg) for y in cfg["folds"]["test_calendar_years"] for s in STRATEGIES]
 # 누수 검사: 학습이 있는 fold 는 학습 끝 < 검정 시작
-assert all(r.train_end < r.test_start for r in folds_069500.itertuples() if r.train_end is not None and r.test_start is not None)
+assert all(f.train_end < f.test_start for f in fold_objs if f.train_end is not None and f.test_start is not None)
+# 표로 변환
+folds_069500 = pd.DataFrame([f.__dict__ for f in fold_objs])
+# 보기 좋게 날짜 문자열로 (없으면 NaN)
+for c in ("train_start", "train_end", "test_start", "test_end"):
+    # Timestamp → 날짜 문자열 YYYY-MM-DD
+    folds_069500[c] = pd.to_datetime(folds_069500[c]).dt.strftime("%Y-%m-%d")
 # 표시
 display(folds_069500[["test_year", "history_strategy", "status", "train_start", "train_end", "n_history", "n_inner_train", "n_inner_val", "test_start", "test_end", "n_test"]])
 """
@@ -606,8 +606,8 @@ for ax in axes:
     ax.text(len(YEARS) - 1, 1.01, "부분·비블라인드", transform=ax.get_xaxis_transform(), ha="center", fontsize=8, color="#898781")
     # x 눈금 = 연도
     ax.set_xticks(range(len(YEARS)), [str(y) for y in YEARS])
-    # 범례
-    ax.legend(frameon=False, fontsize=7.5)
+    # 범례 (그림 아래, 막대를 가리지 않게)
+    ax.legend(frameon=False, fontsize=7.5, loc="upper center", bbox_to_anchor=(0.5, -0.08), ncol=4)
 # 왼쪽 축 이름
 axes[0].set_ylabel("기각 ETF 수 (20 중, T ≥ 1.3397)")
 # 왼쪽 제목
@@ -692,6 +692,12 @@ for tk in figs.order(T):
 pd.DataFrame(figs.MANIFEST).to_csv(FIG_NB / "figure_manifest.csv", index=False, lineterminator="\n")
 # 생성 수 출력
 print(f"그림 {len(figs.MANIFEST)}장 → {FIG_NB.relative_to(ROOT)}")
+# 커밋된 그림 폴더 (seq_golden 결과로 그린 것)
+FIG_REF = ROOT / "research" / "t12_annual_expanding_v2" / "figures"
+# PNG 바이트 비교 (그림은 결과가 아니므로 assert 하지 않고 보고만 한다 — 폰트·matplotlib 버전에 따라 달라질 수 있음)
+png_same = [p.name for p in sorted(FIG_REF.glob("*.png")) if (FIG_NB / p.name).exists() and (FIG_NB / p.name).read_bytes() == p.read_bytes()]
+# 비교 결과 출력
+print(f"커밋된 그림과 PNG 바이트 동일: {len(png_same)} / {len(list(FIG_REF.glob('*.png')))}")
 # 본문이 인용하는 집계값 (재생성본, 커밋본과 바이트 동일 확인됨)
 AGG = pd.read_csv(RES_NB / "aggregates.csv").set_index("name")["value"]
 
@@ -1047,7 +1053,7 @@ def build() -> dict:
     cells = []
     for kind, src in CELLS:
         lines = src.splitlines(keepends=True)
-        cell = {"cell_type": kind, "metadata": {}, "source": lines}
+        cell = {"cell_type": kind, "id": f"t12-{len(cells):02d}", "metadata": {}, "source": lines}
         if kind == "code":
             cell.update(execution_count=None, outputs=[])
         cells.append(cell)
