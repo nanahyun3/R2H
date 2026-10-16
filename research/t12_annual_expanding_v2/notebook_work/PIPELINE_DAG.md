@@ -122,3 +122,5 @@ scripts/run_t12_synthetic_validation.py (--workers 4 기본, --out 기본 = REPO
   검증되지 않은 조건이 하나 더 생긴다. (2) 실데이터 순차 실행만으로 노트북이 이미 약 10–11 분이다.
   (3) 합성 결과는 실데이터 결과표와 독립이라 저장본의 해시 검증으로 무결성을 확인할 수 있다.
   측정값은 `REPRO_ENV.md` 와 노트북 해당 셀에 적는다.
+- B 측정 (2026-10-16, 이 워크트리): `run_t12_synthetic_validation.py --workers 4 --out outputs/t12/synthetic_b_1` → wall 146.9 s,
+  sha256 `43de7bca9b42…` = 저장본 (4회째 일치). 노트북은 `T12_RUN_SYNTHETIC=1` 일 때만 같은 명령을 subprocess 로 재실행한다.
