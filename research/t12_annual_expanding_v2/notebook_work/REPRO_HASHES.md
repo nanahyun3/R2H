@@ -53,20 +53,23 @@ B 의 비교 산출물(커밋 안 함, `outputs/`): `outputs/t12/fingerprint/*.c
 
 ## 3. 원인 확인 — 진단 순서
 
-지시서의 "진단 순서 1–7" 원문은 B 가 받은 문서(ANNUAL_STATE_PACKET·DECISION_LOG·TICKETS, `c/docs`, `R2H/docs`)에서 찾지 못했다.
-아래는 B 가 실제로 쓴 순서다 (STATUS 에 C 질문으로 남김).
+지시서 §6 B-2 원문 (C `DIRECTIVE_EXCERPTS.md`) 의 진단 순서 1–7 에 맞춰 대조했다. 전제 조건(같은 입력 CSV·fold·seed·버전·모형·통계량)은
+먼저 확인했다: data_version `5f20e3e0073b521a`·입력 해시 20/20 동일, config_hash `0a9fbaa9c5776ebc`, code_sha `eb612bf6c11f15f8`,
+환경(python 3.12.3 · numpy 2.5.4 · pandas 3.0.6 · sklearn 1.9.1 · uv.lock 동일 · THREAD_ENV=1) 은 네 run 모두 같다.
 
-| # | 확인 | 방법 | 결과 |
+| # (원문) | 진단 항목 | 방법 | 결과 (seq_golden vs par2·par4·par4_rerun) |
 |---|---|---|---|
-| 1 | data_version | 4 run `run_manifest.data_version` · `input_sha_per_ticker` | 모두 `5f20e3e0073b521a`, 입력 해시 20/20 동일 |
-| 2 | config_hash | `run_manifest.config_hash` · `fold_manifest.config_hash` | 모두 `0a9fbaa9c5776ebc` |
-| 3 | code_sha · 환경 | `run_manifest.code_sha` · `environment` | 모두 `eb612bf6c11f15f8`; python 3.12.3 · numpy 2.5.4 · pandas 3.0.6 · sklearn 1.9.1 · uv.lock 동일 · THREAD_ENV=1 |
-| 4 | 행 수 · PK | integrity.csv · 지문 도구의 키 중복 검사 | 9 표 PASS, 키 중복 0 |
-| 5 | 표별 바이트 | sha256 | 9/10 동일, `fold_manifest.csv` 만 다름 |
-| 6 | 열별 차이 | 앞 15열 `cut` 비교 + 지문(git_sha 제외) | 앞 15열 바이트 동일, `git_sha` 열만 `ccd60d4…` vs `ccd60d4…+dirty` (420행 전부) |
-| 7 | provenance 시점 | `git_sha()` 구현 + 파일 생성 시각 + **재현 실험** | 아래 |
+| 1 | CSV 행·열 정렬 및 인덱스 | 행 수·열 목록 비교, `integrity.csv` (PK 유일성·기대 행 수), 지문 도구의 키 정렬·중복 검사 | 10 표 모두 행 수·열 이름·열 순서 동일, 키 중복 0, integrity 9/9 PASS. 정렬 차이 없음 (9 표는 파일 바이트 동일) |
+| 2 | float 직렬화·파일 메타데이터 | 표별 sha256, `%.10g`·LF 형식 확인 | 9/10 바이트 동일. `fold_manifest.csv` 만 다르며 앞 15열은 바이트 동일 (`cut -d, -f1-15`) → 직렬화 차이 아님. 다른 것은 provenance 열 `git_sha` 하나 (`ccd60d4…` vs `ccd60d4…+dirty`, 420행) |
+| 3 | 결과의 전체 정밀도 차이 | Semantic Fingerprint (`float.hex()`, 반올림 없음, git_sha 제외) | 10 표 Semantic PASS → 저장 정밀도 범위 안에서 수치 차이 0 (최대 절대 차이 0) |
+| 4 | RNG·작업 순서·작업별 seed | 코드 확인: seed = sha256 키 (config.py:294), 병합 안정 정렬 (pipeline.py:81) | 순서·프로세스 무관 설계. 결과로도 차이 없음 (3). C-11: 정규 참조 표본은 `(n, reps, 용도)` 키로 ETF 간 공유 — 순서와 무관 |
+| 5 | NumPy/BLAS thread 및 최적화 구현 | `run_manifest.environment.thread_env`, numpy 빌드 (scipy-openblas 0.3.34) | 네 run 모두 THREAD_ENV=1, 같은 venv. 차이 원인 아님 |
+| 6 | 병렬 작업에서 공유된 mutable state | 코드 확인: worker 는 ticker 별 독립 폴더에 원자적 쓰기, `lru_cache` 는 키 seed 값의 메모 (worker.py:75–90, 읽기 전용 배열) | 공유 가변 상태 없음. 순차(캐시 공유)와 병렬(프로세스별 캐시)이 Semantic 동일 |
+| 7 | 실제 모델 파라미터·통계량·기각 여부 변화 | Verdict Fingerprint (기각·에피소드·상태·플래그 열), `fit_summary` 파라미터·`model_hash` | 10 표 Verdict PASS, `fit_summary` Semantic PASS → 파라미터·통계량·기각 여부 변화 없음 |
 
-**7 의 근거**
+**원인 판정**: 1–7 어디에서도 결과 차이가 없다. 유일한 바이트 차이는 provenance 열 `git_sha` 의 `+dirty` 이고, 그 발생 시점은 아래와 같다.
+
+**`+dirty` 발생 근거**
 
 - 구현 (pipeline.py:65–78): `git status --porcelain -- src configs scripts` 가 비어 있지 않으면 `+dirty`. 실행 시작 시 1회 (pipeline.py:179).
 - **재현 실험 (B 워크트리, 2026-10-16)** — `git_sha()` 를 직접 호출:
@@ -103,7 +106,7 @@ B 의 비교 산출물(커밋 안 함, `outputs/`): `outputs/t12/fingerprint/*.c
 
 ## 5. 기타 발견
 
-- pipeline.py:198 의 `code_sha` 일치 검사는 동어반복이다 (worker 가 부모 `meta["code_sha"]` 를 그대로 돌려줌, worker.py:635).
-  병렬 자식이 다른 src 를 import 해도 잡지 못한다. 결과에는 영향이 없다. src 수정이 필요하므로 B 는 고치지 않았다 (C 판단).
+- pipeline.py:198 의 `code_sha` 일치 검사는 **무효다 (결과 무영향)**. worker 가 부모 `meta["code_sha"]` 를 그대로 돌려주는 동어반복이라
+  (worker.py:635) 병렬 자식이 다른 src 를 import 해도 잡지 못한다. 이번 미션에서는 src 를 고치지 않는다 (D-C08).
 - 합성 검증 `null_dgp_validation.csv`: 원 증거 3회(synthetic, synthetic_r1, synthetic_r2; workers=4) 모두 sha256 `43de7bca9b42…` 동일,
   커밋본과 동일.
