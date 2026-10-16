@@ -2,9 +2,9 @@
   {
     "notebook": "05_개별ETF_다중기간_변동성국면연구.ipynb",
     "status": "PASS",
-    "start_utc": "2026-10-16T16:53:29.542900+00:00",
-    "end_utc": "2026-10-16T16:54:43.486971+00:00",
-    "seconds": 72.73,
+    "start_utc": "2026-10-16T16:59:55.619350+00:00",
+    "end_utc": "2026-10-16T17:01:06.764011+00:00",
+    "seconds": 70.15,
     "returncode": 0,
     "log": "research/multihorizon_w2/evidence/05_execution.log",
     "command": [
@@ -20,9 +20,9 @@
   {
     "notebook": "06_노출군집_공통변동성구간_연구.ipynb",
     "status": "PASS",
-    "start_utc": "2026-10-16T16:54:43.487418+00:00",
-    "end_utc": "2026-10-16T16:54:54.578483+00:00",
-    "seconds": 10.63,
+    "start_utc": "2026-10-16T17:01:06.764437+00:00",
+    "end_utc": "2026-10-16T17:01:18.752118+00:00",
+    "seconds": 11.26,
     "returncode": 0,
     "log": "research/multihorizon_w2/evidence/06_execution.log",
     "command": [
@@ -38,9 +38,9 @@
   {
     "notebook": "07_가격반응_ETF상대움직임_CNN인계.ipynb",
     "status": "PASS",
-    "start_utc": "2026-10-16T16:54:54.578923+00:00",
-    "end_utc": "2026-10-16T16:55:15.990821+00:00",
-    "seconds": 21.41,
+    "start_utc": "2026-10-16T17:01:18.752643+00:00",
+    "end_utc": "2026-10-16T17:01:41.128318+00:00",
+    "seconds": 22.38,
     "returncode": 0,
     "log": "research/multihorizon_w2/evidence/07_execution.log",
     "command": [

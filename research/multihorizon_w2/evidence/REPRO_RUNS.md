@@ -10,7 +10,8 @@
 |---|---|---|---|---|---|
 | R1·R2 | gzip mtime·SVG 해시 고정 전 | PASS | PASS | PASS | 데이터 CSV 28개·PNG 21장 동일. `.csv.gz` 6개·SVG·그림 색인·인계 JSON 은 헤더 시각·SVG id 때문에 다름 |
 | R3·R4 | 결정성 고정 + h=1·3 구간 열을 Git 제외 파일로 분리 | PASS | PASS | PASS | **결과·그림 77개, Git 제외 작업 파일 7개 모두 바이트 동일** |
-| R5 (최종 저장본) | R4 이후 노트북 코드의 lint 정리만 (계산 불변) | PASS 72.7 s | PASS 10.6 s | PASS 21.4 s | R4 와 77개·7개 모두 바이트 동일 |
+| R5 | R4 이후 노트북 코드의 lint 정리만 (계산 불변) | PASS 72.7 s | PASS 10.6 s | PASS 21.4 s | R4 와 77개·7개 모두 바이트 동일 |
+| R6 (최종 저장본) | 07 에 계약 외 사후 확인 셀 추가, 05·07 본문 정정 (결과 파일 생성 코드 불변) | PASS 70.2 s | PASS 11.3 s | PASS 22.4 s | R5 와 77개·7개 모두 바이트 동일. pytest 176 passed |
 
 - R1 대비 R5 에서 데이터 CSV 25개는 동일하다. 달라진 것은 의도한 변경인 `results/07/interval_price_reaction.csv` (h=1·3 열 제거)와 그림 색인뿐이다.
 - 테스트: `pytest -q tests` → **176 passed** (W1 156 + W2 단위 14 + 노트북 규칙 6).
