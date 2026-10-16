@@ -1,0 +1,32 @@
+## 기각 수 /20 (연간, 방법별)
+year                2020             2026           
+policy                 A     B  base    A    B  base
+calibration_method                                  
+asymptotic          11.0  15.0  17.0  0.0  1.0  11.0
+block_insample      13.0  17.0  17.0  1.0  4.0   3.0
+iid_insample        11.0  15.0  17.0  0.0  3.0  15.0
+iid_prequential      0.0   0.0   0.0  0.0  4.0  15.0
+normal_mc           11.0  15.0  17.0  0.0  2.0  11.0
+
+## 같은 2019 모형 (frozen_2019) 을 2026 에 적용했을 때 — 2020 fold 와 모형이 같다
+policy            A  B
+history_strategy      
+expanding         0  1
+frozen_2019       1  1
+trailing_2y       0  4
+
+## 표본·이력·변동성
+      n_train_history  n_test
+year                         
+2020            245.0   248.0
+2026           1718.0   184.0
+      rv_ann_pct  rv_ratio  rv_prior_quantile
+year                                         
+2020      31.337     2.069              1.000
+2026      50.080     1.894              0.962
+base 기각 ETF: 2020 17 · 2026 11 · 둘 다 11 · 2026 만 []
+
+## n 효과 (독립 MC, iid 정규, 연중 분산 ×k 변화 시점 = n/2, 20,000회)
+분산×1.0: 거부율 n=184 0.040 · n=248 0.041
+분산×1.5: 거부율 n=184 0.346 · n=248 0.470
+분산×2.0: 거부율 n=184 0.804 · n=248 0.918

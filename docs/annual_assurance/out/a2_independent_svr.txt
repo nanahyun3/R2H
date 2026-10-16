@@ -1,0 +1,78 @@
+=== proxy mode: prefix ===
+069500 done 3s
+102110 done 6s
+229200 done 9s
+122630 done 12s
+114800 done 14s
+091230 done 18s
+091170 done 21s
+091180 done 24s
+305540 done 27s
+143860 done 30s
+117680 done 33s
+161510 done 36s
+219480 done 39s
+133690 done 43s
+192090 done 47s
+148070 done 51s
+153130 done 54s
+132030 done 58s
+261220 done 60s
+261240 done 63s
+folds 140
+params_match 140 / 140
+val_mae max rel diff 4.79e-10
+vhat_A: folds with max rel diff ≤1e-8: 140/140 · worst 4.96e-10
+vhat_B: folds with max rel diff ≤1e-8: 140/140 · worst 4.97e-10
+nonpos A/B total 9 31
+annual T A: max rel diff 3.35e-10 · verdict flips at 1.3397: 0/140
+annual T B: max rel diff 4.70e-10 · verdict flips at 1.3397: 0/140
+       pool_exkurt  oos_exkurt  pool_acf_e2_1  oos_acf_e2_1  pool_mean_e2  oos_mean_e2
+count      140.000     140.000        140.000       140.000       140.000      140.000
+mean         8.604       3.490         -0.038         0.010         1.309        1.630
+std         46.151      13.926          0.037         0.145         0.170        0.741
+min          0.566      -0.152         -0.151        -0.162         0.629        0.397
+25%          1.198       0.891         -0.058        -0.078         1.228        1.277
+50%          1.770       1.632         -0.042        -0.034         1.339        1.464
+75%          2.756       3.114         -0.019         0.037         1.416        1.696
+max        402.227     164.942          0.093         0.616         1.754        5.083
+share OOS ACF(e²,1) < 0: 0.657 · pool < 0: 0.871
+=== proxy mode: direct ===
+069500 done 3s
+102110 done 6s
+229200 done 10s
+122630 done 12s
+114800 done 16s
+091230 done 19s
+091170 done 22s
+091180 done 25s
+305540 done 28s
+143860 done 32s
+117680 done 35s
+161510 done 37s
+219480 done 40s
+133690 done 44s
+192090 done 48s
+148070 done 52s
+153130 done 56s
+132030 done 60s
+261220 done 62s
+261240 done 65s
+folds 140
+params_match 139 / 140
+val_mae max rel diff 3.71e-03
+vhat_A: folds with max rel diff ≤1e-8: 36/140 · worst 2.14e-01
+vhat_B: folds with max rel diff ≤1e-8: 36/140 · worst 4.07e+01
+nonpos A/B total 9 35
+annual T A: max rel diff 5.86e-03 · verdict flips at 1.3397: 0/140
+annual T B: max rel diff 1.58e-01 · verdict flips at 1.3397: 1/140
+       pool_exkurt  oos_exkurt  pool_acf_e2_1  oos_acf_e2_1  pool_mean_e2  oos_mean_e2
+count      140.000     140.000        140.000       140.000       140.000      140.000
+mean         8.606       3.490         -0.038         0.010         1.310        1.631
+std         46.153      13.927          0.037         0.145         0.170        0.741
+min          0.566      -0.152         -0.151        -0.162         0.629        0.396
+25%          1.198       0.893         -0.059        -0.078         1.228        1.277
+50%          1.771       1.630         -0.042        -0.034         1.340        1.464
+75%          2.756       3.113         -0.019         0.037         1.415        1.697
+max        402.316     164.954          0.093         0.616         1.753        5.085
+share OOS ACF(e²,1) < 0: 0.657 · pool < 0: 0.871

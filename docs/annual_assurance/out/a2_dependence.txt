@@ -1,0 +1,53 @@
+069500 done
+102110 done
+229200 done
+122630 done
+114800 done
+091230 done
+091170 done
+091180 done
+305540 done
+143860 done
+117680 done
+161510 done
+219480 done
+133690 done
+192090 done
+148070 done
+153130 done
+132030 done
+261220 done
+261240 done
+cells 420
+worst {'T_rel': '9.24e-10', 'e_rel': '6.70e-10', 'r_abs': '4.96e-09', 'Troll_abs': '1.06e-09'}
+mismatch counts {'n': 0, 'khat': 0, 'episodes': 0}
+        obs_w60_pure_episodes  null_expected_iid_pool  perm_mean_episodes
+policy                                                                   
+A                          74                   177.8               174.5
+B                         260                   179.0               169.0
+base                      469                   180.9               174.0
+policy
+A      -0.034
+B       0.020
+base    0.104
+by year/policy (obs episodes · iid-pool null · within-year permutation null)
+       obs_w60_pure_episodes          null_expected_iid_pool             perm_mean_episodes            
+policy                     A   B base                      A     B  base                  A     B  base
+year                                                                                                   
+2020                      47  59   72                   27.1  27.3  28.0               25.3  24.8  24.8
+2021                      10  40   71                   26.1  27.2  28.1               27.9  27.1  29.7
+2022                       0  21   77                   27.0  26.8  26.7               27.5  26.2  28.7
+2023                       4  38   63                   26.7  26.7  26.8               26.8  26.7  25.9
+2024                       9  34   58                   26.0  26.4  27.8               25.6  24.0  23.5
+2025                       3  38   77                   26.4  25.9  26.2               24.3  22.8  24.7
+2026                       1  30   51                   18.4  18.6  17.3               17.1  17.4  16.7
+permutation p<0.05 count (annual T, EXPLORATORY) by year/policy
+policy   A   B  base
+year                
+2020    12  15    19
+2021     0   4     3
+2022     1   3     2
+2023     0   5     4
+2024     1   4     0
+2025     1   5     4
+2026     0   2    16
