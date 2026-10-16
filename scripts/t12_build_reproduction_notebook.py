@@ -1,10 +1,10 @@
-"""T12 canonical 재현 노트북 생성기 — ``python scripts/t12_build_reproduction_notebook.py``.
+# ruff: noqa: E501  — 긴 한국어 마크다운과 노트북 셀 원문은 생성물의 일부다.
+"""T12 최종 노트북 00·01·02 생성기 — ``python scripts/t12_build_reproduction_notebook.py``.
 
-``notebooks/T12_Annual_Expanding_Reproduction.ipynb`` 를 셀 정의에서 (출력 없이) 다시 만든다. 노트북을 손으로 고치지 말고
-이 파일을 고친 뒤 다시 생성·실행한다. 실행:
+``notebooks/{00,01,02}_*.ipynb`` 를 B의 검증된 셀 정의에서 역할별로 다시 만든다.
+노트북을 손으로 고치지 말고 이 파일을 고친 뒤 다시 생성·실행한다. 실행:
 
-    cd <repo> && env -u VIRTUAL_ENV -u LD_LIBRARY_PATH PYTHONPATH=$PWD/src <R2H>/.venv/bin/jupyter execute \
-        --inplace --timeout=3600 notebooks/T12_Annual_Expanding_Reproduction.ipynb
+    python scripts/run_t12_final_notebooks.py
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "notebooks" / "T12_Annual_Expanding_Reproduction.ipynb"
+NOTEBOOK_DIR = ROOT / "notebooks"
 
 # seq_golden 기준값 (REPRO_HASHES.md · tests/integration/test_t12_semantic_fingerprint.py 와 같은 값)
 SEQ_GOLDEN_SEMANTIC = "a5dca934bee19e3d843d2914c465a330cdd9d8abcd5051c3ef212de47472f883"
@@ -251,7 +251,7 @@ md(
 2026 = `PARTIAL_NON_BLIND` (~10/2, 이미 알려진 국면).
 
 **SVR–GARCH 분산** ($m=5$, $p=q=1$) — proxy $\tilde\sigma_t^2 = \frac{1}{m}\sum_{j=t-m+1}^{t} r_j^2$, SVR 이 $\tilde\sigma_t^2 \approx f(r_{t-1}^2,\ \tilde\sigma_{t-1}^2)$ 를 배운다
-(`paper2020/volatility_proxy.py:87`, RBF·X/Y 표준화). 검정연도 예측 $\hat\sigma^2_{t\mid t-1} = \hat f(r_{t-1}^2,\ s_{t-1})$:
+(`paper2020/volatility_proxy.py:moving_square_proxy`, `build_lagged_design`, RBF·X/Y 표준화). 검정연도 예측 $\hat\sigma^2_{t\mid t-1} = \hat f(r_{t-1}^2,\ s_{t-1})$:
 
 | 정책 | lag 분산 입력 $s_{t-1}$ | 비고 |
 |---|---|---|
@@ -276,7 +276,7 @@ $$C_k = \sum_{t\le k} e_t^2 - \frac{k}{n}\sum_{t\le n} e_t^2,\qquad \hat\tau^2 =
   **엄격한 OOS 요약은 PURE 만** 쓴다. w=252 는 모든 연도 거래일이 252 미만이라 PURE 가 구조적으로 불가하다.
 - 에피소드 = 경보일 사이 공백 ≤ 5 거래일이면 하나. 귀무 기대 에피소드 = 같은 풀의 iid 표본 200회 평균이다.
   **귀무 표본 길이 = 검정연도 공통 거래일 수** (비양수 분산일 포함; `worker.py:387,390` 의 `n_days`). LOCK L5 의 `n_test` 표기와 이번 자료에서 수치가 같다.
-- 난수 seed = `sha256(study_id|키…)` 앞 8바이트 (`config.py:294`) → 실행 순서·프로세스와 무관하다.
+- 난수 seed = `sha256(study_id|키…)` 앞 8바이트 (`config.py:derive_seed`, `9afc63e` 기준 32행) → 실행 순서·프로세스와 무관하다.
   예외 (CHANGELOG C-11): `normal_mc`·`asymptotic` 용 정규 참조 표본은 풀과 무관하므로 seed 키가 `(n, reps, 용도)` 뿐이다
   (`worker.py:75–90`, ticker·year·policy 없음). 그래서 이 표본은 ETF 간에 공유되고, MC 오차도 ETF 간에 공통이다.
 """
@@ -802,6 +802,7 @@ show_png("F05_episodes_vs_null")
 md(
     """
 **해석 (그림 5)** — 숫자는 w60 PURE 에피소드 관측 수, 색은 관측 − 귀무 기대다 (파랑 = 귀무보다 적음, 빨강 = 많음).
+2020 열은 2019년만 학습한 파일럿, 2026 열은 10월 2일까지의 부분·비블라인드 기간이다. 두 열은 2021–2025 핵심 100 ETF-연도와 합산하지 않는다.
 A 는 거의 전부 파랑이다 (귀무보다 적은 경보 — 검정력 부족 신호). base 는 핵심 연도에서도 빨강이 많다.
 이것은 **alarm_frequency** 이며 ground truth 가 없으므로 정탐/오탐으로 바꿔 부르지 않는다.
 2020·2026 열은 핵심 연도와 별도로 읽는다.
@@ -819,9 +820,11 @@ md(
     """
 **해석 (그림 6)** — 같은 잔차 경로라도 보정 방법에 따라 임계값이 움직인다. 연간 임계값 중앙값은 원문 표기값 1.3397, 정규 MC 약 1.31,
 iid in-sample 약 1.27–1.28 이다. block 부트스트랩은 단기 의존을 보존하는 **다른 귀무** (`DIFFERENT_NULL_SENSITIVITY`)다.
-A·B 에서는 약 1.05 로 더 낮고 base 에서는 약 1.66 으로 더 높다 — 풀의 의존 구조가 정책마다 다르기 때문이다. 기대 경보도 방법마다 다르다.
+A·B 에서는 약 1.05 로 더 낮고 base 에서는 약 1.66 으로 더 높다 — 풀의 의존 구조가 정책마다 다르기 때문으로 보인다 (A 독립 감사 Q6: ACF(e²,1) 중앙값 A −0.034 · base +0.104). 기대 경보도 방법마다 다르다.
 `VERDICT_FLIPS_CALIBRATION` 이 많은 이유가 여기에 있다.
 판정이 보정에 민감하다는 것(`SENSITIVITY_CONFIRMED`: A 104 · B 76 · base 34 / 140)은 계산상의 사실이다. 원인을 말해 주지 않는다.
+원본 그림 6의 눈금 `점근 1.3397`은 결과표 열 이름을 따른 과거 표현이다. 1.3397은 원문 표기 임계값이며 정확한 Kolmogorov 점근 5% 분위 약 1.3581과 다르다. 출판용 그림에서는 `원문 표기 1.3397`로 표시한다.
+분포는 2020–2026의 20 ETF × 7년 = 140 ETF-연도를 합친 것이다. 2020은 학습 1년 파일럿, 2026은 10월 2일까지의 부분·비블라인드 기간이다.
 """
 )
 
@@ -873,6 +876,7 @@ md(
 왼쪽: 연도별 중앙값 기준 QLIKE(A) − QLIKE(base) 는 2020 +0.43, 2022·2025 약 +0.1 이고, 나머지 핵심 연도는 0 근처다 (`summary_by_year_policy.median_qlike_minus_base`). 오른쪽: Ljung–Box($e^2$) BH q 는 잔차 제곱 의존이 남은 ETF-연도를 보여 준다.
 모두 **원인 판정이 아닌 기술 진단**이다. 또한 140 개 expanding 적합 중 98.6% 가 ε=0.1 (grid 하한)을 골랐다 — grid 가 좁을 수 있다는 신호이며,
 결과를 본 뒤 grid 를 넓히지 않았다.
+2020 열은 2019년만 학습한 파일럿, 2026 열은 10월 2일까지의 부분·비블라인드 기간이다. 두 열의 QLIKE와 잔차 진단을 2021–2025 완결 연도와 같은 검증으로 읽지 않는다.
 """
 )
 
@@ -924,6 +928,7 @@ md(
 **해석 (그림 12)** — 셀 글자는 사전 고정 규칙(L7)으로 플래그가 선 축(V/M/N/H)이다. 진한 파랑 `MULTIFACTOR` 는 신호가 있고 축이 2개 이상
 겹친 경우다. 한 경로의 실현값만으로는 **축들을 분리할 수 없다** (`unresolved_questions`). 빨간 점선은 보정·창·경계 중 하나에서
 판정이 뒤집힌 셀이다. 이 그림은 "무엇이 함께 관측됐는가" 의 기술이고, "무엇이 원인인가" 는 답하지 않는다.
+2020 열은 학습 1년 파일럿, 2026 열은 10월 2일까지의 부분·비블라인드 기간이며 두 열은 주 해석의 2021–2025와 구분한다.
 
 **신호 게이트의 한계 (A RQ-7)** — "설명할 신호" 는 연간 1.3397 기각 **또는** w60 PURE 에피소드 ≥1 이다. 위 표처럼 신호 셀 290개
 (A 41 · B 111 · base 138) 중 217개 (A 30 · B 83 · base 104) 가 연간 기각 없이 w60 에피소드만으로 켜졌다. 연간 기각으로 켜진 셀은 A 11 · B 28 · base 34 다.
@@ -1020,8 +1025,9 @@ show_png("F09_synthetic_size_power")
 md(
     """
 **해석 (그림 9)** — 회색 = H0 (Size), 파랑 = 연중 변화 (Power), 주황 = 연도 경계 변화. 막대 = Wilson 95% CI, 점선 = 0.05.
+원본 그림 9의 범례 `연간 사후 (점근)`은 결과표 열 이름을 따른 과거 표현이다. 이 곡선의 1.3397은 원문 표기 임계값이며 정확한 Kolmogorov 점근 5% 분위 약 1.3581과 다르다. 출판용 그림에서는 정정한 명칭을 쓴다.
 
-- **검출기 수준**(잔차를 직접 생성): 연간 사후 검정은 iid·t5 꼬리 H0 에서 Size 가 0.04–0.06 이다 (iid 보정 0.049 · 0.051).
+- **검출기 수준**(잔차를 직접 생성): 연간 사후 검정의 원문 표기 임계값 1.3397 기준 Size 는 iid H0 0.036 · t5 꼬리 H0 0.035 로 보수적이다. iid 보정값은 0.049 · 0.051, 블록 귀무값은 0.044 · 0.061 이다.
   그러나 잔차에 **GARCH 군집이 남아 있으면 구조변화가 없어도 기각률이 약 0.6** 이다 (1.3397 기준 0.58 · iid 0.61; block 0.33).
   잔차에 변동성 군집이 남아 있을 수 있는 실데이터의 기각을 "구조변화" 로 읽으면 안 되는 직접 근거다.
 - w60 PURE "연중 ≥1 경보" 확률은 iid H0 에서도 약 0.7 이다. 점별 95% 임계값은 연간 5% 오경보가 아니다 (L5). 그래서
@@ -1042,7 +1048,7 @@ md(
 
 | # | 한계 | 출처 |
 |---|---|---|
-| R-1 | 1.3397 은 원문 표기값이다. 정확한 점근 5% (1.3581) 가 아니다. n≈245 iid 에서 size 0.040 (보수적), 군집 잔차에서 0.5 이상 (반보수적) | Q4·Q5, `out/a2_size_mc.txt` |
+| R-1 | 1.3397 은 원문 표기값이다. 정확한 점근 5% (1.3581) 가 아니다. n≈245 iid 에서 size 0.040 (보수적), 군집 잔차에서 0.39–0.58 (반보수적) | Q4·Q5, `out/a2_size_mc.txt` |
 | R-2 | 점별 95% 이동창의 연중 ≥1 에피소드 귀무 확률 ≈0.68. 종합 상태의 신호 290개 중 217개가 w60 단독으로 켜졌다 | Q3 (8절에서 재계산) |
 | R-3 | A 는 검정력이 거의 없다 (파이프라인 ×2 변화 0.085). A 의 비기각을 안정성 증거로 쓰지 않는다 | Q6, T12 합성 `null_dgp_validation.csv` |
 | R-4 | base 기각은 모형화되지 않은 변동성 군집과 구별되지 않는다 (군집 귀무 size: 관측 수준 군집 0.39–0.45, 더 강한 군집 0.51–0.58) | Q6·Q9, `out/a2_size_mc.txt` |
@@ -1124,11 +1130,15 @@ display(pd.Series(summary, name="value").to_frame())
 )
 
 
-def build() -> dict:
+def build(selected: list[tuple[str, str]], prefix: str) -> dict:
     cells = []
-    for kind, src in CELLS:
+    for kind, src in selected:
+        if kind == "code" and cells and cells[-1]["cell_type"] == "code":
+            lead = next((line.lstrip("# ").strip() for line in src.splitlines() if line.lstrip().startswith("#")), "다음 계산")
+            explanation = f"**다음 계산: {lead}**\n\n위 단계의 출력과 구분해 입력·설정·결과를 아래 실행 셀에 남긴다. 오류가 나면 다음 셀로 진행하지 않는다."
+            cells.append({"cell_type": "markdown", "id": f"{prefix}-{len(cells):02d}", "metadata": {}, "source": explanation.splitlines(keepends=True)})
         lines = src.splitlines(keepends=True)
-        cell = {"cell_type": kind, "id": f"t12-{len(cells):02d}", "metadata": {}, "source": lines}
+        cell = {"cell_type": kind, "id": f"{prefix}-{len(cells):02d}", "metadata": {}, "source": lines}
         if kind == "code":
             cell.update(execution_count=None, outputs=[])
         cells.append(cell)
@@ -1147,19 +1157,107 @@ def keep_outputs(new: dict, executed: dict) -> dict:
     """마크다운만 고쳤을 때: 실행된 노트북의 코드 셀 출력을 그대로 옮긴다. 코드 셀 원문이 하나라도 다르면 거부 (재실행 필요)."""
     old_code = [c for c in executed["cells"] if c["cell_type"] == "code"]
     new_code = [c for c in new["cells"] if c["cell_type"] == "code"]
-    if len(old_code) != len(new_code) or any("".join(a["source"]) != "".join(b["source"]) for a, b in zip(old_code, new_code)):
+    if len(old_code) != len(new_code) or any("".join(a["source"]) != "".join(b["source"]) for a, b in zip(old_code, new_code, strict=True)):
         raise SystemExit("code cells changed — re-execute the notebook instead of --keep-outputs")
-    for a, b in zip(old_code, new_code):
+    for a, b in zip(old_code, new_code, strict=True):
         b["outputs"], b["execution_count"] = a["outputs"], a["execution_count"]
     new["metadata"] = executed["metadata"]
     return new
 
 
+PREFLIGHT = NOTEBOOK_DIR / "00_환경과_데이터_검증.ipynb"
+REPRODUCTION = NOTEBOOK_DIR / "01_연간확장_실험재현.ipynb"
+INTERPRETATION = NOTEBOOK_DIR / "02_가설검증_강건성_심층해석.ipynb"
+
+
+def final_books() -> dict[Path, dict]:
+    """B의 원본 셀을 역할별로 분리하고, 02는 01의 검증된 파일 계약으로 시작한다."""
+    title00 = ("markdown", "# 00 · 환경과 데이터 검증\n\n국내 ETF 20종의 고정 원자료, 실행환경, 연도별 학습·검정 경계를 먼저 검증한다. 원자료를 다시 다운로드하지 않는다. 2020은 학습 이력 1년의 파일럿이고 2026은 10월 2일까지의 부분·비블라인드 구간이다. 다음 문서는 01 계산, 02 가설과 한계다.\n\n이 연구는 잔차 제곱의 사후 분산 검정이며 가격 상승 방향·거래 수익률을 평가하지 않는다.")
+    title01 = ("markdown", "# 01 · 연간 확장 실험 재현\n\n고정 원자료부터 20 ETF × 2020–2026 × A/B/base 결과를 기존 `r2h.annual_expanding` 코드로 순차 재계산한다. 2021–2025의 완결 100 ETF-연도/정책을 주 해석으로 삼고 2020·2026은 별도 표시한다. 이 노트북은 다른 노트북의 메모리 상태를 사용하지 않는다.\n\n원문 표기 임계값 1.3397은 정확한 Kolmogorov 점근 5% 분위 약 1.3581과 다르다. 여기서는 잠긴 원 프로토콜의 판정을 유지한다.")
+    title02 = ("markdown", "# 02 · 가설 검증, 강건성, 심층 해석\n\n01이 새로 계산한 결과 폴더의 지문을 먼저 검증한다. V(실현 변동성), M(분산 적합), N(잔차 의존), C(검정과 임계값), H(학습 이력)를 분리해 읽는다. 그림의 기각은 실제 시장 변화의 정답이나 온라인 경보가 아니다.\n\n2020은 파일럿, 2026은 부분·비블라인드이며 핵심 결론은 2021–2025의 100 ETF-연도/정책에 한정된다. ETF 간 중복 노출로 100개를 독립 시행으로 취급하지 않는다.")
+    footer00 = ("markdown", "## 사전 점검의 해석\n\n위 실행 출력의 원자료 SHA, 데이터 버전, 20종의 연도 경계와 폰트가 다음 두 노트북의 입력 계약이다. 시세 수정, 환경 버전 차이, 학습일과 검정일의 겹침은 수치 재현을 막는다. 00은 검정 결과를 주장하지 않는다.")
+    qa00 = ("code", r'''# 고정 종가 패널의 종목별 기간과 결측을 점검한다.
+qa = pd.DataFrame({"첫 종가일": panel.close.apply(lambda s: str(s.first_valid_index().date())), "마지막 종가일": panel.close.apply(lambda s: str(s.last_valid_index().date())), "종가 행수": panel.close.notna().sum(), "종가 결측": panel.close.isna().sum(), "수익률 유효일": returns.notna().sum()})  # ETF마다 같은 계약인지 보인다.
+assert panel.close.shape[1] == 20 and returns.shape[1] == 20  # 유니버스 20종을 확인한다.
+assert not panel.close.index.has_duplicates and panel.close.index.is_monotonic_increasing  # 날짜 중복·역순을 차단한다.
+assert panel.close.stack().gt(0).all()  # 관측된 종가의 로그 정의역을 확인한다.
+display(qa)  # 결측·기간을 종목별로 저장된 출력에 표시한다.
+print("공통 가격 거래일:", len(panel.close), "· 전체 종가 결측:", int(panel.close.isna().sum().sum()))  # 분모를 밝힌다.''')
+    font00 = ("code", r'''# 한글·음수·수식 글리프가 실제로 렌더되는지 표본 그림을 만든다.
+font_fig, font_ax = plt.subplots(figsize=(8, 2.3))  # 잘림 확인을 위한 실제 캔버스를 만든다.
+font_ax.text(.03, .65, "한글 검증: 연간 확장 · 변동성 · 정책 A/B", fontsize=14)  # 핵심 한국어 레이블을 그린다.
+font_ax.text(.03, .28, "음수 -0.18 · σ² · τ² · T_n · α=0.05", fontsize=12)  # 수식과 마이너스를 확인한다.
+font_ax.set_axis_off()  # 장식 축을 제거한다.
+font_path = ROOT / "outputs" / "t12" / "preflight" / "한글_폰트_검증.png"  # 생성 그림을 별도 위치에 저장한다.
+font_path.parent.mkdir(parents=True, exist_ok=True)  # 사전 점검 폴더를 만든다.
+font_fig.savefig(font_path, dpi=300, bbox_inches="tight")  # 최종 그림과 같은 해상도에서 확인한다.
+display(font_fig)  # 제출 노트북 안에도 실제 렌더를 남긴다.
+plt.close(font_fig)  # 뒤 셀의 그림 상태를 깨끗하게 유지한다.
+print("한글 렌더 표본:", font_path, "· SHA256:", hashlib.sha256(font_path.read_bytes()).hexdigest())  # 그림 출처를 표시한다.''')
+    footer01 = ("code", r'''# 실행 결과를 다음 노트북에 전달할 파일 계약을 기록한다.
+release_pointer = ROOT / "outputs" / "t12" / "latest_repro.json"  # 같은 작업트리의 새 결과만 선택한다.
+release_pointer.parent.mkdir(parents=True, exist_ok=True)  # 출력 폴더를 준비한다.
+release_pointer.write_text(json.dumps({"run_id": RUN_ID, "semantic": new_fp["aggregate_semantic"], "verdict": new_fp["aggregate_verdict"], "mode": RUN_MODE}, ensure_ascii=False, indent=2) + "\n")  # 02가 확인할 지문을 저장한다.
+print("01 계산 완료:", RUN_ID, "· Semantic/Verdict PASS")  # 노트북에 검증 결과를 남긴다.''')
+    bridge02 = ("code", rf'''# 01의 완료 기록을 읽고 재계산한 run을 선택한다.
+import time  # 선택한 실행의 시간을 기록한다.
+sys.path.insert(0, str(ROOT))  # 노트북 작업 폴더와 무관하게 이 저장소 scripts를 찾는다.
+import scripts.t12_figures as figs  # 원본 그림과 파생표 함수를 재사용한다.
+import scripts.t12_semantic_fingerprint as sfp  # 계산 내용과 판정의 지문을 독립 확인한다.
+pointer = json.loads((ROOT / "outputs" / "t12" / "latest_repro.json").read_text())  # 01의 계약 파일을 읽는다.
+assert pointer["mode"] == "EXECUTED", "01의 새 full 실행이 필요합니다"  # 재사용 실행을 배제한다.
+RUN_ID = pointer["run_id"]  # 이번 01의 실행 ID를 고정한다.
+WORK_ROOT = ROOT / "outputs" / "t12" / "work"  # 일별 캐시 위치를 정한다.
+MERGED = WORK_ROOT / RUN_ID / "merged"  # 전체 ETF의 병합 결과를 찾는다.
+NB_OUT = ROOT / "outputs" / "t12" / "notebook" / RUN_ID  # 그림 출력 폴더를 찾는다.
+RES_NB = NB_OUT / "results"  # 01의 재생성 결과표를 읽는다.
+FIG_NB = NB_OUT / "figures"  # 이 run의 그림만 사용한다.
+REF = ROOT / "research" / "t12_annual_expanding_v2" / "results"  # 동결된 기준을 지정한다.
+manifest = json.loads((MERGED / "run_manifest.json").read_text())  # 병합 무결성 기록을 읽는다.
+assert manifest["integrity_pass"], "01 무결성 실패"  # 누락 또는 중복 행이면 중단한다.
+new_fp = sfp.fingerprint_dir(MERGED)  # 01의 전체 표를 다시 지문화한다.
+assert new_fp["aggregate_semantic"] == pointer["semantic"] == "{SEQ_GOLDEN_SEMANTIC}"  # 수치 동일성을 검사한다.
+assert new_fp["aggregate_verdict"] == pointer["verdict"] == "{SEQ_GOLDEN_VERDICT}"  # 기각 판정을 검사한다.
+T = figs.load(RES_NB)  # 01이 만든 표를 원본 그림 함수의 입력으로 읽는다.
+SYNTHETIC_SHA = "{SYNTHETIC_SHA}"  # 보존된 합성 검증 표의 해시를 고정한다.
+assert hashlib.sha256((RES_NB / "null_dgp_validation.csv").read_bytes()).hexdigest() == SYNTHETIC_SHA  # 합성 표 출처를 검증한다.
+print("02 입력 계약 PASS:", RUN_ID, "· ETF-연도 140/정책 · Semantic/Verdict PASS")  # 검증된 입력을 표시한다.''')
+    presentation_intro = ("markdown", "## 출판용 정정 그림 P01–P06\n\n원본 F01–F12와 ETF 그림은 계산 재현용 아티팩트로 보존한다. 다음 여섯 그림은 같은 결과표를 한국어 표기와 300 dpi PNG·편집 가능한 SVG로 다시 그린 표현 버전이다. 원본의 `점근 1.3397` 표현은 P04/P05에서 `원문 표기 1.3397`로 정정한다. 수치와 검정 판정은 바꾸지 않는다. 각 그림의 자료 SHA와 해석 제한은 인덱스에 기록한다.")
+    presentation_code = ("code", r'''# 출판용 그림 생성 모듈을 불러온다.
+import scripts.t12_presentation_figures as publication  # 동일 결과표의 한국어 그림만 만든다.
+PUB_OUT = NB_OUT / "presentation"  # 원본 그림과 분리해 버전을 표시한다.
+pub_index = publication.make(RES_NB, PUB_OUT)  # PNG·SVG 6쌍과 자료 해시를 생성한다.
+assert len(pub_index) == 6  # 발표 도판 수를 확인한다.
+display(pub_index[["그림", "캡션"]])  # 각 그림의 분모·수치·해석 한계를 같이 보인다.
+for row in pub_index.itertuples():  # 발표용 대표 그림 6개를 노트북 출력에 남긴다.
+    display(Image(filename=row.PNG))  # 실제 렌더 픽셀을 인라인으로 확인할 수 있게 한다.''')
+    evidence02 = ("code", r'''# 01 새 실행의 표에서 주요 주장 수치를 다시 뽑아 출처를 묶는다.
+evidence_rows = []  # 각 주장과 직접 CSV 열의 대응을 모은다.
+for policy in ("A", "B", "base"):  # 정책별 분모는 각각 핵심 100 ETF-연도다.
+    observed = core_sum.loc[policy]  # 2021–2025 합계 행을 읽는다.
+    evidence_rows.append({"주장": f"{policy} 연간 기각", "실측": f"{int(observed.n_reject_asym)}/100", "자료": "summary_by_year_policy.csv:n_reject_asym", "노트북": "01 연간 표 · 02 P01/P02", "제한": "ETF-연도 비독립, 사후 분산 검정"})  # 원문값 판정을 기록한다.
+    evidence_rows.append({"주장": f"{policy} w60 에피소드/귀무 기대", "실측": f"{int(observed.w60_pure_episodes_total)}/{observed.w60_null_expected_total:.3f}", "자료": "summary_by_year_policy.csv:w60_pure_episodes_total,w60_null_expected_total", "노트북": "01 연간 표 · 02 P03", "제한": "60거래일 PURE 이동창, 참탐지율 아님"})  # 경보 묶음의 단위를 적는다.
+syn_tbl = pd.read_csv(RES_NB / "null_dgp_validation.csv")  # 합성 귀무 검증 표를 읽는다.
+for dgp, label in (("stable_low_variance_no_change", "iid 정규"), ("stable_heavy_tail", "t5 꼬리"), ("stable_garch_clustering", "GARCH 군집")):  # 서로 다른 귀무를 분리한다.
+    size_row = syn_tbl.query("dgp_name == @dgp and level == 'detector' and test == 'annual_posthoc' and calibration == 'asymptotic_1.3397'").iloc[0]  # 해당 조건의 직접 모의 결과다.
+    evidence_rows.append({"주장": f"{label} 귀무 크기", "실측": f"{size_row.rate:.3f} (R={int(size_row.mc_reps)})", "자료": "null_dgp_validation.csv:rate,mc_reps", "노트북": "02 P05", "제한": "합성 검출기 수준, 실제 ETF 정답 아님"})  # 크기와 시장 판정을 구별한다.
+claim_table = pd.DataFrame(evidence_rows)  # 근거 표를 하나의 프레임으로 만든다.
+claim_table.to_csv(NB_OUT / "claim_evidence.csv", index=False, lineterminator="\n")  # 이번 run의 주장–근거 파일을 저장한다.
+display(claim_table)  # 채점자가 셀 출력에서 수치와 한계를 확인한다.
+print("주장–근거 행:", len(claim_table), "· 자료 SHA256:", hashlib.sha256((NB_OUT / "claim_evidence.csv").read_bytes()).hexdigest())  # 출처 지문을 출력한다.''')
+    book00 = [title00, *CELLS[1:13], qa00, font00, footer00]
+    book01 = [title01, *CELLS[1:21], footer01]
+    book02 = [title02, *[CELLS[i] for i in (2, 3, 4, 6, 7)], bridge02, *CELLS[19:25], presentation_intro, presentation_code, *CELLS[25:55], evidence02]
+    return {PREFLIGHT: build(book00, "00"), REPRODUCTION: build(book01, "01"), INTERPRETATION: build(book02, "02")}
+
+
 if __name__ == "__main__":
     import sys
 
-    nb = build()
-    if "--keep-outputs" in sys.argv:
-        nb = keep_outputs(nb, json.loads(OUT.read_text(encoding="utf-8")))
-    OUT.write_text(json.dumps(nb, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    print(f"{len(CELLS)} cells → {OUT}")
+    for out, nb in final_books().items():
+        if "--only" in sys.argv and out.name != sys.argv[sys.argv.index("--only") + 1]:
+            continue
+        if "--keep-outputs" in sys.argv and out.exists():
+            nb = keep_outputs(nb, json.loads(out.read_text(encoding="utf-8")))
+        out.write_text(json.dumps(nb, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        print(f"{len(nb['cells'])} cells → {out}")

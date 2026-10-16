@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="484.994148pt" height="297.36pt" viewBox="0 0 484.994148 297.36" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-16T18:24:21.250348</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 297.36 
+L 484.994148 297.36 
+L 484.994148 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 38.106875 274.16 
+L 477.794148 274.16 
+L 477.794148 21.2 
+L 38.106875 21.2 
+z
+" style="fill: #fcfcfb"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 58.09266 274.16 
+L 191.331228 274.16 
+L 191.331228 234.566261 
+L 58.09266 234.566261 
+z
+" clip-path="url(#p895f3fb141)" style="fill: #2a78d6"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 324.569795 274.16 
+L 457.808363 274.16 
+L 457.808363 71.792 
+L 324.569795 71.792 
+z
+" clip-path="url(#p895f3fb141)" style="fill: #eb6834"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 124.711944 274.16 
+L 124.711944 21.2 
+" clip-path="url(#p895f3fb141)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2">
+      <defs>
+       <path id="mca212247cb" d="M 0 0 
+L 0 3.5 
+" style="stroke: #52514e; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#mca212247cb" x="124.711944" y="274.16" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 9px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="124.711944" y="288.36" transform="rotate(-0 124.711944 288.36)">정책 A</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 391.189079 274.16 
+L 391.189079 21.2 
+" clip-path="url(#p895f3fb141)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#mca212247cb" x="391.189079" y="274.16" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 9px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="391.189079" y="288.36" transform="rotate(-0 391.189079 288.36)">정책 B</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_5">
+      <path d="M 38.106875 274.16 
+L 477.794148 274.16 
+" clip-path="url(#p895f3fb141)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <defs>
+       <path id="maf176d8b51" d="M 0 0 
+L -3.5 0 
+" style="stroke: #52514e; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#maf176d8b51" x="38.106875" y="274.16" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 9px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="31.106875" y="277.76" transform="rotate(-0 31.106875 277.76)">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_7">
+      <path d="M 38.106875 230.166957 
+L 477.794148 230.166957 
+" clip-path="url(#p895f3fb141)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#maf176d8b51" x="38.106875" y="230.166957" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 9px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="31.106875" y="233.766957" transform="rotate(-0 31.106875 233.766957)">10</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_9">
+      <path d="M 38.106875 186.173913 
+L 477.794148 186.173913 
+" clip-path="url(#p895f3fb141)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#maf176d8b51" x="38.106875" y="186.173913" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 9px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="31.106875" y="189.773913" transform="rotate(-0 31.106875 189.773913)">20</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_11">
+      <path d="M 38.106875 142.18087 
+L 477.794148 142.18087 
+" clip-path="url(#p895f3fb141)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#maf176d8b51" x="38.106875" y="142.18087" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 9px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="31.106875" y="145.78087" transform="rotate(-0 31.106875 145.78087)">30</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_13">
+      <path d="M 38.106875 98.187826 
+L 477.794148 98.187826 
+" clip-path="url(#p895f3fb141)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#maf176d8b51" x="38.106875" y="98.187826" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 9px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="31.106875" y="101.787826" transform="rotate(-0 31.106875 101.787826)">40</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_15">
+      <path d="M 38.106875 54.194783 
+L 477.794148 54.194783 
+" clip-path="url(#p895f3fb141)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_16">
+      <g>
+       <use xlink:href="#maf176d8b51" x="38.106875" y="54.194783" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 9px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="31.106875" y="57.794783" transform="rotate(-0 31.106875 57.794783)">50</text>
+     </g>
+    </g>
+    <g id="text_9">
+     <text style="font-size: 9px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="14.4" y="147.68" transform="rotate(-90 14.4 147.68)">확장 이력 대비 판정 차이 / 220 대조</text>
+    </g>
+   </g>
+   <g id="patch_5">
+    <path d="M 38.106875 274.16 
+L 38.106875 21.2 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 38.106875 274.16 
+L 477.794148 274.16 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 9px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: middle" x="124.711944" y="230.166957" transform="rotate(-0 124.711944 230.166957)">9 / 220</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 9px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: middle" x="391.189079" y="67.392696" transform="rotate(-0 391.189079 67.392696)">46 / 220</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: middle" x="257.950511" y="15.2" transform="rotate(-0 257.950511 15.2)">그림 P06 · 학습 이력 선택과 검정 판정</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p895f3fb141">
+   <rect x="38.106875" y="21.2" width="439.687273" height="252.96"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -1,11 +1,26 @@
 # R2H
 주가 급등 국면 포착 에이전트 (2026.9~2027.6, 홍익대학교 졸업 프로젝트)
 
+## T12 최종 연구 읽기와 재현 (2026-10-16)
+
+이 브랜치의 T12는 국내 ETF 20종에 SVR–GARCH 분산 추정과 잔차 제곱 CUSUM을 적용한 **연도별 사후 분산 검정**이다. 가격 상승 방향, 온라인 급등 시작, 진입·청산 수익률을 검증한 연구가 아니다. 2021–2025 완결 5년을 핵심 기간으로 읽고, 2020은 학습 1년 파일럿, 2026은 10월 2일까지의 부분·비블라인드 기간으로 구분한다.
+
+최종 공식 노트북은 [00 환경과 데이터 검증](notebooks/00_환경과_데이터_검증.ipynb) → [01 연간 확장 실험 재현](notebooks/01_연간확장_실험재현.ipynb) → [02 가설 검증과 심층 해석](notebooks/02_가설검증_강건성_심층해석.ipynb) 순서다. 세 파일은 [생성기](scripts/t12_build_reproduction_notebook.py)의 같은 셀 정의에서 만들어진다. Claude B의 이전 단일 노트북은 Git 커밋 `871dc62`/`76e8b03`에서 복구할 수 있다.
+
+재현에는 이 R2H 저장소의 고정 `data/raw` 20 ETF 파일과 R2H `.venv`가 필요하다. 원자료는 원격에서 다시 받지 않는다. 새 작업트리에서는 `data`가 기존 R2H 원자료를 가리키는 로컬 symlink다. 다른 환경이라면 `data/raw`를 같은 SHA의 읽기 전용 자료로 배치하고, `T12_JUPYTER`를 호환 Jupyter 실행 파일로 지정한다. Python 3.12.3, numpy 2.5.4, pandas 3.0.6, scikit-learn 1.9.1이 기준이다.
+
+```bash
+python scripts/t12_build_reproduction_notebook.py  # 빈 노트북 3개 재생성; 저장 출력이 지워지므로 제출본에는 실행하지 않는다
+python scripts/run_t12_final_notebooks.py           # 00→01→02 각각 새 커널; 01은 약 11분
+```
+
+두 번째 명령은 01에서 매번 전체 20 ETF × 2020–2026을 순차 실행하고 새 `run_id` 결과를 `outputs/t12/`에 기록한다. 02는 바로 그 결과의 Semantic·Verdict 지문을 확인한 뒤 도판을 만든다. 실행별 로그는 `outputs/t12/final/`, 고정 프로토콜·기준 결과는 `research/t12_annual_expanding_v2/`에 있다. 이번 검증의 [재현 보고](research/t12_annual_expanding_v2/FINAL_REPRODUCTION_REPORT.md), [파일별 SHA256 매니페스트](research/t12_annual_expanding_v2/FINAL_RELEASE_MANIFEST.json), [한국어 발표 그림 6종](research/t12_annual_expanding_v2/presentation/), [연구 종결 보고와 주장–근거 표](FINAL_RESEARCH_CLOSURE.md)를 함께 읽는다. 원본 자료·결과·Claude 작업트리는 변경하지 않았으며 원격 push는 하지 않았다.
+
 <p>
   <a href="https://github.com/nanahyun3/R2H/actions/workflows/ci.yml?query=branch%3A1012"><img alt="CI" src="https://github.com/nanahyun3/R2H/actions/workflows/ci.yml/badge.svg?branch=1012"></a>
   <img alt="Python" src="https://img.shields.io/badge/python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white">
   <img alt="uv" src="https://img.shields.io/badge/env-uv%20%2B%20uv.lock-DE5FE9">
-  <img alt="tests" src="https://img.shields.io/badge/tests-98%20passed-2ea44f">
+  <img alt="tests" src="https://img.shields.io/badge/tests-see%20local%20closure%20report-2ea44f">
   <img alt="ruff" src="https://img.shields.io/badge/lint-ruff-D7FF64">
   <img alt="mypy" src="https://img.shields.io/badge/types-mypy-1F5082">
   <img alt="contract" src="https://img.shields.io/badge/contract-v0.1--proposed-orange">

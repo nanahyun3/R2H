@@ -1,0 +1,2 @@
+# Matplotlib SVG 경로 데이터는 줄 끝 공백을 포함한다. 렌더러 원문 바이트를 보존한다.
+research/t12_annual_expanding_v2/presentation/*.svg -whitespace
