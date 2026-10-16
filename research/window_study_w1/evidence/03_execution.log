@@ -1,0 +1,6 @@
+
+[STDERR]
+[NbClientApp] Executing /home/sieg/projects-wsl/hongik_univ_26_2/SA/1016/R2H_CUSUM_Window_Study/notebooks/03_대표4종_검정창선정_심층연구.ipynb
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+[NbClientApp] Executing notebook with kernel: python3
+[NbClientApp] Save executed results to /home/sieg/projects-wsl/hongik_univ_26_2/SA/1016/R2H_CUSUM_Window_Study/notebooks/03_대표4종_검정창선정_심층연구.ipynb

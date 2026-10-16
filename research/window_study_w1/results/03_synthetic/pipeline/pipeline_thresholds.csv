@@ -1,0 +1,13 @@
+policy,w,critical_annual_max,calibration_rule
+A,20,1.456993031,pipeline_garch_H0_q95_annual_max_common_days
+A,30,1.342926557,pipeline_garch_H0_q95_annual_max_common_days
+A,60,1.249442724,pipeline_garch_H0_q95_annual_max_common_days
+A,120,1.284988416,pipeline_garch_H0_q95_annual_max_common_days
+B,20,1.646381649,pipeline_garch_H0_q95_annual_max_common_days
+B,30,1.716820175,pipeline_garch_H0_q95_annual_max_common_days
+B,60,1.886044621,pipeline_garch_H0_q95_annual_max_common_days
+B,120,2.188312264,pipeline_garch_H0_q95_annual_max_common_days
+base,20,1.669969504,pipeline_garch_H0_q95_annual_max_common_days
+base,30,1.797170502,pipeline_garch_H0_q95_annual_max_common_days
+base,60,2.132821208,pipeline_garch_H0_q95_annual_max_common_days
+base,120,2.4315923,pipeline_garch_H0_q95_annual_max_common_days

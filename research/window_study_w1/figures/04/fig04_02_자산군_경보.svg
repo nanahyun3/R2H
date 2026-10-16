@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="752.04pt" height="388.512pt" viewBox="0 0 752.04 388.512" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-16T21:06:31.705709</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 388.512 
+L 752.04 388.512 
+L 752.04 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 45.84 324.072 
+L 744.84 324.072 
+L 744.84 22.8 
+L 45.84 22.8 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 77.612727 324.072 
+L 90.640269 324.072 
+L 90.640269 324.072 
+L 77.612727 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #1f77b4"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 149.98796 324.072 
+L 163.015502 324.072 
+L 163.015502 324.072 
+L 149.98796 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #1f77b4"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 222.363193 324.072 
+L 235.390735 324.072 
+L 235.390735 324.072 
+L 222.363193 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #1f77b4"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 294.738426 324.072 
+L 307.765968 324.072 
+L 307.765968 297.990186 
+L 294.738426 297.990186 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #1f77b4"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 367.113659 324.072 
+L 380.141201 324.072 
+L 380.141201 324.072 
+L 367.113659 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #1f77b4"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 439.488892 324.072 
+L 452.516434 324.072 
+L 452.516434 324.072 
+L 439.488892 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #1f77b4"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 511.864125 324.072 
+L 524.891667 324.072 
+L 524.891667 324.072 
+L 511.864125 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #1f77b4"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 584.239358 324.072 
+L 597.2669 324.072 
+L 597.2669 324.072 
+L 584.239358 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #1f77b4"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 656.614591 324.072 
+L 669.642133 324.072 
+L 669.642133 324.072 
+L 656.614591 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #1f77b4"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 92.087774 324.072 
+L 105.115316 324.072 
+L 105.115316 324.072 
+L 92.087774 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #ff7f0e"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 164.463007 324.072 
+L 177.490549 324.072 
+L 177.490549 165.07599 
+L 164.463007 165.07599 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #ff7f0e"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 236.83824 324.072 
+L 249.865782 324.072 
+L 249.865782 324.072 
+L 236.83824 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #ff7f0e"/>
+   </g>
+   <g id="patch_15">
+    <path d="M 309.213473 324.072 
+L 322.241015 324.072 
+L 322.241015 297.579449 
+L 309.213473 297.579449 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #ff7f0e"/>
+   </g>
+   <g id="patch_16">
+    <path d="M 381.588706 324.072 
+L 394.616248 324.072 
+L 394.616248 308.302624 
+L 381.588706 308.302624 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #ff7f0e"/>
+   </g>
+   <g id="patch_17">
+    <path d="M 453.963939 324.072 
+L 466.991481 324.072 
+L 466.991481 246.141946 
+L 453.963939 246.141946 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #ff7f0e"/>
+   </g>
+   <g id="patch_18">
+    <path d="M 526.339172 324.072 
+L 539.366714 324.072 
+L 539.366714 245.225121 
+L 526.339172 245.225121 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #ff7f0e"/>
+   </g>
+   <g id="patch_19">
+    <path d="M 598.714405 324.072 
+L 611.741947 324.072 
+L 611.741947 324.072 
+L 598.714405 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #ff7f0e"/>
+   </g>
+   <g id="patch_20">
+    <path d="M 671.089638 324.072 
+L 684.11718 324.072 
+L 684.11718 83.0544 
+L 671.089638 83.0544 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #ff7f0e"/>
+   </g>
+   <g id="patch_21">
+    <path d="M 106.56282 324.072 
+L 119.590362 324.072 
+L 119.590362 324.072 
+L 106.56282 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #2ca02c"/>
+   </g>
+   <g id="patch_22">
+    <path d="M 178.938053 324.072 
+L 191.965595 324.072 
+L 191.965595 324.072 
+L 178.938053 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #2ca02c"/>
+   </g>
+   <g id="patch_23">
+    <path d="M 251.313286 324.072 
+L 264.340828 324.072 
+L 264.340828 244.594346 
+L 251.313286 244.594346 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #2ca02c"/>
+   </g>
+   <g id="patch_24">
+    <path d="M 323.688519 324.072 
+L 336.716061 324.072 
+L 336.716061 206.283082 
+L 323.688519 206.283082 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #2ca02c"/>
+   </g>
+   <g id="patch_25">
+    <path d="M 396.063752 324.072 
+L 409.091294 324.072 
+L 409.091294 308.302624 
+L 396.063752 308.302624 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #2ca02c"/>
+   </g>
+   <g id="patch_26">
+    <path d="M 468.438985 324.072 
+L 481.466527 324.072 
+L 481.466527 167.896504 
+L 468.438985 167.896504 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #2ca02c"/>
+   </g>
+   <g id="patch_27">
+    <path d="M 540.814218 324.072 
+L 553.84176 324.072 
+L 553.84176 245.225121 
+L 540.814218 245.225121 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #2ca02c"/>
+   </g>
+   <g id="patch_28">
+    <path d="M 613.189451 324.072 
+L 626.216993 324.072 
+L 626.216993 247.05877 
+L 613.189451 247.05877 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #2ca02c"/>
+   </g>
+   <g id="patch_29">
+    <path d="M 685.564684 324.072 
+L 698.592226 324.072 
+L 698.592226 324.072 
+L 685.564684 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #2ca02c"/>
+   </g>
+   <g id="patch_30">
+    <path d="M 121.037867 324.072 
+L 134.065409 324.072 
+L 134.065409 324.072 
+L 121.037867 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #d62728"/>
+   </g>
+   <g id="patch_31">
+    <path d="M 193.4131 324.072 
+L 206.440642 324.072 
+L 206.440642 84.306017 
+L 193.4131 84.306017 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #d62728"/>
+   </g>
+   <g id="patch_32">
+    <path d="M 265.788333 324.072 
+L 278.815875 324.072 
+L 278.815875 324.072 
+L 265.788333 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #d62728"/>
+   </g>
+   <g id="patch_33">
+    <path d="M 338.163566 324.072 
+L 351.191108 324.072 
+L 351.191108 257.605199 
+L 338.163566 257.605199 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #d62728"/>
+   </g>
+   <g id="patch_34">
+    <path d="M 410.538799 324.072 
+L 423.566341 324.072 
+L 423.566341 324.072 
+L 410.538799 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #d62728"/>
+   </g>
+   <g id="patch_35">
+    <path d="M 482.914032 324.072 
+L 495.941574 324.072 
+L 495.941574 205.486295 
+L 482.914032 205.486295 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #d62728"/>
+   </g>
+   <g id="patch_36">
+    <path d="M 555.289265 324.072 
+L 568.316807 324.072 
+L 568.316807 324.072 
+L 555.289265 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #d62728"/>
+   </g>
+   <g id="patch_37">
+    <path d="M 627.664498 324.072 
+L 640.69204 324.072 
+L 640.69204 247.05877 
+L 627.664498 247.05877 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #d62728"/>
+   </g>
+   <g id="patch_38">
+    <path d="M 700.039731 324.072 
+L 713.067273 324.072 
+L 713.067273 324.072 
+L 700.039731 324.072 
+z
+" clip-path="url(#p8b22dd73c7)" style="fill: #d62728"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m3e86915252" d="M 0 0 
+L 0 3.5 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m3e86915252" x="105.839068" y="324.072" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(96.439068 339.072)">국채</text>
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(92.879693 349.072)">(n=1)</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m3e86915252" x="178.214301" y="324.072" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(159.414301 339.072)">단기자금</text>
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(165.254926 349.072)">(n=1)</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#m3e86915252" x="250.589534" y="324.072" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(216.239534 339.072)">레버리지·인버스</text>
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(237.630159 349.072)">(n=2)</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m3e86915252" x="322.964767" y="324.072" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(304.164767 339.072)">시장지수</text>
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(310.005392 349.072)">(n=6)</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#m3e86915252" x="395.34" y="324.072" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(385.94 339.072)">업종</text>
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(382.380625 349.072)">(n=5)</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#m3e86915252" x="467.715233" y="324.072" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(453.615233 339.072)">원자재</text>
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(454.755858 349.072)">(n=2)</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_7">
+      <g>
+       <use xlink:href="#m3e86915252" x="540.090466" y="324.072" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(530.690466 339.072)">전략</text>
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(527.131091 349.072)">(n=1)</text>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#m3e86915252" x="612.465699" y="324.072" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(603.065699 339.072)">테마</text>
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(599.506324 349.072)">(n=1)</text>
+     </g>
+    </g>
+    <g id="xtick_9">
+     <g id="line2d_9">
+      <g>
+       <use xlink:href="#m3e86915252" x="684.840932" y="324.072" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(675.440932 339.072)">통화</text>
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'" transform="translate(671.881557 349.072)">(n=1)</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_10">
+      <defs>
+       <path id="m426ca40075" d="M 0 0 
+L -3.5 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m426ca40075" x="45.84" y="324.072" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end" x="38.84" y="328.072" transform="rotate(-0 38.84 328.072)">0.0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_11">
+      <g>
+       <use xlink:href="#m426ca40075" x="45.84" y="284.648561" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_11">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end" x="38.84" y="288.648561" transform="rotate(-0 38.84 288.648561)">0.2</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#m426ca40075" x="45.84" y="245.225121" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_12">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end" x="38.84" y="249.225121" transform="rotate(-0 38.84 249.225121)">0.4</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_13">
+      <g>
+       <use xlink:href="#m426ca40075" x="45.84" y="205.801682" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_13">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end" x="38.84" y="209.801682" transform="rotate(-0 38.84 209.801682)">0.6</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#m426ca40075" x="45.84" y="166.378243" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_14">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end" x="38.84" y="170.378243" transform="rotate(-0 38.84 170.378243)">0.8</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_15">
+      <g>
+       <use xlink:href="#m426ca40075" x="45.84" y="126.954804" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_15">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end" x="38.84" y="130.954804" transform="rotate(-0 38.84 130.954804)">1.0</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_16">
+      <g>
+       <use xlink:href="#m426ca40075" x="45.84" y="87.531364" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_16">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end" x="38.84" y="91.531364" transform="rotate(-0 38.84 91.531364)">1.2</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_17">
+      <g>
+       <use xlink:href="#m426ca40075" x="45.84" y="48.107925" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_17">
+      <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: end" x="38.84" y="52.107925" transform="rotate(-0 38.84 52.107925)">1.4</text>
+     </g>
+    </g>
+    <g id="text_18">
+     <text style="font-size: 10px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: middle" x="17.691563" y="173.436" transform="rotate(-90 17.691563 173.436)">252 유효일당 에피소드 (ETF·연도 평균)</text>
+    </g>
+   </g>
+   <g id="patch_39">
+    <path d="M 45.84 324.072 
+L 45.84 22.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_40">
+    <path d="M 744.84 324.072 
+L 744.84 22.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_41">
+    <path d="M 45.84 324.072 
+L 744.84 324.072 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_42">
+    <path d="M 45.84 22.8 
+L 744.84 22.8 
+" style="fill: none; stroke: #000000; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 12px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: middle" x="395.34" y="16.8" transform="rotate(-0 395.34 16.8)">그림 04-2. 자산군별 관측 경보 부담 (2021–2025 · 정책 A · 연간 보정 임계값)</text>
+   </g>
+   <g id="legend_1">
+    <g id="patch_43">
+     <path d="M 407.5475 41.2 
+L 739.24 41.2 
+Q 740.84 41.2 740.84 39.6 
+L 740.84 28.4 
+Q 740.84 26.8 739.24 26.8 
+L 407.5475 26.8 
+Q 405.9475 26.8 405.9475 28.4 
+L 405.9475 39.6 
+Q 405.9475 41.2 407.5475 41.2 
+z
+" style="fill: #ffffff; opacity: 0.95; stroke: #cccccc; stroke-linejoin: miter"/>
+    </g>
+    <g id="patch_44">
+     <path d="M 409.1475 36.4 
+L 425.1475 36.4 
+L 425.1475 30.8 
+L 409.1475 30.8 
+z
+" style="fill: #1f77b4"/>
+    </g>
+    <g id="text_20">
+     <text style="font-size: 8px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: start" x="431.5475" y="36.4" transform="rotate(-0 431.5475 36.4)">w=20 거래일</text>
+    </g>
+    <g id="patch_45">
+     <path d="M 494.05875 36.4 
+L 510.05875 36.4 
+L 510.05875 30.8 
+L 494.05875 30.8 
+z
+" style="fill: #ff7f0e"/>
+    </g>
+    <g id="text_21">
+     <text style="font-size: 8px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: start" x="516.45875" y="36.4" transform="rotate(-0 516.45875 36.4)">w=30 거래일</text>
+    </g>
+    <g id="patch_46">
+     <path d="M 578.97 36.4 
+L 594.97 36.4 
+L 594.97 30.8 
+L 578.97 30.8 
+z
+" style="fill: #2ca02c"/>
+    </g>
+    <g id="text_22">
+     <text style="font-size: 8px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: start" x="601.37" y="36.4" transform="rotate(-0 601.37 36.4)">w=60 거래일</text>
+    </g>
+    <g id="patch_47">
+     <path d="M 663.88125 36.4 
+L 679.88125 36.4 
+L 679.88125 30.8 
+L 663.88125 30.8 
+z
+" style="fill: #d62728"/>
+    </g>
+    <g id="text_23">
+     <text style="font-size: 8px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: start" x="686.28125" y="36.4" transform="rotate(-0 686.28125 36.4)">w=120 거래일</text>
+    </g>
+   </g>
+  </g>
+  <g id="text_24">
+   <text style="font-size: 8.5px; font-family: 'NanumGothic', 'DejaVu Sans'; text-anchor: start; fill: #333333" x="7.2" y="379.612" transform="rotate(-0 7.2 379.612)">n = 자산군 ETF 수 (불균등) · 같은 날 공통 충격을 공유해 자산군 차이를 독립 표본 차이로 읽지 않음 · 경보는 실제 변화 정답이 아님</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p8b22dd73c7">
+   <rect x="45.84" y="22.8" width="699" height="301.272"/>
+  </clipPath>
+ </defs>
+</svg>

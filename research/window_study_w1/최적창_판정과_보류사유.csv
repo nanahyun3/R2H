@@ -1,0 +1,5 @@
+w,detector_size_ok,detector_power_delay_ok,pipeline_A_size_ok,pipeline_A_power_delay_ok,eligible,insufficient_precision,failure_reason,pipeline_A_power_lower,detector_min_power_lower,pipeline_A_median_delay,pareto,decision
+20,True,False,True,False,False,False,검출기 검출/지연; 적합 포함 검출/지연,0.010724719583860124,0.02109373877061023,24.0,False,비적격
+30,True,False,True,False,False,False,검출기 검출/지연; 적합 포함 검출/지연,0.034652194106514544,0.020266448099813112,26.5,False,비적격
+60,True,False,False,False,False,False,검출기 검출/지연; 적합 포함 귀무 상한; 적합 포함 검출/지연,0.04215217166140097,0.049549663117727814,16.5,False,비적격
+120,True,False,True,False,False,False,검출기 검출/지연; 적합 포함 검출/지연,0.057687448660377366,0.043374813298004446,31.5,False,비적격

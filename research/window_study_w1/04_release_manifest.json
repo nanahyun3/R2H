@@ -1,0 +1,32 @@
+{
+  "study_id": "t13_window_study_w1",
+  "mode": "FULL_EXECUTED",
+  "config_sha256": "8489eada913a3e624149f8ce05315d5be4ca1916680c1c51b5afe734a3015681",
+  "input_03_transfer_sha256": "367712eaedd2b4d0dc4a611416dcc97a9ccd7d175880f54b6c653c6439dc1e48",
+  "base_t12": {
+    "run_id": "b_nb_20261016T181251",
+    "data_version": "5f20e3e0073b521a",
+    "notebook_count": 3,
+    "raw_sha_count": 22,
+    "daily_ticker_count": 20,
+    "source_root": "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1016/R2H_T12_Final"
+  },
+  "environment": {
+    "python": "3.12.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1"
+  },
+  "files_sha256": {
+    "research/window_study_w1/results/04_real/validity.csv": "6b4cc3f2d4ec05fd6819aff907fec592b74e90396bc7b8b15e90d301b6ab339a",
+    "research/window_study_w1/results/04_real/alarm_metrics.csv": "b2e75bca1317cd7856abd12c843fa3504fd5325228e86fdf677a83cb6643a9b9",
+    "research/window_study_w1/results/04_real/cnn_candidate_intervals.csv": "34d896be516e8f6999c42709ff98f827180a546708f85dcbdee5541b518816aa",
+    "research/window_study_w1/results/04_real/daily_cache_qa.csv": "f8bc2e3df04d7b172652fa741a6e0fd8c2e984629ed63fbcd1ae924663a732ba",
+    "research/window_study_w1/results/04_real/asset_category_summary.csv": "5b9439c48c7aed3e6b7a64f7f648cd5be023b9a6691c741d895778cbf65878d2",
+    "research/window_study_w1/results/04_real/exposure_equal_summary.csv": "bf18a7d31986650806ebe4f5472465e0d5b1d0e7c928864decaa76a6035068b2",
+    "research/window_study_w1/results/04_real/representative_vs_16.csv": "e43a5e884079f46c301954a05bc5a5139eda066e464037e9156161fedda6c0c0"
+  },
+  "eligible_windows": [],
+  "pareto_windows": [],
+  "execution_seconds": 5.96
+}

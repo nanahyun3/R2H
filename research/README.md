@@ -10,4 +10,6 @@
 | `svr_garch_cusum_track_b.md` | Track B — Lee·Kim·Lee (2020) 재현 감사 (METHOD_FIDELITY_UNRESOLVED) |
 | `SOURCE_TO_TARGET_MANIFEST.csv` | 이식 파일 단위 출처·해시·테스트 |
 | `svr_garch_cusum_etf/` | **T11** — SVR–GARCH CUSUM 을 ETF 20종에 적용 (설계·데이터 카드·결과표·재현) |
+| `window_study_w1/` | **W1** — CUSUM 검정창 선정 (03 대표 4종 · 04 전체 20종): 적격 0/4, 최적창 없음 · 종결 보고 `FINAL_03_04_RESEARCH_CLOSURE.md` |
+| `03_04_연구계약.md` | W1 사전 연구계약 (실험 전 동결) |
 | `proposals/` | 구현되지 않은 후속 연구 제안 (성과 없음) |

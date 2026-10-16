@@ -1,0 +1,5 @@
+w,critical_annual_max,calibration_rule
+20,1.687777684,max_of_three_H0_q95_annual_max_common_days
+30,1.847603045,max_of_three_H0_q95_annual_max_common_days
+60,2.133353815,max_of_three_H0_q95_annual_max_common_days
+120,2.536285421,max_of_three_H0_q95_annual_max_common_days

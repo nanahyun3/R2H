@@ -1,0 +1,25 @@
+{
+  "study_id": "t13_window_study_w1",
+  "config_sha256": "8489eada913a3e624149f8ce05315d5be4ca1916680c1c51b5afe734a3015681",
+  "base_commit": "39566e2b0b490623e55adccb0f6a4dbddf5c54de",
+  "base_run_id": "b_nb_20261016T181251",
+  "files_sha256": {
+    "research/window_study_w1/results/03_synthetic/detector/detector_summary.csv": "6b7dcd889ea1bbd6b26bbdb18c6a39b0bf0341a8b102dfb6cf7c7317b0a0b7b9",
+    "research/window_study_w1/results/03_synthetic/detector/detector_thresholds.csv": "d3b9aa279d674661a773970ed83ffb60d5840da6aefe1289a3656e07eb330e0b",
+    "research/window_study_w1/results/03_synthetic/pipeline/pipeline_summary.csv": "463ed41edd404d40551d10241064b8a3cec1a4f04b6691cf0384baf21fbb4b1a",
+    "research/window_study_w1/results/03_synthetic/pipeline/pipeline_thresholds.csv": "3ddfe1521e1ded12060ef6a1e6f4a925b1af251f8b4ceee3d08dd7b439bd201c",
+    "research/window_study_w1/최적창_판정과_보류사유.csv": "9ff9af16c1f105847397f1a39fff3bbae973632648dee98d01ba9fa55c4271fc",
+    "research/window_study_w1/results/03_real/validity.csv": "1c99826636df83a87993f540b1c9816599d385fef1a702b2aa3aec51c54d3d8d",
+    "research/window_study_w1/results/03_real/alarm_metrics.csv": "fcb1c87f1cde85bf18f9685571101eef03f02684fa86eb7f7597e35822f612dc"
+  },
+  "eligible_windows": [],
+  "pareto_windows": [],
+  "execution_seconds": 191.53,
+  "environment": {
+    "python": "3.12.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1"
+  },
+  "mode": "FULL_EXECUTED"
+}

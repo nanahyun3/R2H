@@ -1,0 +1,38 @@
+[
+  {
+    "notebook": "03_대표4종_검정창선정_심층연구.ipynb",
+    "status": "PASS",
+    "start_utc": "2026-10-16T12:03:09.787521+00:00",
+    "end_utc": "2026-10-16T12:06:23.944460+00:00",
+    "seconds": 194.16,
+    "returncode": 0,
+    "log": "research/window_study_w1/evidence/03_execution.log",
+    "command": [
+      "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python",
+      "-m",
+      "jupyter",
+      "execute",
+      "--inplace",
+      "--timeout=7200",
+      "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1016/R2H_CUSUM_Window_Study/notebooks/03_대표4종_검정창선정_심층연구.ipynb"
+    ]
+  },
+  {
+    "notebook": "04_전체20종_검정창일반화_강건성연구.ipynb",
+    "status": "PASS",
+    "start_utc": "2026-10-16T12:06:23.945329+00:00",
+    "end_utc": "2026-10-16T12:06:32.594897+00:00",
+    "seconds": 8.65,
+    "returncode": 0,
+    "log": "research/window_study_w1/evidence/04_execution.log",
+    "command": [
+      "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python",
+      "-m",
+      "jupyter",
+      "execute",
+      "--inplace",
+      "--timeout=7200",
+      "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1016/R2H_CUSUM_Window_Study/notebooks/04_전체20종_검정창일반화_강건성연구.ipynb"
+    ]
+  }
+]

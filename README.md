@@ -1,6 +1,21 @@
 # R2H
 주가 급등 국면 포착 에이전트 (2026.9~2027.6, 홍익대학교 졸업 프로젝트)
 
+## W1 검정창 연구 — 03 대표 4종 · 04 전체 20종 (2026-10-16)
+
+브랜치 `1016_CUSUM_Window_4ETF_20ETF`. T12 의 연간 사후 분산 검정을 바꾸지 않고, 이동 CUSUM 검정창 길이 `w` (20·30·60·120 거래일) 를 정할 수 있는지 판정한다. 기준은 사전 고정 규칙 W1 이다 ([연구계약](research/03_04_연구계약.md)).
+
+판정 방식은 세 단계다.
+1. 합성 귀무에서 연중 경보 확률을 잰다 (Wilson 상한 ≤ 0.10).
+2. 알려진 분산 변화의 60거래일 검출률을 잰다 (Wilson 하한 ≥ 0.15).
+3. 실제 ETF 는 그 뒤에 사례로만 적용한다.
+
+**결론: 적격 창 0/4, 최적창 없음.** 귀무 크기는 대부분 통과했지만, 지속 분산 ×2 상승·×0.5 하락의 60일 검출률이 0.03–0.10 에 그쳤다. 04 의 20종 적용은 이 판정을 바꾸지 않는다. 경보는 실제 구조변화나 가격 급등의 정답이 아니며, 20종은 독립 외부 검증이 아니다.
+
+- 노트북: [03 대표 4종 검정창 선정](notebooks/03_대표4종_검정창선정_심층연구.ipynb) → [04 전체 20종 일반화·강건성](notebooks/04_전체20종_검정창일반화_강건성연구.ipynb). 생성기는 `scripts/t13_build_notebooks.py`, 실행은 `scripts/run_t13_notebooks.py` (R2H `.venv`, 약 3분 40초).
+- [종결 보고 · 게이트 · 주장–근거 표](research/window_study_w1/FINAL_03_04_RESEARCH_CLOSURE.md) · [판정표](research/window_study_w1/최적창_판정과_보류사유.csv) · [지표·산식 사전](research/window_study_w1/검정창_지표와_산식_사전.md) · [CNN 후보구간 인계계약](research/window_study_w1/CUSUM_CNN_후보구간_인계계약.md)
+- 재현 전제: T12 일별 잔차 cache (`T12_FROZEN_ROOT`, 기본값은 옆 작업트리 `R2H_T12_Final`, Git 제외). 원자료와 일별 잔차는 배포하지 않는다.
+
 ## T12 최종 연구 읽기와 재현 (2026-10-16)
 
 이 브랜치의 T12는 국내 ETF 20종에 SVR–GARCH 분산 추정과 잔차 제곱 CUSUM을 적용한 **연도별 사후 분산 검정**이다. 가격 상승 방향, 온라인 급등 시작, 진입·청산 수익률을 검증한 연구가 아니다. 2021–2025 완결 5년을 핵심 기간으로 읽고, 2020은 학습 1년 파일럿, 2026은 10월 2일까지의 부분·비블라인드 기간으로 구분한다.
@@ -14,7 +29,7 @@ python scripts/t12_build_reproduction_notebook.py  # 빈 노트북 3개 재생�
 python scripts/run_t12_final_notebooks.py           # 00→01→02 각각 새 커널; 01은 약 11분
 ```
 
-두 번째 명령은 01에서 매번 전체 20 ETF × 2020–2026을 순차 실행하고 새 `run_id` 결과를 `outputs/t12/`에 기록한다. 02는 바로 그 결과의 Semantic·Verdict 지문을 확인한 뒤 도판을 만든다. 실행별 로그는 `outputs/t12/final/`, 고정 프로토콜·기준 결과는 `research/t12_annual_expanding_v2/`에 있다. 이번 검증의 [재현 보고](research/t12_annual_expanding_v2/FINAL_REPRODUCTION_REPORT.md), [파일별 SHA256 매니페스트](research/t12_annual_expanding_v2/FINAL_RELEASE_MANIFEST.json), [한국어 발표 그림 6종](research/t12_annual_expanding_v2/presentation/), [연구 종결 보고와 주장–근거 표](FINAL_RESEARCH_CLOSURE.md)를 함께 읽는다. 원본 자료·결과·Claude 작업트리는 변경하지 않았으며 원격 push는 하지 않았다.
+두 번째 명령은 01에서 매번 전체 20 ETF × 2020–2026을 순차 실행하고 새 `run_id` 결과를 `outputs/t12/`에 기록한다. 02는 바로 그 결과의 Semantic·Verdict 지문을 확인한 뒤 도판을 만든다. 실행별 로그는 `outputs/t12/final/`, 고정 프로토콜·기준 결과는 `research/t12_annual_expanding_v2/`에 있다. 이번 검증의 [재현 보고](research/t12_annual_expanding_v2/FINAL_REPRODUCTION_REPORT.md), [파일별 SHA256 매니페스트](research/t12_annual_expanding_v2/FINAL_RELEASE_MANIFEST.json), [한국어 발표 그림 6종](research/t12_annual_expanding_v2/presentation/), [연구 종결 보고와 주장–근거 표](FINAL_RESEARCH_CLOSURE.md)를 함께 읽는다. 원본 자료·결과·Claude 작업트리는 변경하지 않았다. T12 종결 시점(`39566e2`)에는 원격 push를 하지 않았고, 이후 W1 브랜치 `1016_CUSUM_Window_4ETF_20ETF` 의 조상 커밋으로 공개됐다.
 
 <p>
   <a href="https://github.com/nanahyun3/R2H/actions/workflows/ci.yml?query=branch%3A1012"><img alt="CI" src="https://github.com/nanahyun3/R2H/actions/workflows/ci.yml/badge.svg?branch=1012"></a>
