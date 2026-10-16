@@ -17,7 +17,7 @@
 | B-1 DAG | DONE | `notebook_work/PIPELINE_DAG.md` |
 | B-2 seq/par 확인 · 지문 | DONE (b_seq_1 · b_par4_1 Semantic PASS) | `scripts/t12_semantic_fingerprint.py`, `tests/integration/test_t12_semantic_fingerprint.py`, `notebook_work/REPRO_HASHES.md` |
 | B-3 환경 | DONE | `notebook_work/REPRO_ENV.md`, `notebook_work/raw_data_sha256.txt` |
-| B-4 노트북 | IN_PROGRESS | `notebooks/T12_Annual_Expanding_Reproduction.ipynb` (생성기 `scripts/t12_build_reproduction_notebook.py`) |
+| B-4 노트북 | DONE — `b_nb_20261016T163946` 순차 실행 성공 (wall 11:24, 파이프라인 663 s), 집계 Semantic·Verdict = seq_golden, PNG 32/32 커밋본과 바이트 동일, pytest 134 passed | `notebooks/T12_Annual_Expanding_Reproduction.ipynb` (생성기 `scripts/t12_build_reproduction_notebook.py`) |
 
 ## 장애물
 
@@ -30,7 +30,7 @@
    노트북 2절(1.3397 = 원문 표기 임계값, 정확 점근 5% 1.3581 아님, n≈245 보수적; C-11 seed 공유; 귀무 표본 길이) · 3절(261240 243일·170/73) · 11절 제한사항.
    노트북에서 1.3397 을 "점근 5%" 라고 부르지 않는다 (부정문 "점근 5% 정확값이 아니다" 한 곳만 있음).
    남은 표현: `scripts/t12_figures.py` 그림 6 의 x 눈금 "점근\n1.3397" (그림 PNG 를 바꾸므로 손대지 않음 — 필요하면 C 지시).
-3. A 의 `REQUESTS_TO_B.md` 에 RQ-6–RQ-11 이 새로 생겼다. C 승인 범위(RQ-1–5) 밖이라 **반영하지 않았다**. 승인하면 노트북 표시·서술만 바꾸고 재실행한다.
-4. 중단 run: `outputs/t12/work/b_nb_20261016T162756` 은 RQ 반영을 위해 B 가 일부러 중단한 노트북 실행의 잔여물이다 (merged 없음, 사용 금지).
+3. A RQ-6–RQ-11 (C 승인, A-2 `6d074eb`) 반영: 7절 보정별 기각 표(2020 iid_prequential `<NA>`), 8절 신호 게이트 분해(290/217, 귀무 0.684 재계산), R1·9절 서술, 11.1 절 R-1–R-12 표(A 감사 산출물 인용 표시), 11.2-6 RISK-N1, CHANGELOG C-16 (pilot_g3). RQ-2 문구는 C 정답 문구로 교체(노트북·methods_part·C-15).
+4. 중단 run: `outputs/t12/work/b_nb_20261016T162756`, `b_nb_20261016T163110` 은 RQ 반영을 위해 B 가 일부러 중단한 노트북 실행의 잔여물이다 (merged 없음, 사용 금지). canonical 실행은 `b_nb_20261016T163946`.
 5. 합성 재실행 측정 (B, 2026-10-16): workers=4 146.9 s, sha256 `43de7bca9b42…` 저장본과 동일 (`outputs/t12/synthetic_b_1`). 4회째 일치.
 6. `src/r2h/annual_expanding/**` 은 수정하지 않았다.
