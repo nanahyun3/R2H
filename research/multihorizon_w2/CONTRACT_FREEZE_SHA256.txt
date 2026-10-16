@@ -1,0 +1,4 @@
+9fa948762e9f7bfb3011d132b4b7c7b3ba0a5aa1282102368b9971b996361f8d  configs/t14_multihorizon_w2_v1.json
+4dec1d40adc3d01a0ec91ffd3f6dccd57c93032c78f25c5a93918636420b77bf  research/multihorizon_w2/W2_연구계약.md
+dd6ab542b2d7a673035b307e7a743cf87d1f5a9efb2bdb8e949593e226990e72  research/multihorizon_w2/W1_PROTECTED_SHA256.csv
+2026-10-17T01:00:37+09:00
