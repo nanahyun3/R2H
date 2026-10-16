@@ -1,0 +1,55 @@
+{
+  "from": "07",
+  "protocol_version": "W2-lock-1",
+  "config_sha256": "9fa948762e9f7bfb3011d132b4b7c7b3ba0a5aa1282102368b9971b996361f8d",
+  "contract_sha256": "4dec1d40adc3d01a0ec91ffd3f6dccd57c93032c78f25c5a93918636420b77bf",
+  "environment": {
+    "python": "3.12.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2"
+  },
+  "results": {
+    "results/05/h3_spearman.csv": "f83571b83b84b337c656229550b14f54b80146e2ebc1e3ce9ac18d15ec3cba70",
+    "results/05/h3_alarm_contrast.csv": "92692e4af7765e1fb25307e9b677b758663963437fafa263986fd2550a2e3ccc",
+    "results/05/h3_cusum_events.csv": "14adb328ab4a6288068f5d9e9c7acdd183ea9a9aa6b0805680a4f26bbcbaad79",
+    "results/05/h3_event_trajectory_mean.csv": "c660c3c0aab5ddb02890bed8426298a0efdea59af72d3aabdfec9e7c00cfba81",
+    "results/05/h1_level_vs_change_jaccard.csv": "43e5d0d633bdbd605090e35781e2e66e2a5876319bcbbe9f0c73ef20f3b39a53",
+    "results/05/eligibility_missingness.csv": "bd7cf1e5941067d5fc6d919a2e1f100792a225a4257aef60a6febb3c771e1b0d",
+    "results/05/signal_rates.csv": "d8a5526618942dc40e38462ac4cdf42ca8e39e8cc47e93a029c4049fd331ab95",
+    "results/05/period_episodes.csv": "f48a03c087506a626fff4ec3973cd60457fe0a0238718487c5221af364d66549",
+    "results/05/overlap_intervals.csv": "3b007bf9c1bb1a11d8ba9c6033016dd3f19c5a25a39a1df728ce2049a93da7fe",
+    "results/05/cusum_w1_reconciliation.csv": "e79b2a08d28eb12866fc0dca52e3d9153bc0e0d166bde63c88f1bf637bbc3852",
+    "results/05/unit_checks.csv": "97c561f9454856408b9b8ec7f9882e62de9dc008800b82a085d08136ed3a3957",
+    "results/05/sensitivity_intervals.csv": "6ca55272e351bf8208476294795d77c58b8aa99c9d92f12b530552dfefd003b6",
+    "results/06/exposure_groups.csv": "2fd8a4cc777bf0967967abbb73ac3b1e91926c8d2d5a507e0df231c42f8c5620",
+    "results/06/cross_daily_counts.csv": "db0a7d32ec3774d384f5aca445473cbf0ef559ae16fe6c22c079701f7c60fd5f",
+    "results/06/cross_intervals_group.csv": "6cb7e983d5ee61de3cf37e67170b690dad81ee04d63e6a712205763772688da6",
+    "results/06/cross_intervals_etf.csv": "f953e648e706363ff83a888ce91e0c78a5c252f466f72037f5000610845c75bf",
+    "results/06/cross_intervals_group_us_sensitivity.csv": "013a1e0f8dfd865393d9fe40129a3ae795f8fa1c5b8868742260c747f56bdc8b",
+    "results/06/within_group_intervals.csv": "33d15371f79bee529273ff981020d51b83e95b84bf9535d1ae095641e26330e6",
+    "results/06/within_group_pair_jaccard.csv": "7e6b0f7ef0f8198c2e94276f692688b262f106ee6a5bd0ff09609e3c95b8811a",
+    "results/06/all_pair_jaccard.csv": "05bffbd1f164c96d2fb286e4edd158341860abd070d79e76f8f33e08ac93260b",
+    "results/06/yearly_summary.csv": "d67ce697368ff63e5b413a2464a6a869df64377fa6000c063cd1adc5e64a32a1",
+    "results/06/global_interval_rank.csv": "a57efcce31dc3e28336802bc50a2e64c6de420e6819a16960d2476e5023d6026",
+    "results/07/interval_price_reaction.csv": "8acd3219bb2d3c4a68d6564a93da2d084c8c4e8bf0861506433f2f7d72861212",
+    "results/07/interval_path_mean.csv": "c6e99eb3f19d74a492d26a1648bc59851af662ff61df0f5bd3f7ef36c80b07f8",
+    "results/07/cusum_alarm_price_summary.csv": "c816f357947d53782d06183f5df2ae9ebeebd3fe3cc65a22c54140f29bb6b2cf",
+    "results/07/cnn_candidate_intervals_w2.csv": "2b0b018eb53b031439b1e465636aacb39d47f630cf93ff8dd43cd2d54203a33f"
+  },
+  "work_files": {
+    "outputs/t14/05/daily_features.csv.gz": "04a262c75963abc91c255415599f31da4f9c11e01aa6272a562ef09b13076ef2",
+    "outputs/t14/05/daily_overlap.csv.gz": "07f977dde3b718e7da0a0ed8e4f1dd1f73843a2611490aa1a3e966da2797e1bd",
+    "outputs/t14/05/daily_cusum.csv.gz": "baf7dadbebdf3a763f7838c8034119abc3e727d3d6c5d22f0b7e47e0b04c3648",
+    "outputs/t14/07/daily_price_features.csv.gz": "deaf541f0509cd5dab9f3ded69be4b001b441e33a127d564750e6f37240b3e0e",
+    "outputs/t14/07/daily_relative_moves.csv.gz": "91e7a64e51d020ec7d76bf17c472a817589b74fe9405f482ee627ec91f691d7f",
+    "outputs/t14/07/cusum_alarm_price_daily.csv.gz": "8b28d4a568102516fc4bb8cb97c2b220a15fad4e1c7560f40b79c7f8bac8584a",
+    "outputs/t14/07/interval_price_reaction_full.csv.gz": "858d083dacc931dc2a2dd6793a40ff2bb5365bdabad873c47f33189dcf3178fd"
+  },
+  "figure_indexes": {
+    "05": "19b63091e25629b4a02dc64ef64e9e13e70c34e929c374956adf5a688f937f16",
+    "06": "f2dcdab302464a32e313e0d088715ffde48f1ded45ea28c5549e512be40d8f51",
+    "07": "3b066c9fd8a0cb527cd287729dd3dad0aabf02f91584ca633358eb00d6393ce4"
+  }
+}

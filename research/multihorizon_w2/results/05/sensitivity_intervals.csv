@@ -1,0 +1,17 @@
+variant,channel,n_intervals_core,n_max7_core,median_duration_core,top1_overlap_retained,top1_total
+fixed504_10pct,CONTRACTION,330,0,1,20,20
+fixed504_10pct,EXPANSION,361,5,2,20,20
+fixed504_10pct,HIGH_LEVEL,344,48,3,20,20
+fixed504_10pct,LOW_LEVEL,488,31,2,20,20
+main_10pct,CONTRACTION,262,0,1,20,20
+main_10pct,EXPANSION,253,2,2,20,20
+main_10pct,HIGH_LEVEL,290,23,3,20,20
+main_10pct,LOW_LEVEL,363,9,2,20,20
+sens_20pct,CONTRACTION,1173,0,2,20,20
+sens_20pct,EXPANSION,997,7,2,20,20
+sens_20pct,HIGH_LEVEL,529,51,4,20,20
+sens_20pct,LOW_LEVEL,594,42,3,20,20
+sens_5pct,CONTRACTION,52,0,1,10,20
+sens_5pct,EXPANSION,102,1,2,20,20
+sens_5pct,HIGH_LEVEL,125,11,4,20,20
+sens_5pct,LOW_LEVEL,195,2,2,20,20

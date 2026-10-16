@@ -1,0 +1,56 @@
+[
+  {
+    "notebook": "05_개별ETF_다중기간_변동성국면연구.ipynb",
+    "status": "PASS",
+    "start_utc": "2026-10-16T16:53:29.542900+00:00",
+    "end_utc": "2026-10-16T16:54:43.486971+00:00",
+    "seconds": 72.73,
+    "returncode": 0,
+    "log": "research/multihorizon_w2/evidence/05_execution.log",
+    "command": [
+      "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python",
+      "-m",
+      "jupyter",
+      "execute",
+      "--inplace",
+      "--timeout=7200",
+      "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1017/R2H_MultiHorizon_Volatility_Regime/notebooks/05_개별ETF_다중기간_변동성국면연구.ipynb"
+    ]
+  },
+  {
+    "notebook": "06_노출군집_공통변동성구간_연구.ipynb",
+    "status": "PASS",
+    "start_utc": "2026-10-16T16:54:43.487418+00:00",
+    "end_utc": "2026-10-16T16:54:54.578483+00:00",
+    "seconds": 10.63,
+    "returncode": 0,
+    "log": "research/multihorizon_w2/evidence/06_execution.log",
+    "command": [
+      "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python",
+      "-m",
+      "jupyter",
+      "execute",
+      "--inplace",
+      "--timeout=7200",
+      "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1017/R2H_MultiHorizon_Volatility_Regime/notebooks/06_노출군집_공통변동성구간_연구.ipynb"
+    ]
+  },
+  {
+    "notebook": "07_가격반응_ETF상대움직임_CNN인계.ipynb",
+    "status": "PASS",
+    "start_utc": "2026-10-16T16:54:54.578923+00:00",
+    "end_utc": "2026-10-16T16:55:15.990821+00:00",
+    "seconds": 21.41,
+    "returncode": 0,
+    "log": "research/multihorizon_w2/evidence/07_execution.log",
+    "command": [
+      "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python",
+      "-m",
+      "jupyter",
+      "execute",
+      "--inplace",
+      "--timeout=7200",
+      "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1017/R2H_MultiHorizon_Volatility_Regime/notebooks/07_가격반응_ETF상대움직임_CNN인계.ipynb"
+    ]
+  }
+]

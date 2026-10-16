@@ -1,0 +1,35 @@
+{
+  "from": "05",
+  "to": "06",
+  "protocol_version": "W2-lock-1",
+  "config_sha256": "9fa948762e9f7bfb3011d132b4b7c7b3ba0a5aa1282102368b9971b996361f8d",
+  "contract_sha256": "4dec1d40adc3d01a0ec91ffd3f6dccd57c93032c78f25c5a93918636420b77bf",
+  "t12_run_id": "b_nb_20261016T181251",
+  "environment": {
+    "python": "3.12.3",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2"
+  },
+  "results": {
+    "results/05/h3_spearman.csv": "f83571b83b84b337c656229550b14f54b80146e2ebc1e3ce9ac18d15ec3cba70",
+    "results/05/h3_alarm_contrast.csv": "92692e4af7765e1fb25307e9b677b758663963437fafa263986fd2550a2e3ccc",
+    "results/05/h3_cusum_events.csv": "14adb328ab4a6288068f5d9e9c7acdd183ea9a9aa6b0805680a4f26bbcbaad79",
+    "results/05/h3_event_trajectory_mean.csv": "c660c3c0aab5ddb02890bed8426298a0efdea59af72d3aabdfec9e7c00cfba81",
+    "results/05/h1_level_vs_change_jaccard.csv": "43e5d0d633bdbd605090e35781e2e66e2a5876319bcbbe9f0c73ef20f3b39a53",
+    "results/05/eligibility_missingness.csv": "bd7cf1e5941067d5fc6d919a2e1f100792a225a4257aef60a6febb3c771e1b0d",
+    "results/05/signal_rates.csv": "d8a5526618942dc40e38462ac4cdf42ca8e39e8cc47e93a029c4049fd331ab95",
+    "results/05/period_episodes.csv": "f48a03c087506a626fff4ec3973cd60457fe0a0238718487c5221af364d66549",
+    "results/05/overlap_intervals.csv": "3b007bf9c1bb1a11d8ba9c6033016dd3f19c5a25a39a1df728ce2049a93da7fe",
+    "results/05/cusum_w1_reconciliation.csv": "e79b2a08d28eb12866fc0dca52e3d9153bc0e0d166bde63c88f1bf637bbc3852",
+    "results/05/unit_checks.csv": "97c561f9454856408b9b8ec7f9882e62de9dc008800b82a085d08136ed3a3957",
+    "results/05/sensitivity_intervals.csv": "6ca55272e351bf8208476294795d77c58b8aa99c9d92f12b530552dfefd003b6"
+  },
+  "work_files": {
+    "outputs/t14/05/daily_features.csv.gz": "04a262c75963abc91c255415599f31da4f9c11e01aa6272a562ef09b13076ef2",
+    "outputs/t14/05/daily_overlap.csv.gz": "07f977dde3b718e7da0a0ed8e4f1dd1f73843a2611490aa1a3e966da2797e1bd",
+    "outputs/t14/05/daily_cusum.csv.gz": "baf7dadbebdf3a763f7838c8034119abc3e727d3d6c5d22f0b7e47e0b04c3648"
+  },
+  "figure_index_sha256": "19b63091e25629b4a02dc64ef64e9e13e70c34e929c374956adf5a688f937f16"
+}

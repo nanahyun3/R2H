@@ -1,0 +1,21 @@
+ticker,name,category,exposure_group,exposure_group_us,nominal_multiplier
+069500,KODEX 200,broad_market,KOSPI200_동일노출,KOSPI200_동일노출,1
+102110,TIGER 200,broad_market,KOSPI200_동일노출,KOSPI200_동일노출,1
+229200,KODEX 코스닥150,broad_market,229200,229200,1
+122630,KODEX 레버리지,leveraged_inverse,KOSPI200_동일노출,KOSPI200_동일노출,2
+114800,KODEX 인버스,leveraged_inverse,KOSPI200_동일노출,KOSPI200_동일노출,-1
+091230,TIGER 반도체,sector,091230,091230,1
+091170,KODEX 은행,sector,091170,091170,1
+091180,KODEX 자동차,sector,091180,091180,1
+305540,TIGER 2차전지테마,theme,305540,305540,1
+143860,TIGER 헬스케어,sector,143860,143860,1
+117680,KODEX 철강,sector,117680,117680,1
+161510,PLUS 고배당주,strategy,161510,161510,1
+219480,KODEX 미국S&P500선물(H),broad_market,219480,미국주식_2종,1
+133690,TIGER 미국나스닥100,broad_market,133690,미국주식_2종,1
+192090,TIGER 차이나CSI300,broad_market,192090,192090,1
+148070,KIWOOM 국고채10년,rates,148070,148070,1
+153130,KODEX 단기채권,money_market,153130,153130,1
+132030,KODEX 골드선물(H),commodity,132030,132030,1
+261220,KODEX WTI원유선물(H),commodity,261220,261220,1
+261240,KODEX 미국달러선물,currency,261240,261240,1

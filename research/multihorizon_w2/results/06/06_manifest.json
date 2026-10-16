@@ -1,0 +1,29 @@
+{
+  "stage": "06",
+  "upstream_05": {
+    "results/05/h3_spearman.csv": "f83571b83b84b337c656229550b14f54b80146e2ebc1e3ce9ac18d15ec3cba70",
+    "results/05/h3_alarm_contrast.csv": "92692e4af7765e1fb25307e9b677b758663963437fafa263986fd2550a2e3ccc",
+    "results/05/h3_cusum_events.csv": "14adb328ab4a6288068f5d9e9c7acdd183ea9a9aa6b0805680a4f26bbcbaad79",
+    "results/05/h3_event_trajectory_mean.csv": "c660c3c0aab5ddb02890bed8426298a0efdea59af72d3aabdfec9e7c00cfba81",
+    "results/05/h1_level_vs_change_jaccard.csv": "43e5d0d633bdbd605090e35781e2e66e2a5876319bcbbe9f0c73ef20f3b39a53",
+    "results/05/eligibility_missingness.csv": "bd7cf1e5941067d5fc6d919a2e1f100792a225a4257aef60a6febb3c771e1b0d",
+    "results/05/signal_rates.csv": "d8a5526618942dc40e38462ac4cdf42ca8e39e8cc47e93a029c4049fd331ab95",
+    "results/05/period_episodes.csv": "f48a03c087506a626fff4ec3973cd60457fe0a0238718487c5221af364d66549",
+    "results/05/overlap_intervals.csv": "3b007bf9c1bb1a11d8ba9c6033016dd3f19c5a25a39a1df728ce2049a93da7fe",
+    "results/05/cusum_w1_reconciliation.csv": "e79b2a08d28eb12866fc0dca52e3d9153bc0e0d166bde63c88f1bf637bbc3852",
+    "results/05/unit_checks.csv": "97c561f9454856408b9b8ec7f9882e62de9dc008800b82a085d08136ed3a3957",
+    "results/05/sensitivity_intervals.csv": "6ca55272e351bf8208476294795d77c58b8aa99c9d92f12b530552dfefd003b6"
+  },
+  "files_sha256": {
+    "results/06/exposure_groups.csv": "2fd8a4cc777bf0967967abbb73ac3b1e91926c8d2d5a507e0df231c42f8c5620",
+    "results/06/cross_daily_counts.csv": "db0a7d32ec3774d384f5aca445473cbf0ef559ae16fe6c22c079701f7c60fd5f",
+    "results/06/cross_intervals_group.csv": "6cb7e983d5ee61de3cf37e67170b690dad81ee04d63e6a712205763772688da6",
+    "results/06/cross_intervals_etf.csv": "f953e648e706363ff83a888ce91e0c78a5c252f466f72037f5000610845c75bf",
+    "results/06/cross_intervals_group_us_sensitivity.csv": "013a1e0f8dfd865393d9fe40129a3ae795f8fa1c5b8868742260c747f56bdc8b",
+    "results/06/within_group_intervals.csv": "33d15371f79bee529273ff981020d51b83e95b84bf9535d1ae095641e26330e6",
+    "results/06/within_group_pair_jaccard.csv": "7e6b0f7ef0f8198c2e94276f692688b262f106ee6a5bd0ff09609e3c95b8811a",
+    "results/06/all_pair_jaccard.csv": "05bffbd1f164c96d2fb286e4edd158341860abd070d79e76f8f33e08ac93260b",
+    "results/06/yearly_summary.csv": "d67ce697368ff63e5b413a2464a6a869df64377fa6000c063cd1adc5e64a32a1",
+    "results/06/global_interval_rank.csv": "a57efcce31dc3e28336802bc50a2e64c6de420e6819a16960d2476e5023d6026"
+  }
+}
