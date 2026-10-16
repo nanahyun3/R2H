@@ -1,0 +1,10 @@
+table,rows,expected_rows,pk,pk_duplicates,status
+fold_manifest,420,420,"ticker,year,history_strategy",0,PASS
+fit_summary,360,,"ticker,year,history_strategy",0,PASS
+annual_vol_diagnostics,140,140,"ticker,year",0,PASS
+annual_forecast_diagnostics,420,420,"ticker,year,policy",0,PASS
+annual_residual_diagnostics,420,420,"ticker,year,policy",0,PASS
+annual_posthoc,2100,2100,"ticker,year,policy,calibration_method",0,PASS
+annual_cusum_diagnostics,21000,21000,"ticker,year,policy,window,boundary_mode,calibration_method",0,PASS
+annual_history_ablation,840,840,"ticker,year,policy,history_strategy",0,PASS
+diagnostic_profile,420,420,"ticker,year,policy",0,PASS

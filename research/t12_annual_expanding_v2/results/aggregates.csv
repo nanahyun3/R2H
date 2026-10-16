@@ -1,0 +1,111 @@
+name,value,definition
+spearman_T_rvratio_A_core,-0.18321,"Spearman rank corr annual_T vs rv_ratio, 2021-2025, 100 ETF-years"
+spearman_T_rv_A_core,-0.126313,"Spearman annual_T vs rv_ann_pct, 2021-2025"
+spearman_T_rvratio_A_all,0.181645,"Spearman, 2020-2026, 140 ETF-years"
+core_reject_asym_A,0,annual asymptotic rejections 2021-2025 (of 100)
+core_median_T_A,0.614251,median annual T 2021-2025
+core_w60_obs_A,26,"w60 PURE episodes 2021-2025, iid_insample"
+core_w60_null_A,132.22,expected null episodes 2021-2025
+core_w60_ratio_A,0.196642,observed/expected
+core_median_mean_e2_A,1.38587,median mean e2 2021-2025
+core_share_e2_ge_1p5_A,0.28,share of ETF-years with mean e2>=1.5
+nonpos_days_A,9,"non-positive variance days, all ETF-years"
+status_A_MULTIFACTOR,35,count over 140 ETF-years
+status_core_A_MULTIFACTOR,15,count over 100 core ETF-years
+status_A_DESCRIPTIVE_EVIDENCE,6,count over 140 ETF-years
+status_core_A_DESCRIPTIVE_EVIDENCE,6,count over 100 core ETF-years
+status_A_UNRESOLVED,0,count over 140 ETF-years
+status_core_A_UNRESOLVED,0,count over 100 core ETF-years
+status_A_NO_SIGNAL_DESCRIPTIVE,99,count over 140 ETF-years
+status_core_A_NO_SIGNAL_DESCRIPTIVE,79,count over 100 core ETF-years
+sensitivity_A,104,SENSITIVITY_CONFIRMED over 140
+signal_cells_A,41,cells with annual reject or w60 PURE episode
+signal_share_V_A,0.829268,share of signal cells with V flagged
+signal_share_M_A,0.609756,share of signal cells with M flagged
+signal_share_N_A,0.439024,share of signal cells with N flagged
+signal_share_H_A,0.439024,share of signal cells with H flagged
+h_trailing_2y_A_n,100,computed contrasts
+h_trailing_2y_A_frac_worse,0.65,share QLIKE worse than expanding
+h_trailing_2y_A_dq_median,0.0345686,median dQLIKE
+h_trailing_2y_A_absdT_median,0.0588762,median |dT|
+h_frozen_2019_A_n,120,computed contrasts
+h_frozen_2019_A_frac_worse,0.941667,share QLIKE worse than expanding
+h_frozen_2019_A_dq_median,0.157166,median dQLIKE
+h_frozen_2019_A_absdT_median,0.104423,median |dT|
+h_verdict_diff_A,9,alternative-history contrasts whose asymptotic verdict differs
+h_contrasts_A,220,computed alternative-history contrasts
+spearman_T_rvratio_B_core,-0.0455566,"Spearman rank corr annual_T vs rv_ratio, 2021-2025, 100 ETF-years"
+spearman_T_rv_B_core,0.122832,"Spearman annual_T vs rv_ann_pct, 2021-2025"
+spearman_T_rvratio_B_all,0.231943,"Spearman, 2020-2026, 140 ETF-years"
+core_reject_asym_B,12,annual asymptotic rejections 2021-2025 (of 100)
+core_median_T_B,0.800601,median annual T 2021-2025
+core_w60_obs_B,171,"w60 PURE episodes 2021-2025, iid_insample"
+core_w60_null_B,132.975,expected null episodes 2021-2025
+core_w60_ratio_B,1.28596,observed/expected
+core_median_mean_e2_B,0.947285,median mean e2 2021-2025
+core_share_e2_ge_1p5_B,0.07,share of ETF-years with mean e2>=1.5
+nonpos_days_B,31,"non-positive variance days, all ETF-years"
+status_B_MULTIFACTOR,86,count over 140 ETF-years
+status_core_B_MULTIFACTOR,55,count over 100 core ETF-years
+status_B_DESCRIPTIVE_EVIDENCE,16,count over 140 ETF-years
+status_core_B_DESCRIPTIVE_EVIDENCE,14,count over 100 core ETF-years
+status_B_UNRESOLVED,9,count over 140 ETF-years
+status_core_B_UNRESOLVED,9,count over 100 core ETF-years
+status_B_NO_SIGNAL_DESCRIPTIVE,29,count over 140 ETF-years
+status_core_B_NO_SIGNAL_DESCRIPTIVE,22,count over 100 core ETF-years
+sensitivity_B,76,SENSITIVITY_CONFIRMED over 140
+signal_cells_B,111,cells with annual reject or w60 PURE episode
+signal_share_V_B,0.603604,share of signal cells with V flagged
+signal_share_M_B,0.657658,share of signal cells with M flagged
+signal_share_N_B,0.459459,share of signal cells with N flagged
+signal_share_H_B,0.612613,share of signal cells with H flagged
+h_trailing_2y_B_n,100,computed contrasts
+h_trailing_2y_B_frac_worse,0.54,share QLIKE worse than expanding
+h_trailing_2y_B_dq_median,0.0102614,median dQLIKE
+h_trailing_2y_B_absdT_median,0.164905,median |dT|
+h_frozen_2019_B_n,120,computed contrasts
+h_frozen_2019_B_frac_worse,0.666667,share QLIKE worse than expanding
+h_frozen_2019_B_dq_median,0.0646344,median dQLIKE
+h_frozen_2019_B_absdT_median,0.166444,median |dT|
+h_verdict_diff_B,46,alternative-history contrasts whose asymptotic verdict differs
+h_contrasts_B,220,computed alternative-history contrasts
+spearman_T_rvratio_base_core,-0.0834443,"Spearman rank corr annual_T vs rv_ratio, 2021-2025, 100 ETF-years"
+spearman_T_rv_base_core,0.14195,"Spearman annual_T vs rv_ann_pct, 2021-2025"
+spearman_T_rvratio_base_all,0.410745,"Spearman, 2020-2026, 140 ETF-years"
+core_reject_asym_base,6,annual asymptotic rejections 2021-2025 (of 100)
+core_median_T_base,0.913535,median annual T 2021-2025
+core_w60_obs_base,346,"w60 PURE episodes 2021-2025, iid_insample"
+core_w60_null_base,135.675,expected null episodes 2021-2025
+core_w60_ratio_base,2.55021,observed/expected
+core_median_mean_e2_base,1.11092,median mean e2 2021-2025
+core_share_e2_ge_1p5_base,0.04,share of ETF-years with mean e2>=1.5
+nonpos_days_base,0,"non-positive variance days, all ETF-years"
+status_base_MULTIFACTOR,67,count over 140 ETF-years
+status_core_base_MULTIFACTOR,33,count over 100 core ETF-years
+status_base_DESCRIPTIVE_EVIDENCE,45,count over 140 ETF-years
+status_core_base_DESCRIPTIVE_EVIDENCE,41,count over 100 core ETF-years
+status_base_UNRESOLVED,26,count over 140 ETF-years
+status_core_base_UNRESOLVED,24,count over 100 core ETF-years
+status_base_NO_SIGNAL_DESCRIPTIVE,2,count over 140 ETF-years
+status_core_base_NO_SIGNAL_DESCRIPTIVE,2,count over 100 core ETF-years
+sensitivity_base,34,SENSITIVITY_CONFIRMED over 140
+signal_cells_base,138,cells with annual reject or w60 PURE episode
+signal_share_V_base,0.615942,share of signal cells with V flagged
+signal_share_M_base,0.101449,share of signal cells with M flagged
+signal_share_N_base,0.681159,share of signal cells with N flagged
+signal_share_H_base,0,share of signal cells with H flagged
+h_frozen_A_dq_median_2021,0.142394,median dQLIKE frozen vs expanding by year
+h_frozen_A_dq_median_2022,0.111105,median dQLIKE frozen vs expanding by year
+h_frozen_A_dq_median_2023,0.0972085,median dQLIKE frozen vs expanding by year
+h_frozen_A_dq_median_2024,0.190477,median dQLIKE frozen vs expanding by year
+h_frozen_A_dq_median_2025,0.234844,median dQLIKE frozen vs expanding by year
+h_frozen_A_dq_median_2026,1.00904,median dQLIKE frozen vs expanding by year
+b_spikes_2021plus,10,B ETF-years 2021+ with T>=1.6 and mean e2<0.8
+b_T_ge_1p6_2021plus,10,B ETF-years 2021+ with T>=1.6
+eps_at_grid_edge_share,0.985714,share of expanding fits selecting epsilon=0.1 (grid edge)
+n_expanding_fits,140,expanding fits
+kospi_pair_max_absdiff_T_A,0.0689486,max |T 069500 - T 102110| policy A over years
+kospi_pair_max_absdiff_T_B,0.64055,"same, policy B"
+rv_median_2026,50.0801,median RV 2026 (partial)
+rv_max_2026,134.139,max RV 2026
+null_prob_any_w60_A_core_mean,0.69395,"mean iid-null P(>=1 PURE episode in year), A, 2021-2025"
