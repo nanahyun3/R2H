@@ -152,7 +152,7 @@ A 가 원자료에서 날짜를 독립적으로 다시 계산했고 140/140 일�
 | 전략 | 학습 표본 | 코드 | 문서 |
 |---|---|---|---|
 | expanding (주) | `H_y` 전체 | `ae/folds.py:44-46` | `LOCK L2` |
-| trailing_2y | `[y−2-01-01, y-01-01)` | `ae/folds.py:47-48`, 상태 `ae/folds.py:58-61` | `LOCK L2` |
+| trailing_2y | `[y−2-01-01, y-01-01)` | `ae/folds.py:47-48`, 상태 `ae/folds.py:54-65` | `LOCK L2` |
 | frozen_2019 | 2019 만 학습한 2020 fold 모형을 재사용 | `ae/folds.py:49-50`, `ae/worker.py:241-242,508-511` | `LOCK L2`, `CHG C-06` |
 
 - 특징 문맥(lag 입력)은 모든 전략에서 실제 직전 관측(`ctx`, `H_y` 전체)이다 (`ae/fit.py:85-92`, `ae/worker.py:540`).
@@ -198,7 +198,7 @@ k̂    = argmax_k |S_k|  (동률이면 첫 위치)  — 위치일 뿐이다. 기
 - **정규화 해석**: τ̂ 는 그 표본(또는 창)의 e² 표본 표준편차다. 그래서 T 는 **척도 불변**이다. e 를 상수배해도 T 는 같다.
   - 따라서 "분산 수준이 일정하게 높음(편향)" 은 T 를 올리지 않는다. T 는 **연중 e² 수준의 변화** 에만 반응한다.
   - 합성 결과 `variance_forecast_bias_constant` 의 Size 0.045 가 이것을 보여 준다.
-- **독립 재계산**: A 가 위 식을 numpy 로 직접 구현했다. 재실행 `a_seq_1` 의 일별 잔차로 420행의 `annual_T`·`n_test_residuals`·`khat_argmax_date` 를 대조했다 (`docs/annual_assurance/scripts/a2_posthoc_recompute.py`, 감사 Q3).
+- **독립 재계산**: A 가 위 식을 numpy 로 직접 구현했다. 재실행 `a_seq_1` 의 일별 잔차로 420행의 `annual_T`·`n_test_residuals`·`khat_argmax_date` 를 대조했다 (`docs/annual_assurance/scripts/a2_dependence.py`, 감사 Q3).
 
 ## 8. 임계값
 
@@ -218,23 +218,23 @@ k̂    = argmax_k |S_k|  (동률이면 첫 위치)  — 위치일 뿐이다. 기
   - 이 통계량의 H0 극한분포는 sup|Brownian bridge| (Kolmogorov) 다.
   - 그 정확한 95% 분위는 **1.3581** 이다 (`scipy.stats.kstwobign.ppf(0.95)`). 극한에서 `P(sup|B°| > 1.3397) = 0.0552` 다.
   - 따라서 1.3397 은 원문(Lee·Kim·Lee 2020) 이 표기한 값이며, **정확한 점근 5% 값이 아니다**.
-  - 유한표본(n≈245)에서는 이산 최대값이 연속 sup 보다 작다. 그래서 1.3397 은 iid 정규에서 보수적이다 (감사 Q4: n=245 iid 정규 size 0.040, 20,000회). A 의 MC 에서 1.3397 은 n=5000 의 유한표본 95% 분위(1.3396)와 거의 같다. 수렴이 느린 극한의 대표본 근사값으로 보인다. `annual_posthoc` 의 normal_mc 95% 는 n = 184–248 에서 1.298–1.320 이다.
+  - 유한표본(n≈245)에서는 이산 최대값이 연속 sup 보다 작다. 그래서 1.3397 은 iid 정규에서 보수적이다 (감사 Q4: n=245 iid 정규 size 0.040, 20,000회). A 의 MC 에서 n=1000–5000 유한표본 95% 분위는 1.335–1.340 (MC 표준오차 ≈0.01) 이며 1.3397 은 이와 구별되지 않는다. 수렴이 느린 극한의 대표본 근사값일 가능성이 있다 (추정). `annual_posthoc` 의 normal_mc 95% 는 n = 184–248 에서 1.298–1.320 이다.
   - 이 사실은 노트북에 "원문 표기 임계값, 점근 5% 정확값 아님" 으로 적어야 한다.
 
 ### 8.2 이동창 (일별)
 
 - 같은 다섯 방법을 쓴다. 다만 표본 길이가 **w** 이고, 결과는 길이 w 창 하나의 **점별 95% 분위** 다 (`ae/worker.py:371-383`).
-  - 문서: `LOCK:53`, `SPEC A§2.4`, `SPEC B§6`.
+  - 문서: `LOCK:54`, `SPEC A§2.4`, `SPEC B§6`.
 - 점별 95% 는 "연중 첫 경보 확률 5%" 나 ARL₀ 를 뜻하지 않는다.
   - 합성 iid N(0,1) 검출기 수준에서 w60 PURE 창의 연중 ≥1 에피소드 확률은 **0.682** 다 (`results/null_dgp_validation.csv`).
 - 귀무 기대 에피소드 (`expected_null_episodes`, `null_prob_any_episode`)
   - 같은 풀에서 길이 `n_days` 표본을 200회 뽑는다. PURE 창으로 에피소드를 세고 평균과 ≥1 확률을 낸다 (`ae/worker.py:385-396`, `ae/calibration.py:53-59`).
   - 단위는 **연간 원카운트** 다 (T11 의 연율 환산과 다르다. `T11_T12_COMPARISON_CONTRACT.md`).
 - **충돌 K-1 (경미)**
-  - `LOCK:57` 은 귀무 표본 길이를 `n_test` 로 정의한다. 코드는 공통 index 날짜 수 `n_days` 를 쓴다 (`ae/worker.py:387,390`).
+  - `LOCK:56` 은 귀무 표본 길이를 `n_test` 로 정의한다. 코드는 공통 index 날짜 수 `n_days` 를 쓴다 (`ae/worker.py:387,390`).
   - 이번 자료에서는 검정연도에 DQ 결측이 없어 두 값이 같다. 다만 비양수 분산일(NaN 잔차)은 `n_days` 에 포함된다.
 - **충돌 K-2 (seed 규칙)**
-  - `LOCK:58` 은 모든 난수 seed 를 `sha256(study_id|ticker|year|policy|history|window|calibration|purpose)` 로 정한다.
+  - `LOCK:57` 은 모든 난수 seed 를 `sha256(study_id|ticker|year|policy|history|window|calibration|purpose)` 로 정한다.
   - 코드에서 normal_mc 와 asymptotic 귀무 표본은 `rng_for(study_id, "normal_reference", n, reps, purpose)` 이다 (`ae/worker.py:75-90`). ticker·year·policy 가 키에 없다.
   - 그 결과 같은 n 이면 모든 ETF 가 **같은 정규 표본** 을 공유한다. 정규 임계값의 MC 오차가 ETF 사이에 완전 상관된다.
   - 코드 주석은 근거로 `C-11` 을 인용한다 (`ae/worker.py:77`). 그러나 `PROTOCOL_CHANGELOG.md` 에는 C-10 까지만 있다. **문서 누락**이다.
@@ -242,7 +242,7 @@ k̂    = argmax_k |S_k|  (동률이면 첫 위치)  — 위치일 뿐이다. 기
 ### 8.3 seed
 
 - `derive_seed(*key)` 는 `sha256("|".join(key))` 의 앞 8바이트를 big-endian 으로 읽는다 (`ae/config.py:32-35`).
-- Python `hash()` 를 쓰지 않으므로 프로세스·순서와 무관하다. 문서: `LOCK:58`.
+- Python `hash()` 를 쓰지 않으므로 프로세스·순서와 무관하다. 문서: `LOCK:57`.
 - 기본 seed `CFG:9` (20261012) 는 키 기반 seed 에 들어가지 않는다. study_id 문자열이 대신 들어간다.
 
 ## 9. 경계 모드 · 마스크 · 에피소드

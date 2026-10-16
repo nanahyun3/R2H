@@ -17,7 +17,7 @@ T12 가 T11 과 "일치" 하거나 "더 많이/적게 기각" 한다는 서술�
 | 재적합 주기 | 1회 (ETF 당 1모형, 20모형) | 연 1회 × 7년 (expanding 140모형 + trailing_2y 100모형. frozen_2019 는 2020 모형을 재사용한다) | `ae/worker.py:240,513`; `results/fit_summary.csv` 360행 |
 | 검정 구간의 모형 나이 | 검정 첫날 기준 0일, 끝날 기준 약 2.3년 | 매년 0일 ~ 약 1년 | 설계 |
 | 학습 표본 크기 | 1,331 (고정) | 2020 245 · 2021 493 · … · 2026 1,718 | §3 표 (`ANNUAL_METHOD_CONTRACT.md`) |
-| 정책 | A (1차) · B (사후 검정만) · base | A · B · base. 셋 다 사후 검정과 이동창에 모두 쓴다 | `etf/pipeline.py:40` `RTYPES=("svrA","base")`; `ae/worker.py:37` |
+| 정책 | A (1차) · B (사후 검정만) · base | A · B · base. 셋 다 사후 검정과 이동창에 모두 쓴다 | `etf/pipeline.py:38` `RTYPES=("svrA","base")`; `ae/worker.py:37` |
 | B 의 이동창 | 없음 | 있음 (warm 문맥과 풀은 A 의 값) | `CHG C-05` |
 | 사후 검정 단위 | ETF 당 1회, n ≈ 571 | ETF × 연도마다 1회, n = 184–248 | `etf/model.py:160-185`; `ae/worker.py:326` |
 | 사후 검정 수 | 정책당 20개 | 정책당 140개 (주 해석 2021–2025 는 100개) | — |
@@ -26,7 +26,7 @@ T12 가 T11 과 "일치" 하거나 "더 많이/적게 기각" 한다는 서술�
 | 연간 임계값 | 1.3397 만 사용 | 1.3397 + 유한표본 4종 (iid_insample · iid_prequential · normal_mc · block) | `etf/model.py:174-176`; `ae/worker.py:330-338` |
 | 이동창 통계량 | `rolling_cusum` (유효 ≥ 0.9w) | 같은 함수 | `etf/rolling.py:39-49` |
 | 이동창 범위 | 2019–2026 **전 시계열 한 줄**. 적합 구간은 in-sample 이다 | 검정연도 날짜만. CARRY warm 은 `model_y` 로 다시 표준화한 사전 연도 잔차 | `etf/pipeline.py:186-205`; `ae/calibration.py:75-80` |
-| 경계 처리 | 분할일 + w − 1 이후 = `test` zone, 그 전 = `boundary` | 매년 PURE_OOS_WINDOW (연중 순번 ≥ w−1) / CROSS_BOUNDARY_WARM | `etf/pipeline.py:58-77`; `ae/worker.py:366` |
+| 경계 처리 | 분할일 + w − 1 이후 = `test` zone, 그 전 = `boundary` | 매년 PURE_OOS_WINDOW (연중 순번 ≥ w−1) / CROSS_BOUNDARY_WARM | `etf/pipeline.py:63-81`; `ae/worker.py:366` |
 | 이동창 임계값 풀 | 적합 구간 잔차 (in-sample) 전체, 5,000회, seed `[20261012, w, salt]` | 사전 연도 재표준화 잔차 (`model_y` 의 in-sample), 5,000회, seed 는 키 sha256 | `etf/rolling.py:62-69`; `ae/worker.py:93-108` |
 | 이동창 임계값의 의미 | 점별 95% | 점별 95% | `SPEC B§6` |
 | 귀무 기대 에피소드 | `null_alarm_episodes_per_year`: 길이 1,902 전 시계열, 100회, **n/252 로 나눈 연율**, 마스크 없음 | `expected_null_episodes`: 길이 `n_days` (그해), 200회, **연간 원카운트**, PURE 마스크만 | `etf/rolling.py:72-90`; `ae/calibration.py:53-59`, `ae/worker.py:385-396` |

@@ -55,10 +55,12 @@ def main() -> None:
     dgps = {
         "iid_normal": lambda rng, r, n: rng.standard_normal((r, n)),
         "iid_t5": lambda rng, r, n: rng.standard_t(5, (r, n)) / math.sqrt(5 / 3),
-        "garch_a.10_b.85": lambda rng, r, n: garch(r, n, rng),
+        "garch_a.10_b.85": lambda rng, r, n: garch(r, n, rng),  # 이론 ACF(e²,1) ≈ 0.18
+        "garch_a.07_b.88": lambda rng, r, n: garch(r, n, rng, 0.07, 0.88),  # ≈ 0.11 (실제 base 중앙값 0.104 근처)
     }
     plan = [(d, n) for d in ("iid_normal",) for n in (184, 242, 245, 248, 1000, 5000)]
     plan += [("iid_t5", 245), ("iid_t5", 184), ("garch_a.10_b.85", 245), ("garch_a.10_b.85", 184)]
+    plan += [("garch_a.07_b.88", 245), ("garch_a.07_b.88", 184)]
     for i, (d, n) in enumerate(plan):
         reps = 20000 if n <= 1000 else 4000
         rng = np.random.default_rng([20261016, n, list(dgps).index(d)])
