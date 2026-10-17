@@ -5,19 +5,20 @@
 `SVR–GARCH` · `CUSUM` · `다중 기간 실현분산` · `자산 간 공통 구간` — 국내 상장 ETF 20종, 2019-01 ~ 2026-10-02
 
 <p>
-  <img alt="research" src="https://img.shields.io/badge/latest-W2%20(05%C2%B706%C2%B707)%20exploratory-1F5082">
-  <img alt="protocol" src="https://img.shields.io/badge/protocol-W2--lock--1%20frozen%20before%20signals-orange">
-  <img alt="tests" src="https://img.shields.io/badge/local%20pytest-176%20passed-2ea44f">
+  <img alt="research" src="https://img.shields.io/badge/in%20progress-W3%20(08)%20joint%20CUSUM-1F5082">
+  <img alt="w2" src="https://img.shields.io/badge/closed-W2%20(05%C2%B706%C2%B707)%20exploratory-6250d6">
+  <img alt="protocol" src="https://img.shields.io/badge/protocol-W3--lock--2%20frozen%20before%20joint%20stats-orange">
+  <img alt="tests" src="https://img.shields.io/badge/local%20pytest-198%20passed-2ea44f">
   <img alt="lint" src="https://img.shields.io/badge/ruff-W2%20new%200%20%C2%B7%20repo%20debt%20133-lightgrey">
   <img alt="ci" src="https://img.shields.io/badge/CI-not%20triggered%20on%20this%20branch-lightgrey">
   <img alt="data" src="https://img.shields.io/badge/raw%20prices-not%20in%20repo-lightgrey">
   <img alt="license" src="https://img.shields.io/badge/license-undecided%20(D--07)-lightgrey">
 </p>
 
-> **이 브랜치(`1017_MultiHorizon_Volatility_Regime_W2`)의 현재 상태.**
-> 1. 시장의 변동성은 하나의 수치나 하나의 경보로 충분히 설명되지 않았다. W2 에서는 시간 규모, 수준과 변화, 자산 간 공통성에 따라 서로 다른 양상이 관찰됐다.
-> 2. 공통성을 **관찰**한 것과 통계적으로 특별한 구조변화를 **확인**한 것은 다르다. W2 의 모든 결과는 탐색적 기술이며 보정된 귀무분포가 없다. W1 에서 드러난 CUSUM 검출력 문제도 해결되지 않았다.
-> 3. 지금까지의 연구는 그 차이를 기술하고 검증할 기초를 만들었다. 다음 08 은 기존 시장 동조성을 넘어서는 GARCH–CUSUM 공통 반응을 식별할 수 있는지 조사한다 (설계 중, 결과 없음).
+> **이 브랜치(`1017_2_MultiAsset_Joint_CUSUM_W3`)의 현재 상태 — W3 (노트북 08) 진행 중.**
+> - W2 (05·06·07) 는 종결됐다. 그 결과는 아래 §1–§6 에 그대로 있다.
+> - 지금은 그 위에서 **W3 — 여섯 ETF 의 공동 SVR–GARCH–CUSUM 불안정성을 단계적으로 통계 식별**하는 연구를 진행하고 있다. 진행 상황은 [§8 W3 진행 추적](#8-w3--대표-6종-공동-cusum-바텀업-통계-식별-노트북-08--진행-추적)에 단계마다 갱신한다.
+> - W3 는 아직 **결론이 없다**. 계약과 반복 수는 실제 ETF 의 공동 통계량을 보기 전에 동결했다. 관측 결과는 귀무 Monte Carlo 가 끝난 뒤에만 계산한다.
 
 **바로 가기** — [W2 종결 보고](research/multihorizon_w2/FINAL_W2_RESEARCH_REPORT.md) · [W2 연구계약](research/multihorizon_w2/W2_연구계약.md) · [노트북 05](notebooks/05_개별ETF_다중기간_변동성국면연구.ipynb) · [06](notebooks/06_노출군집_공통변동성구간_연구.ipynb) · [07](notebooks/07_가격반응_ETF상대움직임_CNN인계.ipynb) · [CNN 인계계약](research/multihorizon_w2/CNN_후보구간_인계계약_W2.md) · [릴리스 매니페스트](research/multihorizon_w2/W2_RELEASE_MANIFEST.json) · [이전 README 보존본](docs/history/README_1012_T11_T12_W1.md)
 
@@ -49,7 +50,7 @@
 | T12 | 연간 expanding 사후 검정 · 강건성 | 2021–2025 연간 기각 A/B/기준선 **0/12/6** (각 100 ETF-연도). 군집 귀무에서 크기 0.39–0.58 로 왜곡. 정책 A 파이프라인 검정력 0.085 | 완료 |
 | W1 (03·04) | 이동 CUSUM 검정창 w 선정 · 20종 일반화 | **적격 창 0/4, 최적창 없음.** 지속 분산 ×2·×0.5 의 60일 검출률 0.03–0.10 | 완료 (부정적 결과) |
 | **W2 (05·06·07)** | 다중 기간 변동성 상태 · 노출 군집 공통 구간 · 가격 반응 | 탐색적 공통 구간 1,711개 (2021–2025 1,168). 독립적 유의성은 검증하지 않음 | **완료 (탐색적)** |
-| 08 | 자산 간 GARCH–CUSUM 공통 반응 식별 | 설계 중, 결과 없음 | 예정 |
+| **W3 (08)** | 대표 6종 공동 SVR–GARCH–CUSUM 바텀업 통계 식별 (S1→S5, 57개 부분집합, DCC-t 귀무) | 계약 W3-lock-2 동결, 전체 재적합 Monte Carlo 실행 중. 결과 없음 | **진행 중** |
 
 **W1 과 W2 의 관계.** W2 는 W1 의 검정창 문제를 푼 연구가 아니다. W1 의 결론(적격 창 0/4)은 그대로 유지된다. W2 는 연구 대상을 바꿨다. CUSUM 이라는 단일 검정의 경보가 아니라 변동성 **상태 자체**를 여러 시간 규모로 기술하고, 그 상태가 자산 사이에서 언제 함께 나타나는지를 본다. W1 의 CUSUM 은 W2 에서 비교 대상(H3)으로만 쓰였고, 일별 경보를 다시 계산해 W1 집계 6,720행과 일치함을 확인했다.
 
@@ -217,17 +218,42 @@ print(event_metrics(alarms, events, ticker_years=len(calendar) / 252))
 
 ---
 
-## 8. Next Research — 08 Bottom-up Cross-Asset GARCH–CUSUM Synchronization
+## 8. W3 — 대표 6종 공동 CUSUM 바텀업 통계 식별 (노트북 08) · 진행 추적
 
-> **상태: 설계 중. 계산한 결과가 없다.** 아래는 목적이며 기대 성과가 아니다.
+> 이 절은 작업 단계마다 갱신한다. **아직 결론이 없다.** 아래 수치는 설계·계산 상태이며 연구 결과가 아니다.
 
-**목적.** KOSPI200 과 KOSDAQ150 에서 시작해 국고채10년, 단기채권, 미국 나스닥100, WTI 원유선물로 자산을 순차적으로 넓히며 GARCH–CUSUM 통계량의 공통 반응을 조사한다.
+**질문.** KOSPI200·KOSDAQ150 (S1) 에 국고채10년 → 단기채권 → 나스닥100 → WTI 원유를 하나씩 더할 때 묻는 것은 두 가지다.
+- 여러 자산의 CUSUM 공동 반응이 **기존 동적 시장 동조성(DCC-t 귀무)** 으로 설명되는가?
+- 새 자산이 **추가 정보**를 주는가?
 
-**W2 에서 넘어온 문제.**
-- W2 의 교차 공통성(F3·F4)에는 보정된 귀무분포가 없다. 08 은 단순한 경보의 시간적 중복이나 기존 자산 간 동조성으로 설명되지 않는 **추가적인** 공통 반응을 구별하려 한다. 이를 위해 자산별 시간 의존성과 다변량 의존 구조를 보존하는 귀무검정을 먼저 설계·등록한다.
-- W2 에서 CUSUM 경보 방향(분산 증가·감소)을 나누지 않았고, 연초 커버리지도 비어 있었다.
+**설계 요약 (계약 `W3-lock-2`).**
 
-**범위.** 공통 반응이 어떤 자산 조합과 기간에서 관찰되는지 식별한다. 가격 반응과의 관계는 별도 탐색 분석으로 평가한다. 08 이 끝나면 보고서와 산출값을 근거로 이 문서의 Research Snapshot 을 다시 쓴다.
+| 항목 | 내용 |
+|---|---|
+| 개별 통계량 | T12 연간 SVR–GARCH 잔차 (정책 A·B·base 동등), W1 이동창 CUSUM. 주 창 w=20·30·60·120, 단기 3·7·14 는 적격성 연구만 |
+| 꼬리점수 | Q = −log P_{H0-B}(T* ≥ T). (ETF, 정책, 창, 연중 위치 구간) 별 보정 반복 2,000회에서 계산 |
+| 공동 점수 | J_all = 구성원 최소 Q, J_2 = 두 번째 Q. 기준 ETF 069500, 시차 ±2 거래일 |
+| 주 경로 | S1 은 max J_all. S2–S5 는 신규 ETF 조건부 참여 (E 를 반복마다 재생성). 고정 순서, 각 α=0.02 |
+| 부분 분석 | 57개 부분집합 max J_all, Holm α=0.02 (민감도: minP) |
+| 귀무 | **H0-B 주**: 평가연도별 DCC(1,1)-t (그해 이전 자료로 적합). 모든 반복에서 연간 SVR 재적합. 민감도: CCC-t (공통 난수). **H0-A 보조**: 원형 이동·블록 재표집 |
+| 정밀도 | DCC 50,000 반복. 최소 p = 2e-5. Clopper–Pearson 99%. 부분집합 가족 해상도 B×0.02/57 = 17.5 |
+| 가격 (H6) | 5·10·20일, `EXPLORATORY_REUSED_DATA`. α=0.01 은 미래 독립 자료용 예약 |
+
+**진행 상태.**
+
+| 게이트 | 상태 | 근거 |
+|---|---|---|
+| G0 인수 | 완료 | W1 `7205e91` 조상, W2 `3ac04c5` 에서 분기 |
+| G1 계약 동결 | 완료: lock-1 `9cdeccb` → **lock-2 `955d126`** | [계약](research/joint_cusum_w3/W3_연구계약.md) · [개정 lock-2](research/joint_cusum_w3/W3_계약개정_lock2.md) · [설정 v2](configs/t15_joint_cusum_w3_v2.json) |
+| G2 비용 측정 | 완료: 반복 1회 CPU 약 17초, 작업자 22개 분당 74회. 계획 14.2시간 (예산 24시간) | [반복 수 동결](research/joint_cusum_w3/MC_REPS_FREEZE.md) · [벤치마크](research/joint_cusum_w3/evidence/G2_benchmark_lock2.csv) |
+| G3 통계 모듈 | 완료: `src/r2h/joint_cusum/`. 테스트 22개, 전체 pytest 198 통과 | 관측 경로가 T12 cache e·vhat 을 5e-10 이내로 재현 |
+| G4 합성 검증 | **실행 중** (2026-10-17 13:28 시작) | 보정 2,000 → DCC 50,000 → CCC 5,000 → holdout 1,000 → robustness 1,000 → 대립 2,700 → H0-A 20,000 |
+| G5 실증 노트북 08 | 대기 | `scripts/t15_build_notebook.py` (작성 중) |
+| G6 경제적 해석 · G7 감사 · G8 릴리스 | 대기 | |
+
+**결과를 보기 전에 이미 정해진 귀결.** 귀무모형을 적합하는 단계에서 아래 사실이 확인됐다. 규칙은 바꾸지 않는다.
+- 2024 모형의 148070 주변 GARCH 지속성이 경계에 걸렸다 (α+β ≈ 0.999). 수치 게이트 N1 에 따라 148070 이 들어간 통계량은 H0-B 확증이 불가능하다. 따라서 **주 경로 확증 사슬은 S2 에서 멈춘다.** S2–S5 는 계산해서 보고하지만 확증은 아니다.
+- 153130 은 표준화 잔차의 자기상관(Ljung–Box p<0.01, 5/5 년)과 정확 0 수익률 17.2% 때문에 N3 탈락 가능성이 크다.
 
 ---
 
