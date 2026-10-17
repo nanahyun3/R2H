@@ -96,7 +96,7 @@ from r2h.joint_cusum import figures as F  # W3 그림
 from r2h.joint_cusum.pipeline import load_cfg  # W3 동결 설정 (lock-2)
 
 assert Path(sys.modules["r2h"].__file__).resolve().is_relative_to((ROOT / "src").resolve())  # 다른 트리의 r2h 금지
-CFG = load_cfg()  # configs/t15_joint_cusum_w3_v2.json
+CFG = load_cfg()  # 동결 설정 configs/t15_joint_cusum_w3_v2.json
 BASE = ROOT / "research/joint_cusum_w3"  # W3 산출물 폴더
 RES = BASE / "results/08"  # 집계 결과 (Git 포함)
 FIG = BASE / "figures"  # 그림 (PNG 320dpi + SVG)
@@ -233,7 +233,7 @@ display(REPRO.describe().loc[["max"]])  # 최대 차만 표시
 from r2h.multihorizon.cusum import critical_tables, daily_cusum, load_daily_cache, verify_against_w1  # W2 가 쓴 대조 함수
 from r2h.window_study.simulation import load_cfg as load_w1_cfg  # W1 동결 설정
 
-W1CFG = load_w1_cfg(ROOT)  # configs/t13_window_study_v1.json
+W1CFG = load_w1_cfg(ROOT)  # W1 동결 설정 configs/t13_window_study_v1.json
 SRC = ROOT.parents[1] / "1016/R2H_T12_Final"  # T12 종결 작업트리
 pipe_c, point_c = critical_tables(SRC, W1CFG["base_t12_run_id"], ROOT)  # W1·T12 임계값
 cus = pd.concat([daily_cusum(t, load_daily_cache(SRC, W1CFG["base_t12_run_id"], t), W1CFG, pipe_c, point_c, [20, 30, 60, 120]) for t in OBS.tickers])  # 6종 일별 경보
@@ -390,7 +390,7 @@ display(COND)  # 조건부 귀무 유효성
 """),
         code(r"""
 # 그림 08-3: 단계 통계량 vs DCC 귀무 분포 · ETF×단계 조건부 참여 강도
-NULL_DCC = np.load(ROOT / "outputs/t15/mc/null_eval_dcc.npz")  # H0_EVALUATION (DCC) 50,000
+NULL_DCC = np.load(ROOT / "outputs/t15/mc/null_eval_dcc.npz")  # DCC 귀무 평가 50,000 반복
 NC = {"S1": NULL_DCC["M_subset"][:, 0], **{f"S{k + 2}": NULL_DCC["C_stage"][:, k] for k in range(4)}}  # 단계별 귀무
 PART = A.participation_table(OBS)  # 기술 통계
 save_csv(PART, "stage_participation.csv")  # 근거
@@ -469,7 +469,7 @@ display(Image(filename=str(P9[0]), width=950))  # 렌더 확인
 H0AD = A.h0a_diagnostics(OBS)  # 접합부·허용 이동·중복
 save_csv(H0AD, "h0a_diagnostics.csv")  # 근거
 display(H0AD)  # 표
-ROB = A.robustness_compare(OBS)  # burn-in 500 vs 2000
+ROB = A.robustness_compare(OBS)  # 초기조건 burn-in 500 대 2000 비교
 save_csv(ROB, "robustness_burnin.csv")  # 근거
 display(ROB.pivot_table(index="statistic", columns="quantile", values=["burn500", "burn2000"]).round(3))  # 분위 비교
 NULL_CCC = np.load(ROOT / "outputs/t15/mc/null_eval_ccc.npz")  # CCC 5,000 (같은 시드)
