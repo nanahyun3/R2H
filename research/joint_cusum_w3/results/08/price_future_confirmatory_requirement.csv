@@ -1,0 +1,4 @@
+group,h,observed_mean_diff,pooled_sd,n_per_group_required_alpha_0.01_power_0.8,note
+two_or_more_etf,5,0.5417376423,2.498357173,497,효과크기는 탐색 자료에서 추정 — 낙관적일 수 있다
+two_or_more_etf,10,0.6331738119,3.623086394,765,효과크기는 탐색 자료에서 추정 — 낙관적일 수 있다
+two_or_more_etf,20,0.1053630301,4.677061414,46027,효과크기는 탐색 자료에서 추정 — 낙관적일 수 있다

@@ -1,0 +1,16 @@
+{
+ "decided_at": "2026-10-18 02:33:30",
+ "rule": "if any primary-stage or secondary-Holm decision is INSUFFICIENT_MONTE_CARLO at B=50,000, run exactly one pre-specified extension of +25,000 H0_EVALUATION reps (DCC) and decide again, only if the total wall time stays within max_total_wall_hours; never extend to chase significance",
+ "insufficient_decisions": 0,
+ "stage_status": {
+  "S1": "NULL_MODEL_INVALID",
+  "S2": "NOT_ESTIMABLE",
+  "S3": "NOT_ESTIMABLE",
+  "S4": "NULL_MODEL_INVALID",
+  "S5": "NULL_MODEL_INVALID"
+ },
+ "subset_insufficient": 0,
+ "chain_wall_hours": 13.08,
+ "extension_wall_hours_estimate": 5.63,
+ "decision": "NOT_NEEDED"
+}

@@ -230,7 +230,12 @@ display(REPRO.describe().loc[["max"]])  # 최대 차만 표시
 """),
         code(r"""
 # W1 common 표본 무결성 대조: W1 동결 임계값으로 6종 일별 경보를 다시 세어 W1 집계와 맞춘다 (lock-2 §6)
-from r2h.multihorizon.cusum import critical_tables, daily_cusum, load_daily_cache, verify_against_w1  # W2 가 쓴 대조 함수
+from r2h.multihorizon.cusum import (  # W2 가 쓴 대조 함수
+    critical_tables,  # W1·T12 임계값 표
+    daily_cusum,  # 일별 경보 재계산
+    load_daily_cache,  # T12 일별 cache 읽기
+    verify_against_w1,  # W1 집계와 행 단위 대조
+)
 from r2h.window_study.simulation import load_cfg as load_w1_cfg  # W1 동결 설정
 
 W1CFG = load_w1_cfg(ROOT)  # W1 동결 설정 configs/t13_window_study_v1.json
@@ -457,6 +462,9 @@ save_csv(VAL["lb"], "null_validity_ljungbox.csv")  # 근거
 display(N1[~N1.ok])  # 실패 항목만
 display(VAL["n3"][["ticker", "N1_margin_ok_all_years", "kurt_years_outside", "acf_r2_years_outside", "var_years_outside", "zero_share_years_outside", "lb10_z_p_years_below_0.01", "lb10_z2_p_years_below_0.01", "N3_pass"]])  # ETF 별
 display(VAL["n4"][["pair", "corr_years_outside", "coexceed_years_outside", "rollcorr_sd_years_outside", "N4_fail_count", "N4_pass"]])  # 쌍별
+VDET = A.validity_detail(OBS)  # 연도별 관측·envelope·방향
+save_csv(VDET, "null_validity_detail_by_year.csv")  # 근거
+display(VDET[(VDET.side != "안") & ~((VDET.statistic == "zero_share") & (VDET.obs <= 0.02))].round(4))  # 실제 탈락에 쓰인 이탈만
 print("H0-B 유효 단계:", [k for k, v in VAL["valid_stage"].items() if v], "| 유효 부분집합:", sum(VAL["valid_subset"].values()), "/ 57")  # 요약
 N5 = A.n5_marginal(OBS)  # 주변 CUSUM 본체 진단
 save_csv(N5, "null_diagnostic_N5_marginal_cusum.csv")  # 근거
@@ -519,7 +527,12 @@ for k in ("path", "detection", "delays", "criticals"):  # 네 표
     save_csv(POWER[k], f"power_{k}.csv")  # 근거
 display(POWER["path"].round(3))  # 시나리오별 경로 수준 기각률·참여
 display(POWER["detection"][["scenario", "family", "R", "detected_60", "detected_60_wilson_low", "detected_60_wilson_high", "detected_within_5", "detected_within_20", "median_delay_detected", "false_sig_before_tau", "ep_start_err_median", "ep_end_err_median"]].round(3))  # 검출
-P6 = F.fig_power(POWER["detection"], POWER["delays"], FIG, "08-6")  # 검정력 그림
+BASE_FIRE = A.null_first_fire_baseline(OBS, 300)  # 계약 외 사후 기준선: 변화 없는 귀무의 60일 첫 발화
+save_csv(BASE_FIRE, "null_first_fire_baseline_posthoc.csv")  # 근거
+V1D = POWER["delays"][POWER["delays"].scenario.eq("V1")].merge(BASE_FIRE, on="signal", how="left")  # V1 대 귀무 (세 정책 모두)
+save_csv(V1D, "v1_vs_null_first_fire.csv")  # 근거
+display(V1D[V1D.signal.str.contains("q3|q7|q14|w3crit|cusum_Q")].round(3))  # 세 정책 비교표
+P6 = F.fig_power(POWER["detection"], POWER["delays"], BASE_FIRE, FIG, "08-6")  # 검정력 그림 (귀무 기준선 포함)
 display(Image(filename=str(P6[0]), width=950))  # 렌더 확인
 """),
         interp("ch13"),
@@ -541,7 +554,7 @@ display(Image(filename=str(P6[0]), width=950))  # 렌더 확인
 """),
         code(r"""
 # 다중검정 요약: 주 경로 사슬 · 부분집합 Holm · minP 민감도 · CCC 민감도 · 연장 규칙 적용 여부
-MT = pd.DataFrame([{"family": "주 경로 S1–S5 (고정 순서 α=0.02)", "hypotheses": 5, "significant_h0b": int((STAGE.confirmatory_status == "SIGNIFICANT_H0B").sum()), "chain_stop_stage": next((s for s, c in zip(STAGE.stage, STAGE.confirmatory_status) if c != "SIGNIFICANT_H0B"), "없음"), "insufficient_mc": int((STAGE.status == "INSUFFICIENT_MONTE_CARLO").sum())}, {"family": "부분집합 57 (Holm α=0.02)", "hypotheses": 57, "significant_h0b": int((SUB.status == "SIGNIFICANT_H0B").sum()), "chain_stop_stage": "—", "insufficient_mc": int((SUB.status == "INSUFFICIENT_MONTE_CARLO").sum())}])  # 가족 요약
+MT = pd.DataFrame([{"family": "주 경로 S1–S5 (고정 순서 α=0.02)", "hypotheses": 5, "significant_h0b": int((STAGE.confirmatory_status == "SIGNIFICANT_H0B").sum()), "chain_stop_stage": next((s for s, c in zip(STAGE.stage, STAGE.confirmatory_status, strict=True) if c != "SIGNIFICANT_H0B"), "없음"), "insufficient_mc": int((STAGE.status == "INSUFFICIENT_MONTE_CARLO").sum())}, {"family": "부분집합 57 (Holm α=0.02)", "hypotheses": 57, "significant_h0b": int((SUB.status == "SIGNIFICANT_H0B").sum()), "chain_stop_stage": "—", "insufficient_mc": int((SUB.status == "INSUFFICIENT_MONTE_CARLO").sum())}])  # 가족 요약
 EXT = json.loads((ROOT / "research/joint_cusum_w3/MC_EXTENSION_DECISION.json").read_text())  # 연장 규칙 판정 기록
 MT["extension_rule"] = EXT["decision"]  # 적용 여부
 save_csv(MT, "multiple_testing_summary.csv")  # 근거
@@ -658,7 +671,7 @@ for name, (a, b) in CASES.items():  # 두 사례
         code(r"""
 # 본문 수치 대조 (CLAIMS) — 해석 문단에 적은 값과 이번 실행 결과가 같아야 한다
 CLAIMS = json.loads((ROOT / "research/joint_cusum_w3/notebook_claims.json").read_text(encoding="utf-8"))  # 해석 문단의 수치 목록
-ENV = {"STAGE": STAGE, "SUB": SUB, "SIZE": SIZE, "POWER": POWER, "EP": EP, "VAL": VAL, "COND": COND, "ELIG": ELIG, "PRICE": PRICE, "LAGSUM": LAGSUM, "INDIV": INDIV, "CASE_T": CASE_T, "W1CHK": W1CHK, "np": np, "pd": pd}  # 평가 이름공간
+ENV = {"STAGE": STAGE, "SUB": SUB, "SIZE": SIZE, "POWER": POWER, "EP": EP, "VAL": VAL, "COND": COND, "ELIG": ELIG, "PRICE": PRICE, "LAGSUM": LAGSUM, "INDIV": INDIV, "CASE_T": CASE_T, "W1CHK": W1CHK, "SEQ": SEQ, "V1D": V1D, "ROB": ROB, "H0AD": H0AD, "REPRO": REPRO, "VDET": VDET, "CORR": CORR, "REQ": REQ, "np": np, "pd": pd}  # 평가 이름공간
 bad = []  # 불일치 목록
 for c in CLAIMS:  # 하나씩
     got = eval(c["expr"], {}, ENV)  # 결과에서 계산 (식은 저장소에 커밋된 JSON)

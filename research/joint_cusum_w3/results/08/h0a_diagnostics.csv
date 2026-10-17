@@ -1,0 +1,3 @@
+method,reps,unique_transforms,mean_junctions,allowed_shifts_per_etf_year_w20_to_w120,year_boundary
+circular_shift_within_year,10000,10000,119.3286,w20:223–229; w30:213–219; w60:183–189; w120:123–129,변환은 연도 안에서만 (경계 넘지 않음)
+circular_block_bootstrap_within_year,10000,10000,1187.3345,w20:223–229; w30:213–219; w60:183–189; w120:123–129,변환은 연도 안에서만 (경계 넘지 않음)

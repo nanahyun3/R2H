@@ -1061,3 +1061,104 @@ def participation_table(obs: Obs) -> pd.DataFrame:
                 }
             )
     return pd.DataFrame(rows)
+
+
+def validity_detail(obs: Obs) -> pd.DataFrame:
+    """탈락 통계의 연도별 관측값·envelope·방향 (관측이 위/아래) — 게이트 결과를 원인과 함께 읽기 위한 표."""
+    d = mc_dir(obs.root)
+    years = list(obs.cfg["sample"]["evaluation_years"])
+    cal = dict(np.load(d / "cal_diag.npz"))
+    per = [return_diagnostics(obs.R[obs.R.index < pd.Timestamp(f"{y}-01-01")].to_numpy()) for y in years]
+    rows = []
+    for s in ("kurt", "acf_r2", "var", "zero_share"):
+        lo = np.nanquantile(cal[f"diag_{s}"], 0.005, axis=0)
+        hi = np.nanquantile(cal[f"diag_{s}"], 0.995, axis=0)
+        med = np.nanmedian(cal[f"diag_{s}"], axis=0)
+        for y_i, y in enumerate(years):
+            for j, tk in enumerate(obs.tickers):
+                v = float(per[y_i][s][j])
+                side = "위" if v > hi[y_i, j] else ("아래" if v < lo[y_i, j] else "안")
+                rows.append(
+                    {
+                        "statistic": s,
+                        "year_model": y,
+                        "ticker": tk,
+                        "obs": v,
+                        "null_median": float(med[y_i, j]),
+                        "lo_0.5%": float(lo[y_i, j]),
+                        "hi_99.5%": float(hi[y_i, j]),
+                        "side": side,
+                    }
+                )
+    return pd.DataFrame(rows)
+
+
+def null_first_fire_baseline(obs: Obs, reps: int = 300) -> pd.DataFrame:
+    """계약 외 사후 기준선 (advisor·G7 Q12): 변화가 없는 귀무에서 대립과 같은 규칙으로 τ 를 뽑았을 때 60일 안 첫 발화 비율·지연.
+
+    단기 q 확대 후보는 귀무에서도 하루 약 10% 켜지므로, V1 의 '빠른 검출' 은 이 기준선과 비교해야 한다.
+    CUSUM 신호(W3 임계·Q≥c_E)는 H0_CALIBRATION 반복 T 를 쓰고, q 신호는 같은 연도 귀무 경로를 새로 모의한다 (재적합 불필요).
+    """
+    import pickle as _pk
+
+    from .mc import alt_design, rep_rng, simulate_year_paths
+
+    cfg = obs.cfg
+    d = mc_dir(obs.root)
+    models = _pk.load(open(d / "models.pkl", "rb"))["DCC"]
+    crit = json.loads((d / "w3_individual_criticals.json").read_text())
+    T = np.load(d / "cal_T.npy", mmap_mode="r")
+    tt = obs.tt
+    from .scores import q_score
+
+    c_E = float(cfg["joint"]["primary_test_statistics"]["c_E"])
+    dates = pd.DatetimeIndex(obs.R.index)
+    wins = PRIMARY_W + list(cfg["pipeline"]["windows_short_eligibility"])
+    rows = []
+    for r in range(reps):
+        rng = rep_rng(cfg, "H1_POWER_NULL_BASELINE_POSTHOC", r)
+        des = alt_design(models, dates, obs.dates, cfg, "V1", rng)
+        Tr = np.asarray(T[r], dtype=np.float64)
+        Qr = q_score(Tr[:, :, :4], tt, obs.out.pos_in_year)
+        paths = simulate_year_paths({des.year: models[des.year]}, dates, list(obs.tickers), rng)
+        py = paths[des.year]
+        yev = np.asarray(py.index.year == des.year)
+        ystart = int(np.flatnonzero(obs.out.year_of_day == des.year)[0])
+        for tk in ("069500", "229200"):
+            i = obs.tickers.index(tk)
+            rec = {"rep": r, "ticker": tk}
+            x = py[tk].to_numpy(float)
+            for q in (3, 7, 14):
+                dd, _, _ = log_variance_ratio(realized_variance(x, q), q)
+                ud, _, _ = midrank_past(dd, 252)
+                flag = np.zeros(len(obs.dates), bool)
+                flag[ystart : ystart + int(yev.sum())] = ud[yev] >= 0.9
+                rec[f"q{q}_EXP"] = _delay(flag, des.tau)
+            for p_i, p in enumerate(POLICIES):
+                for w_i, w in enumerate(wins):
+                    rec[f"cusum_w3crit_{p}_w{w}"] = _delay(
+                        np.isfinite(Tr[i, p_i, w_i]) & (Tr[i, p_i, w_i] >= crit[f"w3:{tk}:{p}:{w}"]), des.tau
+                    )
+                    if w_i < 4:
+                        rec[f"cusum_Q_{p}_w{w}"] = _delay(
+                            np.isfinite(Qr[i, p_i, w_i]) & (Qr[i, p_i, w_i] >= c_E), des.tau
+                        )
+            rows.append(rec)
+    df = pd.DataFrame(rows)
+    out = []
+    for c in [c for c in df.columns if c not in ("rep", "ticker")]:
+        v = df[c].to_numpy(float)
+        out.append(
+            {
+                "signal": c,
+                "null_detected_60": float(np.isfinite(v).mean()),
+                "null_median_delay": float(np.nanmedian(v)) if np.isfinite(v).any() else np.nan,
+                "n": v.size,
+            }
+        )
+    return pd.DataFrame(out)
+
+
+def _delay(flag: np.ndarray, tau: int, H: int = 60) -> float:
+    k = np.flatnonzero(flag[tau : tau + H])
+    return float(k[0]) if k.size else np.nan

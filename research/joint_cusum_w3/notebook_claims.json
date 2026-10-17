@@ -1,0 +1,492 @@
+[
+ {
+  "id": "w3_alarm_total",
+  "expr": "int(INDIV.alarm_days_w3.sum())",
+  "want": 45
+ },
+ {
+  "id": "w3_alarm_153130",
+  "expr": "int(INDIV[INDIV.ticker=='153130'].alarm_days_w3.sum())",
+  "want": 32
+ },
+ {
+  "id": "w3_alarm_261220",
+  "expr": "int(INDIV[INDIV.ticker=='261220'].alarm_days_w3.sum())",
+  "want": 9
+ },
+ {
+  "id": "w3_alarm_133690",
+  "expr": "int(INDIV[INDIV.ticker=='133690'].alarm_days_w3.sum())",
+  "want": 4
+ },
+ {
+  "id": "w3_alarm_kospi_kosdaq_bond",
+  "expr": "int(INDIV[INDIV.ticker.isin(['069500','229200','148070'])].alarm_days_w3.sum())",
+  "want": 0
+ },
+ {
+  "id": "w1_ref_alarm_total",
+  "expr": "int(INDIV.alarm_days_w1_ref.sum())",
+  "want": 186
+ },
+ {
+  "id": "valid_w20",
+  "expr": "int(INDIV[INDIV.w==20].valid_days.iloc[0])",
+  "want": 1130
+ },
+ {
+  "id": "na_w20",
+  "expr": "int(INDIV[INDIV.w==20].not_available_days.iloc[0])",
+  "want": 95
+ },
+ {
+  "id": "valid_w120",
+  "expr": "int(INDIV[INDIV.w==120].valid_days.iloc[0])",
+  "want": 630
+ },
+ {
+  "id": "na_w120",
+  "expr": "int(INDIV[INDIV.w==120].not_available_days.iloc[0])",
+  "want": 595
+ },
+ {
+  "id": "seq_episodes",
+  "expr": "len(SEQ)",
+  "want": 10
+ },
+ {
+  "id": "seq_by_w",
+  "expr": "{str(k): int(v) for k, v in SEQ.groupby('w').size().items()}",
+  "want": {
+   "20": 3,
+   "60": 3,
+   "120": 4
+  }
+ },
+ {
+  "id": "seq_q3_preceded",
+  "expr": "float(SEQ.lag_from_q3_EXP.notna().mean())",
+  "want": 1.0,
+  "atol": 1e-09
+ },
+ {
+  "id": "seq_q3_lag_median",
+  "expr": "float(SEQ.lag_from_q3_EXP.median())",
+  "want": 10.5,
+  "atol": 1e-09
+ },
+ {
+  "id": "elig_short_none",
+  "expr": "int((ELIG[ELIG.w.isin([3,7,14])].verdict=='ELIGIBLE').sum())",
+  "want": 0
+ },
+ {
+  "id": "elig_all_none",
+  "expr": "int((ELIG.verdict=='ELIGIBLE').sum())",
+  "want": 0
+ },
+ {
+  "id": "elig_short_size_hi",
+  "expr": "round(float(ELIG[ELIG.w.isin([3,7,14])].null_wilson_high.max()),3)",
+  "want": 0.064,
+  "atol": 1e-09
+ },
+ {
+  "id": "elig_v1_w3",
+  "expr": "round(float(ELIG[ELIG.w==3].v1_detected_60_pooled_affected.mean()),3)",
+  "want": 0.009,
+  "atol": 1e-09
+ },
+ {
+  "id": "elig_v1_w7",
+  "expr": "round(float(ELIG[ELIG.w==7].v1_detected_60_pooled_affected.mean()),3)",
+  "want": 0.011,
+  "atol": 1e-09
+ },
+ {
+  "id": "elig_v1_w14",
+  "expr": "round(float(ELIG[ELIG.w==14].v1_detected_60_pooled_affected.mean()),3)",
+  "want": 0.016,
+  "atol": 1e-09
+ },
+ {
+  "id": "case24_069500_q3",
+  "expr": "CASE_T['2024-08 (2024-07-25~09-30)'].set_index('ticker').loc['069500','first_EXP_q3']",
+  "want": "2024-08-02"
+ },
+ {
+  "id": "case24_148070_q3",
+  "expr": "CASE_T['2024-08 (2024-07-25~09-30)'].set_index('ticker').loc['148070','first_EXP_q3']",
+  "want": "2024-07-25"
+ },
+ {
+  "id": "case24_153130_w120",
+  "expr": "CASE_T['2024-08 (2024-07-25~09-30)'].set_index('ticker').loc['153130','first_CUSUM_w120']",
+  "want": "2024-07-29"
+ },
+ {
+  "id": "case25_no_cusum",
+  "expr": "int((CASE_T['2025-04 (2025-03-25~05-30)'][['first_CUSUM_w20','first_CUSUM_w30','first_CUSUM_w60','first_CUSUM_w120']]!='NONE').sum().sum())",
+  "want": 0
+ },
+ {
+  "id": "s1_obs",
+  "expr": "round(float(STAGE.set_index('stage').loc['S1','obs']),3)",
+  "want": 4.471,
+  "atol": 1e-09
+ },
+ {
+  "id": "s1_p",
+  "expr": "round(float(STAGE.set_index('stage').loc['S1','p_dcc']),3)",
+  "want": 0.853,
+  "atol": 1e-09
+ },
+ {
+  "id": "s1_p_ccc",
+  "expr": "round(float(STAGE.set_index('stage').loc['S1','p_ccc']),3)",
+  "want": 0.845,
+  "atol": 1e-09
+ },
+ {
+  "id": "s1_h0a_shift",
+  "expr": "round(float(STAGE.set_index('stage').loc['S1','p_h0a_circular_shift_within_year']),3)",
+  "want": 0.627,
+  "atol": 1e-09
+ },
+ {
+  "id": "s1_h0a_block",
+  "expr": "round(float(STAGE.set_index('stage').loc['S1','p_h0a_circular_block_bootstrap_within_year']),3)",
+  "want": 0.602,
+  "atol": 1e-09
+ },
+ {
+  "id": "stage_status",
+  "expr": "STAGE.status.tolist()",
+  "want": [
+   "NULL_MODEL_INVALID",
+   "NOT_ESTIMABLE",
+   "NOT_ESTIMABLE",
+   "NULL_MODEL_INVALID",
+   "NULL_MODEL_INVALID"
+  ]
+ },
+ {
+  "id": "chain_stop_s1",
+  "expr": "STAGE.confirmatory_status.iloc[0]",
+  "want": "NULL_MODEL_INVALID"
+ },
+ {
+  "id": "s4_obs",
+  "expr": "round(float(STAGE.set_index('stage').loc['S4','obs']),3)",
+  "want": 0.669,
+  "atol": 1e-09
+ },
+ {
+  "id": "s4_p",
+  "expr": "round(float(STAGE.set_index('stage').loc['S4','p_dcc']),3)",
+  "want": 0.855,
+  "atol": 1e-09
+ },
+ {
+  "id": "s5_obs",
+  "expr": "round(float(STAGE.set_index('stage').loc['S5','obs']),3)",
+  "want": 0.893,
+  "atol": 1e-09
+ },
+ {
+  "id": "s5_p",
+  "expr": "round(float(STAGE.set_index('stage').loc['S5','p_dcc']),3)",
+  "want": 0.953,
+  "atol": 1e-09
+ },
+ {
+  "id": "cond_rate_min",
+  "expr": "round(float(COND.rate.min()),3)",
+  "want": 0.007,
+  "atol": 1e-09
+ },
+ {
+  "id": "cond_rate_max",
+  "expr": "round(float(COND.rate.max()),3)",
+  "want": 0.027,
+  "atol": 1e-09
+ },
+ {
+  "id": "cond_all_valid",
+  "expr": "bool(COND.conditional_null_valid.all())",
+  "want": true
+ },
+ {
+  "id": "sub_invalid",
+  "expr": "int((SUB.status=='NULL_MODEL_INVALID').sum())",
+  "want": 56
+ },
+ {
+  "id": "sub_valid_only",
+  "expr": "SUB[SUB.h0b_valid].subset.tolist()",
+  "want": [
+   "229200+133690"
+  ]
+ },
+ {
+  "id": "sub_valid_p",
+  "expr": "round(float(SUB[SUB.h0b_valid].p_dcc.iloc[0]),3)",
+  "want": 0.27,
+  "atol": 1e-09
+ },
+ {
+  "id": "sub_valid_p_ccc",
+  "expr": "round(float(SUB[SUB.h0b_valid].p_ccc.iloc[0]),3)",
+  "want": 0.255,
+  "atol": 1e-09
+ },
+ {
+  "id": "sub_min_p",
+  "expr": "round(float(SUB.p_dcc.min()),3)",
+  "want": 0.04,
+  "atol": 1e-09
+ },
+ {
+  "id": "sub_min_p_subset",
+  "expr": "SUB.loc[SUB.p_dcc.idxmin(),'subset']",
+  "want": "069500+153130+261220"
+ },
+ {
+  "id": "sub_max_M",
+  "expr": "round(float(SUB.M_obs.max()),3)",
+  "want": 5.689,
+  "atol": 1e-09
+ },
+ {
+  "id": "sub_h0a_shift_min",
+  "expr": "round(float(SUB.p_h0a_circular_shift_within_year.min()),3)",
+  "want": 0.028,
+  "atol": 1e-09
+ },
+ {
+  "id": "sub_h0a_block_min",
+  "expr": "round(float(SUB.p_h0a_circular_block_bootstrap_within_year.min()),3)",
+  "want": 0.024,
+  "atol": 1e-09
+ },
+ {
+  "id": "acf_069500_years_above",
+  "expr": "int(((VDET.statistic=='acf_r2')&(VDET.ticker=='069500')&(VDET.side=='위')).sum())",
+  "want": 4
+ },
+ {
+  "id": "acf_069500_min",
+  "expr": "round(float(VDET[(VDET.statistic=='acf_r2')&(VDET.ticker=='069500')&(VDET.side=='위')].obs.min()),3)",
+  "want": 0.386,
+  "atol": 1e-09
+ },
+ {
+  "id": "acf_069500_max",
+  "expr": "round(float(VDET[(VDET.statistic=='acf_r2')&(VDET.ticker=='069500')&(VDET.side=='위')].obs.max()),3)",
+  "want": 0.423,
+  "atol": 1e-09
+ },
+ {
+  "id": "kurt_261220_years_above",
+  "expr": "int(((VDET.statistic=='kurt')&(VDET.ticker=='261220')&(VDET.side=='위')).sum())",
+  "want": 5
+ },
+ {
+  "id": "n3_pass",
+  "expr": "VAL['n3'][VAL['n3'].N3_pass].ticker.tolist()",
+  "want": [
+   "229200",
+   "133690"
+  ]
+ },
+ {
+  "id": "rob_q98",
+  "expr": "[round(float(v),3) for v in ROB[(ROB.statistic=='M_S1')&(ROB['quantile']==0.98)][['burn500','burn2000']].iloc[0]]",
+  "want": [
+   7.79,
+   7.789
+  ]
+ },
+ {
+  "id": "h0a_unique",
+  "expr": "H0AD.unique_transforms.tolist()",
+  "want": [
+   10000,
+   10000
+  ]
+ },
+ {
+  "id": "size_s1",
+  "expr": "round(float(SIZE.iloc[0]['size']),3)",
+  "want": 0.024,
+  "atol": 1e-09
+ },
+ {
+  "id": "size_s4",
+  "expr": "round(float(SIZE.iloc[3]['size']),3)",
+  "want": 0.03,
+  "atol": 1e-09
+ },
+ {
+  "id": "size_fam",
+  "expr": "round(float(SIZE.iloc[5]['size']),3)",
+  "want": 0.02,
+  "atol": 1e-09
+ },
+ {
+  "id": "v1_path_s1",
+  "expr": "round(float(POWER['path'].set_index('scenario').loc['V1','path_S1_reject']),3)",
+  "want": 0.043,
+  "atol": 1e-09
+ },
+ {
+  "id": "det_all_zero_but_v7",
+  "expr": "int(POWER['detection'][POWER['detection'].scenario!='V7'].detected_60.gt(0).sum())",
+  "want": 0
+ },
+ {
+  "id": "v7_s1_false",
+  "expr": "round(float(POWER['detection'].set_index(['scenario','family']).loc[('V7','S1'),'detected_60']),3)",
+  "want": 0.007,
+  "atol": 1e-09
+ },
+ {
+  "id": "v1_recall",
+  "expr": "round(float(POWER['path'].set_index('scenario').loc['V1','participation_recall']),3)",
+  "want": 0.565,
+  "atol": 1e-09
+ },
+ {
+  "id": "v1_over",
+  "expr": "round(float(POWER['path'].set_index('scenario').loc['V1','over_participation']),3)",
+  "want": 0.532,
+  "atol": 1e-09
+ },
+ {
+  "id": "v1_q3",
+  "expr": "[round(float(x),3) for x in V1D.set_index('signal').loc['q3_EXP',['detected_60','null_detected_60']]]",
+  "want": [
+   1.0,
+   0.992
+  ]
+ },
+ {
+  "id": "v1_q14",
+  "expr": "[round(float(x),3) for x in V1D.set_index('signal').loc['q14_EXP',['detected_60','null_detected_60']]]",
+  "want": [
+   0.86,
+   0.743
+  ]
+ },
+ {
+  "id": "v1_Q_w20",
+  "expr": "[round(float(x),3) for x in V1D.set_index('signal').loc['cusum_Q_A_w20',['detected_60','null_detected_60']]]",
+  "want": [
+   0.233,
+   0.228
+  ]
+ },
+ {
+  "id": "v1_w3_w60",
+  "expr": "[round(float(x),3) for x in V1D.set_index('signal').loc['cusum_w3crit_A_w60',['detected_60','null_detected_60']]]",
+  "want": [
+   0.045,
+   0.013
+  ]
+ },
+ {
+  "id": "ep_count",
+  "expr": "len(EP)",
+  "want": 10
+ },
+ {
+  "id": "ep_all_pairs",
+  "expr": "sorted(EP['size'].unique().tolist())",
+  "want": [
+   2
+  ]
+ },
+ {
+  "id": "ep_s1_none",
+  "expr": "int((EP.subset=='069500+229200').sum())",
+  "want": 0
+ },
+ {
+  "id": "ep_sig_days",
+  "expr": "int(EP.n_days_ge_day_critical.sum())",
+  "want": 0
+ },
+ {
+  "id": "ep_min_p",
+  "expr": "round(float(EP.retrospective_p_value.min()),3)",
+  "want": 0.066,
+  "atol": 1e-09
+ },
+ {
+  "id": "ep_status",
+  "expr": "EP.day_level_status.value_counts().to_dict()",
+  "want": {
+   "NULL_MODEL_INVALID": 8,
+   "EXPLORATORY": 2
+  }
+ },
+ {
+  "id": "ep_direction",
+  "expr": "EP.direction.value_counts().sort_index().to_dict()",
+  "want": {
+   "COMMON_CONTRACTION": 2,
+   "COMMON_EXPANSION": 2,
+   "MIXED": 3,
+   "UNDETERMINED": 3
+  }
+ },
+ {
+  "id": "corr_pairs",
+  "expr": "len(CORR)",
+  "want": 8
+ },
+ {
+  "id": "corr_mean",
+  "expr": "round(float(CORR.delta.mean()),3)",
+  "want": 0.105,
+  "atol": 1e-09
+ },
+ {
+  "id": "price_single_h5",
+  "expr": "[round(float(x),3) for x in PRICE['summary'].set_index(['group','h']).loc[('single_etf_only',5),['n_events','median_ret','ci95_low','ci95_high']]]",
+  "want": [
+   94.0,
+   0.024,
+   -0.356,
+   0.065
+  ]
+ },
+ {
+  "id": "price_multi_h10",
+  "expr": "[round(float(x),3) for x in PRICE['summary'].set_index(['group','h']).loc[('two_or_more_etf',10),['n_events','median_ret','ci95_low','ci95_high']]]",
+  "want": [
+   18.0,
+   0.461,
+   0.083,
+   1.272
+  ]
+ },
+ {
+  "id": "price_req",
+  "expr": "REQ.set_index('h')['n_per_group_required_alpha_0.01_power_0.8'].loc[[5,10]].astype(int).tolist()",
+  "want": [
+   497,
+   765
+  ]
+ },
+ {
+  "id": "w1_integrity",
+  "expr": "bool(W1CHK.match.all())",
+  "want": true
+ },
+ {
+  "id": "t12_repro",
+  "expr": "bool(REPRO.max_abs_de.max() < 1e-8)",
+  "want": true
+ }
+]

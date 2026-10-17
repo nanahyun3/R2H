@@ -46,9 +46,21 @@ STATUS_COLOR = {
 }
 
 
-def save(fig: plt.Figure, out: Path, name: str) -> list[Path]:
-    """PNG 320dpi + SVG (메타데이터 날짜 제거 → 결정적)."""
+def save(
+    fig: plt.Figure,
+    out: Path,
+    name: str,
+    rect: tuple | None = (0, 0.06, 1, 0.965),
+    h_pad: float | None = None,
+) -> list[Path]:
+    """PNG 320dpi + SVG (메타데이터 날짜 제거 → 결정적). rect=None 이면 그림 함수가 여백을 직접 정한 것."""
     out.mkdir(parents=True, exist_ok=True)
+    import warnings
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        if rect is not None:
+            fig.tight_layout(rect=rect, h_pad=h_pad)  # 각주(아래)·제목(위) 자리를 비우고 패널 배치
     paths = [out / f"{name}.png", out / f"{name}.svg"]
     fig.savefig(paths[0], dpi=320, bbox_inches="tight", metadata={"Software": None})
     fig.savefig(paths[1], bbox_inches="tight", metadata={"Date": None, "Creator": None})
@@ -100,6 +112,7 @@ def fig_individual(
     _date_axis(axes[-1])
     axes[0].figure.suptitle(
         f"그림 {fig_no}. ETF 별 가격·일간 변동·개별 CUSUM (2021–2025, 공통 날짜축)",
+        y=0.995,
         x=0.01,
         ha="left",
         fontsize=12,
@@ -108,7 +121,10 @@ def fig_individual(
         fig,
         "회색 띠 = CUSUM w=60 계산 불능(연초 59일, NOT_AVAILABLE — 무경보 아님). 점선 = W1 동결 임계값(pipeline_garch_annual_max, 기술용 — W1 적격 창 0/4 유지). 패널마다 세로 척도가 다르다.",
     )
-    return save(fig, out, f"fig08_1_{tickers[0]}_individual")
+    fig.subplots_adjust(
+        top=0.975, bottom=0.035, left=0.08, right=0.98, hspace=0.32
+    )  # 긴 그림: 여백을 직접 지정
+    return save(fig, out, f"fig08_1_{tickers[0]}_individual", rect=None)
 
 
 def fig_sequence(
@@ -116,7 +132,7 @@ def fig_sequence(
 ) -> list[Path]:
     """그림 08-2: 사례 창의 ETF 별 첫 단기 후보·첫 CUSUM 경보 날짜 (가·나) + 단기 후보→CUSUM 경보 지연 분포 (다)."""
     fig = plt.figure(figsize=(12, 7.2))
-    gs = fig.add_gridspec(2, 2, height_ratios=[1.0, 0.85], hspace=0.45, wspace=0.18)
+    gs = fig.add_gridspec(2, 2, height_ratios=[1.0, 0.85], hspace=0.45, wspace=0.42)
     sigs = [
         ("first_daily_shock_q1", "q=1 충격", "x", MUTED),
         ("first_EXP_q3", "q=3 확대", "o", "#86b6ef"),
@@ -141,7 +157,7 @@ def fig_sequence(
                         color=colr,
                         label=lab if y == 0 else None,
                         zorder=3,
-                        edgecolor="white",
+                        edgecolor="white" if mk != "x" else None,
                         lw=0.4,
                     )
         ax.set_yticks(range(len(ticks)), [f"{names[t]}\n({t})" for t in ticks], fontsize=7)
@@ -150,7 +166,13 @@ def fig_sequence(
         ax.set_title(f"({'가나'[c_i]}) {title}", fontsize=9, loc="left")
         style(ax)
         if c_i == 1:
-            ax.legend(fontsize=6.5, frameon=False, loc="upper left", bbox_to_anchor=(1.0, 1.0))
+            from matplotlib.lines import Line2D
+
+            hs = [
+                Line2D([], [], ls="", marker=mk, color=colr, markersize=5, label=lab)
+                for _, lab, mk, colr in sigs
+            ]
+            ax.legend(handles=hs, fontsize=6.5, frameon=False, loc="upper left", bbox_to_anchor=(1.0, 1.0))
     ax = fig.add_subplot(gs[1, :])
     cols = ["lag_from_q3_EXP", "lag_from_q7_EXP", "lag_from_q14_EXP"]
     data, labels, pos = [], [], []
@@ -175,7 +197,7 @@ def fig_sequence(
     ax.set_xticks(pos, labels, fontsize=6.5)
     ax.set_ylabel("지연 (거래일)", fontsize=8)
     ax.set_title(
-        "(다) CUSUM 경보 시작 전 60일 안의 가장 가까운 단기 확대 후보 → 경보까지 관측 지연 (6종·3정책)",
+        "(다) W3 임계 CUSUM 경보 시작 전 60일 안의 가장 가까운 단기 확대 후보 → 경보까지 지연 (6종·3정책, 빈 칸 = 경보 없음)",
         fontsize=9,
         loc="left",
     )
@@ -188,7 +210,7 @@ def fig_sequence(
     )
     footnote(
         fig,
-        "q 후보 = W2 규칙(엄밀 과거 확장형 분위 ≥ 0.90) — 탐색 후보이며 보정된 경보가 아니다. CUSUM 경보 = W1 동결 임계값(정책 A·B·base 중 최초). 사후 선택한 사례 창의 날짜는 실시간 조기 탐지 성공이 아니다.",
+        "q 후보 = W2 규칙(엄밀 과거 확장형 분위 ≥ 0.90) — 탐색 후보이며 보정된 경보가 아니다. CUSUM 경보 = W3 own-valid 보정 임계값(정책 A·B·base 중 최초). 사후 선택한 사례 창의 날짜는 실시간 조기 탐지 성공이 아니다.",
     )
     return save(fig, out, "fig08_2_sequential_detection")
 
@@ -222,7 +244,10 @@ def fig_bottom_up(
             ax.annotate("추정 불가", (k, 0), fontsize=7, color=MUTED)
     ax.set_xticks(
         range(len(stage)),
-        [f"{s}\n{m.split('+')[-1]}" for s, m in zip(stage.stage, stage.members, strict=True)],
+        [
+            f"{s}\n{m.replace('+', '·') if s == 'S1' else '+' + m.split('+')[-1]}"
+            for s, m in zip(stage.stage, stage.members, strict=True)
+        ],
         fontsize=7.5,
     )
     ax.set_ylabel("단계 통계량 (S1: max J_all · S2–S5: 신규 ETF 평균 시차 Q)", fontsize=7.5)
@@ -270,9 +295,15 @@ def fig_subsets(sub: pd.DataFrame, out: Path, fig_no: str) -> list[Path]:
     ax = axes[0]
     ax.bar(x, s.M_obs, color=[CAT[int(z) - 2] for z in sizes], width=0.75)
     ax.set_ylabel("M_S = max J_all (원시 점수)", fontsize=8)
-    for z in sorted(set(sizes)):
-        ax.bar([], [], color=CAT[int(z) - 2], label=f"{z}종")
-    ax.legend(fontsize=7, ncol=5, frameon=False, loc="upper right")
+    from matplotlib.patches import Patch
+
+    ax.legend(
+        handles=[Patch(color=CAT[int(z) - 2], label=f"{z}종") for z in sorted(set(sizes))],
+        fontsize=7,
+        ncol=5,
+        frameon=False,
+        loc="upper right",
+    )
     ax.set_title("(가) 원시 공동 점수 — 유의성 아님", fontsize=9, loc="left")
     style(ax)
     ax = axes[1]
@@ -292,15 +323,15 @@ def fig_subsets(sub: pd.DataFrame, out: Path, fig_no: str) -> list[Path]:
     ax.axhline(-np.log10(0.02 / 57), color="#b8302f", ls=":", lw=0.8)
     ax.axhline(-np.log10(0.02), color=MUTED, ls=":", lw=0.8)
     ax.text(
-        len(s) - 0.5,
+        0,
         -np.log10(0.02 / 57),
         "Holm 첫 단계 0.02/57",
         fontsize=6.5,
-        ha="right",
+        ha="left",
         va="bottom",
         color="#b8302f",
     )
-    ax.text(len(s) - 0.5, -np.log10(0.02), "0.02", fontsize=6.5, ha="right", va="bottom", color=MUTED)
+    ax.text(0, -np.log10(0.02), "0.02", fontsize=6.5, ha="left", va="bottom", color=MUTED)
     for st in s.status.unique():
         ax.scatter(
             [],
@@ -310,9 +341,14 @@ def fig_subsets(sub: pd.DataFrame, out: Path, fig_no: str) -> list[Path]:
             edgecolor=STATUS_COLOR.get(st, INK),
             label=STATUS_KO.get(st, st),
         )
-    ax.legend(fontsize=7, ncol=4, frameon=False, loc="upper right")
+    ax.legend(fontsize=7, ncol=4, frameon=False, loc="upper right", bbox_to_anchor=(1.0, 0.92))
     ax.set_ylabel("−log10 p (DCC-t, MC)", fontsize=8)
-    ax.set_xticks(x, [z.replace("+", "\n") for z in s.subset], fontsize=4.6)
+    short = {"069500": "K", "229200": "Q", "148070": "B", "153130": "S", "133690": "N", "261220": "W"}
+    ax.set_xticks(x, ["".join(short[c] for c in z.split("+")) for z in s.subset], fontsize=6, rotation=90)
+    ax.set_xlabel(
+        "부분집합 (K=069500 KOSPI200 · Q=229200 KOSDAQ150 · B=148070 국채10년 · S=153130 단기채 · N=133690 나스닥100 · W=261220 원유)",
+        fontsize=7.5,
+    )
     ax.set_title(
         "(나) DCC-t 귀무 MC p 와 판정 상태 (빈 원 = 귀무 부적합 → 확증 불가)", fontsize=9, loc="left"
     )
@@ -372,9 +408,11 @@ def fig_nulls(
     return save(fig, out, "fig08_5_null_comparison")
 
 
-def fig_power(det: pd.DataFrame, delays: pd.DataFrame, out: Path, fig_no: str) -> list[Path]:
-    """그림 08-6: (가) 시나리오×목표 가족 검출률 (5·10·20·60일, Wilson 95%) · (나) V1 영향 ETF 의 신호별 검출 지연."""
-    fig, axes = plt.subplots(1, 2, figsize=(13, 4.8), gridspec_kw={"width_ratios": [1.25, 1.0]})
+def fig_power(
+    det: pd.DataFrame, delays: pd.DataFrame, baseline: pd.DataFrame, out: Path, fig_no: str
+) -> list[Path]:
+    """그림 08-6: (가) 시나리오×목표 가족 유의일 검출률 · (나) V1 영향 ETF 의 신호별 60일 첫 발화 — V1 대 귀무 기준선."""
+    fig, axes = plt.subplots(1, 2, figsize=(13.5, 5.0), gridspec_kw={"width_ratios": [1.1, 1.15]})
     ax = axes[0]
     d = det.reset_index(drop=True)
     hz = [5, 10, 20, 60]
@@ -387,8 +425,8 @@ def fig_power(det: pd.DataFrame, delays: pd.DataFrame, out: Path, fig_no: str) -
             60,
             row.detected_60,
             yerr=[
-                [row.detected_60 - row.detected_60_wilson_low],
-                [row.detected_60_wilson_high - row.detected_60],
+                [max(0.0, row.detected_60 - row.detected_60_wilson_low)],
+                [max(0.0, row.detected_60_wilson_high - row.detected_60)],
             ],
             color=CAT[k % len(CAT)],
             lw=0.8,
@@ -396,70 +434,63 @@ def fig_power(det: pd.DataFrame, delays: pd.DataFrame, out: Path, fig_no: str) -
         )
     ax.set_xscale("log")
     ax.set_xticks(hz, [str(h) for h in hz])
+    ax.xaxis.set_minor_formatter(plt.NullFormatter())
     ax.set_xlabel("변화 후 거래일", fontsize=8)
     ax.set_ylabel("유의일 검출률 (분모 = 전체 반복)", fontsize=8)
     ax.set_ylim(-0.02, 1.02)
     ax.legend(fontsize=6, frameon=False, ncol=2, loc="upper left")
-    ax.set_title(
-        "(가) 대립·음성 대조 시나리오의 검출률 (V7 = 정상 공통 충격 → 거짓 검출)", fontsize=8.5, loc="left"
-    )
+    ax.set_title("(가) 공동 검정의 유의일 검출률 (V7 = 정상 공통 충격 → 거짓 검출)", fontsize=8.5, loc="left")
     style(ax)
     ax = axes[1]
-    v1 = delays[delays.scenario.eq("V1")]
+    v1 = delays[delays.scenario.eq("V1")].set_index("signal")
+    bl = baseline.set_index("signal")
     order = [
-        "q3_EXP",
-        "q7_EXP",
-        "q14_EXP",
-        "short_A_w3",
-        "short_A_w7",
-        "short_A_w14",
-        "cusum_Q_A_w20",
-        "cusum_Q_A_w30",
-        "cusum_Q_A_w60",
-        "cusum_Q_A_w120",
-        "cusum_w1crit_A_w60",
+        ("q3_EXP", "q=3 확대 후보"),
+        ("q7_EXP", "q=7 확대 후보"),
+        ("q14_EXP", "q=14 확대 후보"),
+        ("cusum_w3crit_A_w3", "CUSUM w=3 (W3 임계)"),
+        ("cusum_w3crit_A_w7", "CUSUM w=7 (W3 임계)"),
+        ("cusum_w3crit_A_w14", "CUSUM w=14 (W3 임계)"),
+        ("cusum_w3crit_A_w20", "CUSUM w=20 (W3 임계)"),
+        ("cusum_w3crit_A_w60", "CUSUM w=60 (W3 임계)"),
+        ("cusum_w3crit_A_w120", "CUSUM w=120 (W3 임계)"),
+        ("cusum_Q_A_w20", "Q≥c_E w=20"),
+        ("cusum_Q_A_w60", "Q≥c_E w=60"),
     ]
-    rows = v1.set_index("signal").reindex(order)
     y = np.arange(len(order))
-    ax.barh(y, rows.detected_60, color="#cde2fb", label="60일 내 검출 비율")
-    for k, (_, row) in enumerate(rows.iterrows()):
-        if np.isfinite(row.median_delay):
-            ax.text(
-                min(row.detected_60, 1) + 0.02,
-                k,
-                f"중앙 지연 {row.median_delay:.0f}일",
-                va="center",
-                fontsize=6.5,
-                color=INK2,
-            )
-    ax.set_yticks(
-        y,
-        [
-            "q=3 확대",
-            "q=7 확대",
-            "q=14 확대",
-            "CUSUM w=3 (적격성 연구)",
-            "CUSUM w=7 (적격성 연구)",
-            "CUSUM w=14 (적격성 연구)",
-            "Q≥c_E w=20",
-            "Q≥c_E w=30",
-            "Q≥c_E w=60",
-            "Q≥c_E w=120",
-            "W1 임계 w=60",
-        ],
-        fontsize=7,
-    )
+    a = [v1.detected_60.get(k, np.nan) for k, _ in order]
+    b = [bl.null_detected_60.get(k, np.nan) for k, _ in order]
+    ax.barh(y - 0.2, a, height=0.38, color="#3987e5", label="V1 (분산 ×2 주입)")
+    ax.barh(y + 0.2, b, height=0.38, color="#c3c2b7", label="귀무 기준선 (변화 없음, 같은 τ 규칙)")
+    for k, (key, _) in enumerate(order):
+        da, db = v1.median_delay.get(key, np.nan), bl.null_median_delay.get(key, np.nan)
+        txt = f"지연 {da:.0f} / {db:.0f}일" if np.isfinite(da) and np.isfinite(db) else ""
+        ax.text(
+            max(a[k] if np.isfinite(a[k]) else 0, b[k] if np.isfinite(b[k]) else 0) + 0.02,
+            k,
+            txt,
+            va="center",
+            fontsize=6.3,
+            color=INK2,
+        )
+    ax.set_yticks(y, [lab for _, lab in order], fontsize=7)
     ax.invert_yaxis()
-    ax.set_xlim(0, 1.35)
-    ax.set_xlabel("비율", fontsize=8)
+    ax.set_xlim(0, 1.45)
+    ax.set_xlabel("60일 안 첫 발화 비율 (정책 A, 영향 ETF 069500·229200)", fontsize=8)
+    ax.legend(fontsize=6.5, frameon=False, loc="lower right")
     ax.set_title(
-        "(나) V1 (KOSPI200·KOSDAQ150 분산 ×2) 영향 ETF 의 신호별 검출 (정책 A)", fontsize=8.5, loc="left"
+        "(나) 개별 신호: V1 과 귀무 기준선이 거의 같다 (계약 외 사후 기준선)", fontsize=8.5, loc="left"
     )
     style(ax)
-    fig.suptitle(f"그림 {fig_no}. 합성 공동 변화의 검출력·지연과 음성 대조", x=0.01, ha="left", fontsize=12)
+    fig.suptitle(
+        f"그림 {fig_no}. 합성 공동 변화의 검출력 — 공동 검정과 개별 신호 모두 변화를 구별하지 못한다",
+        x=0.01,
+        ha="left",
+        fontsize=12,
+    )
     footnote(
         fig,
-        "모든 반복에서 연간 SVR 재적합 포함. 검출률 분모는 전체 반복(검출된 반복만 쓰지 않는다). 단기 q 후보는 분위 기반 탐색 후보, Q≥c_E 는 개별 꼬리 1% — 가족 보정 경보가 아니다.",
+        "모든 반복에서 연간 SVR 재적합 포함. 분모는 전체 반복. 지연은 'V1 / 귀무' 중앙값(발화한 반복만). 귀무 기준선은 결과를 본 뒤 추가한 계약 외 비교(H0_CALIBRATION T 와 새 귀무 경로, 300회).",
     )
     return save(fig, out, "fig08_6_power")
 
@@ -474,7 +505,9 @@ def fig_episode_zoom(
 ) -> list[Path]:
     """그림 08-7: 주요 공동 구간·사례 창 확대 — ETF 별 max Q (정책·창 최대) · 유의일 음영 · 방향 표기."""
     dates = obs.dates
-    fig, axes = plt.subplots(len(windows), 1, figsize=(11.5, 3.0 * len(windows)), squeeze=False)
+    fig, axes = plt.subplots(
+        len(windows), 1, figsize=(11.5, 3.3 * len(windows)), squeeze=False, gridspec_kw={"hspace": 0.55}
+    )
     qmax = np.where(np.isfinite(obs.Q), obs.Q, -np.inf).max(axis=(1, 2))
     qmax[~np.isfinite(qmax)] = np.nan
     for ax, (title, a, b) in zip(axes[:, 0], windows, strict=True):
@@ -482,6 +515,8 @@ def fig_episode_zoom(
         for i, tk in enumerate(obs.tickers):
             ax.plot(dates[m], qmax[i, m], color=TICKER_COLOR[tk], lw=1.1, label=f"{names[tk]} ({tk})")
         flag = sig_days.get(title)
+        n_sig = int(flag[m].sum()) if flag is not None else 0
+        title = f"{title} — 유의일 {n_sig}일"
         if flag is not None:
             from r2h.joint_cusum.scores import run_lengths
 
@@ -493,7 +528,7 @@ def fig_episode_zoom(
         ax.set_ylabel("max Q (−log 꼬리확률)", fontsize=7.5)
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m-%d"))
         style(ax)
-    axes[0, 0].legend(fontsize=6.5, ncol=3, frameon=False, loc="upper left")
+    axes[-1, 0].legend(fontsize=6.5, ncol=6, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.22))
     fig.suptitle(
         f"그림 {fig_no}. 주요 공동 구간 확대 — 참여 ETF 의 개별 꼬리점수와 판정",
         x=0.01,
@@ -538,7 +573,7 @@ def fig_price(summary: pd.DataFrame, out: Path, fig_no: str) -> list[Path]:
             ax.errorbar(
                 row.median_ret,
                 k,
-                xerr=[[row.median_ret - row.ci95_low], [row.ci95_high - row.median_ret]],
+                xerr=[[max(0.0, row.median_ret - row.ci95_low)], [max(0.0, row.ci95_high - row.median_ret)]],
                 fmt="o" if not ctrl else "s",
                 color=MUTED if ctrl else "#2a78d6",
                 ms=5,
@@ -581,7 +616,10 @@ def fig_validity(n3: pd.DataFrame, n4: pd.DataFrame, out: Path, fig_no: str) -> 
         ("zero_share", "정확 0 비율"),
     ]
     fig, axes = plt.subplots(
-        1, len(stats) + 1, figsize=(16, 3.8), gridspec_kw={"width_ratios": [1] * len(stats) + [1.2]}
+        1,
+        len(stats) + 1,
+        figsize=(17, 4.2),
+        gridspec_kw={"width_ratios": [1] * len(stats) + [1.3], "wspace": 0.35},
     )
     y = np.arange(len(n3))
     for ax, (s, lab) in zip(axes[:-1], stats, strict=True):
@@ -595,17 +633,24 @@ def fig_validity(n3: pd.DataFrame, n4: pd.DataFrame, out: Path, fig_no: str) -> 
                 zorder=3,
                 edgecolor="white",
             )
-        ax.set_yticks(y, n3.ticker, fontsize=7.5)
+        ax.set_yticks(y, n3.ticker if s == "kurt" else [""] * len(y), fontsize=7.5)
         ax.invert_yaxis()
         ax.set_title(lab, fontsize=9, loc="left")
-        if s in ("var",):
+        vals = np.r_[n3[f"{s}_lo"], n3[f"{s}_hi"], n3[f"{s}_obs"]].astype(float)
+        if s == "var":
             ax.set_xscale("log")
+            ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:g}"))
+            ax.xaxis.set_minor_formatter(plt.NullFormatter())
+        else:
+            span = np.nanmax(vals) - np.nanmin(vals)
+            ax.set_xlim(np.nanmin(vals) - 0.05 * span, np.nanmax(vals) + 0.08 * span)
         style(ax)
     ax = axes[-1]
     ax.barh(
         np.arange(len(n4)), n4.N4_fail_count, color=["#b8302f" if not ok else "#c3c2b7" for ok in n4.N4_pass]
     )
     ax.set_yticks(np.arange(len(n4)), n4.pair, fontsize=6)
+    ax.yaxis.tick_right()  # 쌍 이름을 오른쪽에 — 왼쪽 패널의 점을 가리지 않게
     ax.invert_yaxis()
     ax.axvline(1.5, color=INK2, ls=":", lw=0.8)
     ax.set_title("N4 쌍별 탈락 수 (≥2 부적합)", fontsize=9, loc="left")
@@ -615,6 +660,6 @@ def fig_validity(n3: pd.DataFrame, n4: pd.DataFrame, out: Path, fig_no: str) -> 
     )
     footnote(
         fig,
-        "회색 막대 = 보정 반복 2,000개의 0.5–99.5% 범위, 점 = 관측(2019-01-03~2025-12-30). 빨강 = 범위 밖. 정확 0 비율은 관측 ≤ 2% 면 호가 단위 효과로 통과(계약 §6.3).",
+        "표시는 마지막 연도 모형(2025, 적합 자료 < 2025-01-01): 회색 막대 = H0_CALIBRATION 2,000 반복 0.5–99.5% 범위, 점 = 관측. 점 색은 5개 연도 모형 2/5 규칙의 최종 판정(빨강 = 탈락). 정확 0 비율은 관측 ≤ 2% 면 통과(계약 §6.3). 연도별 값은 null_validity_detail_by_year.csv.",
     )
     return save(fig, out, "fig08_9_null_validity")
