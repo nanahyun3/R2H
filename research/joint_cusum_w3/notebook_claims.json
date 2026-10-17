@@ -488,5 +488,10 @@
   "id": "t12_repro",
   "expr": "bool(REPRO.max_abs_de.max() < 1e-8)",
   "want": true
+ },
+ {
+  "id": "price_multi_h10_blocks",
+  "expr": "int(PRICE['summary'].set_index(['group','h']).loc[('two_or_more_etf',10),'n_date_blocks'])",
+  "want": 6
  }
 ]

@@ -135,7 +135,7 @@ INTERP = {
     "ch17": r"""
 **해석 (17, `EXPLORATORY_REUSED_DATA`).**
 - **단독 반응 사건 (94개, 날짜 블록 41개).** 사후 5일 누적수익률 중앙값은 0.024% [−0.356, 0.065] 로 0 근처다.
-- **2종 이상 공동 반응 사건 (20개, 블록 7개).**
+- **2종 이상 공동 반응 사건 (사후 10일 계산 가능 18개, 날짜 블록 6개).**
   - 사후 10일 중앙값은 0.461% [0.083, 1.272] 다.
   - 같은 조건의 대조일은 5개뿐이라 구간이 [−6.1, 6.2] 로 넓어 비교할 수 없다.
 - **H0-B 유의 구간.** 없으므로 그 그룹은 비어 있다.
@@ -490,6 +490,14 @@ CLAIMS = [
     {"id": "w1_integrity", "expr": "bool(W1CHK.match.all())", "want": True},
     {"id": "t12_repro", "expr": "bool(REPRO.max_abs_de.max() < 1e-8)", "want": True},
 ]
+
+CLAIMS.append(
+    {
+        "id": "price_multi_h10_blocks",
+        "expr": "int(PRICE['summary'].set_index(['group','h']).loc[('two_or_more_etf',10),'n_date_blocks'])",
+        "want": 6,
+    }
+)
 
 
 def main() -> None:

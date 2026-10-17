@@ -2,29 +2,133 @@
 
 주가 급등 국면 포착 에이전트를 위한 기초 연구 (2026.9~2027.6, 홍익대학교 졸업 프로젝트)
 
-`SVR–GARCH` · `CUSUM` · `다중 기간 실현분산` · `자산 간 공통 구간` — 국내 상장 ETF 20종, 2019-01 ~ 2026-10-02
+`SVR–GARCH` · `CUSUM` · `다중 기간 실현분산` · `자산 간 공동 반응` · `DCC-t 귀무 Monte Carlo` — 국내 상장 ETF 20종 (W3 는 대표 6종), 2019-01 ~ 2026-10-02
 
 <p>
-  <img alt="research" src="https://img.shields.io/badge/in%20progress-W3%20(08)%20joint%20CUSUM-1F5082">
+  <img alt="w3" src="https://img.shields.io/badge/latest-W3%20(08)%20LOW__POWER__INCONCLUSIVE-1F5082">
   <img alt="w2" src="https://img.shields.io/badge/closed-W2%20(05%C2%B706%C2%B707)%20exploratory-6250d6">
   <img alt="protocol" src="https://img.shields.io/badge/protocol-W3--lock--2%20frozen%20before%20joint%20stats-orange">
-  <img alt="tests" src="https://img.shields.io/badge/local%20pytest-198%20passed-2ea44f">
-  <img alt="lint" src="https://img.shields.io/badge/ruff-W2%20new%200%20%C2%B7%20repo%20debt%20133-lightgrey">
+  <img alt="mc" src="https://img.shields.io/badge/Monte%20Carlo-full%20SVR%20refit%20%C2%B7%2050%2C000%20DCC--t%20reps-2a78d6">
+  <img alt="tests" src="https://img.shields.io/badge/local%20pytest-200%20passed-2ea44f">
+  <img alt="lint" src="https://img.shields.io/badge/ruff-W3%20new%200%20%C2%B7%20repo%20debt%20133-lightgrey">
   <img alt="ci" src="https://img.shields.io/badge/CI-not%20triggered%20on%20this%20branch-lightgrey">
   <img alt="data" src="https://img.shields.io/badge/raw%20prices-not%20in%20repo-lightgrey">
   <img alt="license" src="https://img.shields.io/badge/license-undecided%20(D--07)-lightgrey">
 </p>
 
-> **이 브랜치(`1017_2_MultiAsset_Joint_CUSUM_W3`)의 현재 상태 — W3 (노트북 08) 진행 중.**
-> - W2 (05·06·07) 는 종결됐다. 그 결과는 아래 §1–§6 에 그대로 있다.
-> - 지금은 그 위에서 **W3 — 여섯 ETF 의 공동 SVR–GARCH–CUSUM 불안정성을 단계적으로 통계 식별**하는 연구를 진행하고 있다. 진행 상황은 [§8 W3 진행 추적](#8-w3--대표-6종-공동-cusum-바텀업-통계-식별-노트북-08--진행-추적)에 단계마다 갱신한다.
-> - W3 는 아직 **결론이 없다**. 계약과 반복 수는 실제 ETF 의 공동 통계량을 보기 전에 동결했다. 관측 결과는 귀무 Monte Carlo 가 끝난 뒤에만 계산한다.
+> **이 브랜치(`1017_2_MultiAsset_Joint_CUSUM_W3`)의 현재 상태 — W3 (노트북 08) 종결.**
+> 1. 여섯 ETF 의 개별 SVR–GARCH–CUSUM 이 **정상적인 시장 동조성을 넘어 함께 반응했다는 증거는 찾지 못했다.** 유의한 공동 구간은 0개다.
+> 2. 이것을 "공동 불안정성이 없었다" 로 읽으면 안 된다. 설계한 공동 분산 ×2 변화조차 검정 크기 수준으로만 잡혔다 (검출력 사실상 없음). 귀무모형(DCC-t)도 실제 ETF 의 군집·꼬리·이산성을 재현하지 못했다. 판정은 **`LOW_POWER_INCONCLUSIVE`** 다.
+> 3. 원인은 SVR 예측분산이 변동성을 흡수한 뒤의 잔차로 CUSUM 을 만든다는 데 있다. T12·W1 의 낮은 검출력을 W3 공동 검정이 그대로 물려받았다. 다음 단계는 흡수 이전의 공동 통계량부터 검출력을 확인하는 것이다.
 
-**바로 가기** — [W2 종결 보고](research/multihorizon_w2/FINAL_W2_RESEARCH_REPORT.md) · [W2 연구계약](research/multihorizon_w2/W2_연구계약.md) · [노트북 05](notebooks/05_개별ETF_다중기간_변동성국면연구.ipynb) · [06](notebooks/06_노출군집_공통변동성구간_연구.ipynb) · [07](notebooks/07_가격반응_ETF상대움직임_CNN인계.ipynb) · [CNN 인계계약](research/multihorizon_w2/CNN_후보구간_인계계약_W2.md) · [릴리스 매니페스트](research/multihorizon_w2/W2_RELEASE_MANIFEST.json) · [이전 README 보존본](docs/history/README_1012_T11_T12_W1.md)
+**바로 가기** — [W3 종결 보고](research/joint_cusum_w3/FINAL_W3_RESEARCH_REPORT.md) · [노트북 08](notebooks/08_대표6종ETF_공동CUSUM_바텀업통계식별.ipynb) · [W3 계약](research/joint_cusum_w3/W3_연구계약.md) · [개정 lock-2](research/joint_cusum_w3/W3_계약개정_lock2.md) · [릴리스 매니페스트](research/joint_cusum_w3/W3_RELEASE_MANIFEST.json) · [W2 종결 보고](research/multihorizon_w2/FINAL_W2_RESEARCH_REPORT.md) · [이전 README 보존본](docs/history/README_1012_T11_T12_W1.md)
 
 ---
 
-## 1. Research Snapshot — W2 핵심 발견
+## 1. Research Snapshot — W3 핵심 결과
+
+모두 2021–2025 평가 자료다 (이미 W1·W2 에서 본 자료이므로 독립 외부 검증이 아니다). 수치는 노트북 08 의 CLAIMS 81개가 실행 결과와 대조한다.
+
+| # | 결과 | 수치 | 근거 (`research/joint_cusum_w3/results/08/`) |
+|---|---|---|---|
+| R1 | KOSPI200·KOSDAQ150 의 **공동 CUSUM 극단이 없었다** | S1 J_all 최대 **4.471** < 개별 꼬리 1% 기준 4.605. DCC-t p **0.853**, CCC-t 0.845, H0-A 0.627·0.602 | `stage_tests.csv` |
+| R2 | 57개 부분집합 중 **유의 0** | 56개 귀무 부적합, 유효 1개(229200+133690) p **0.270**. 원시 p 최소 0.040 ≫ Holm 기준 3.5e-4 | `subset57_tests.csv` |
+| R3 | **검출력이 사실상 없다** | V1 (KOSPI·KOSDAQ 분산 ×2 지속) 경로 기각 **0.043** ≈ 크기 0.024. 유의일 검출 **0/300** (모든 시나리오) | `power_path.csv` · `power_detection.csv` |
+| R4 | **귀무모형(DCC-t)이 실제 ETF 를 재현하지 못했다** | 069500 r² 자기상관 0.386–0.423 > 상한 · 261220 첨도 28–33 · 153130 정확 0 수익률 18.5–27.0% · 148070 지속성 경계 | `null_validity_detail_by_year.csv` |
+| R5 | 단기 분위 신호는 **빠르지만 비특이적** | V1 대 귀무: q=3 확대 후보 60일 첫 발화 1.000 대 0.992, CUSUM Q≥c_E (w=20) 0.233 대 0.228 | `v1_vs_null_first_fire.csv` (계약 외 사후 기준선) |
+| R6 | 검정 크기·재현성은 맞다 | holdout 실제 크기 S1 0.024 · 부분집합 FWER 0.020. 새 커널 결과 61개 바이트 동일. T12 cache 4e-9 재현 | `size_check_holdout.csv` · `evidence/REPRO_RUNS_08.md` |
+
+---
+
+## 2. Research Roadmap — 연구 계보
+
+| 단계 | 연구 | 핵심 결과 | 상태 |
+|---|---|---|---|
+| 1012 | ETF EDA · Track A 상관 전환 · Track B 논문 재현 | 20종 자산 구조와 중복 노출 규칙 확정. 상관 전환은 우연 수준(부정적 결과). Lee·Kim·Lee (2020) 원문 수치는 미재현 (`METHOD_FIDELITY_UNRESOLVED`) | 완료 |
+| T11 | SVR–GARCH CUSUM × ETF 20종 (70/30 · 이동창) | 정책 A 경보율이 iid 기준 미만 (w=60 0.39 vs 1.71/년). 사건 근접은 우연 수준 (최소 q=0.57). 테스트 분산 입력 규칙 하나로 기각 수가 4.5배 달라짐 | 완료 |
+| T12 | 연간 expanding 사후 검정 · 강건성 | 2021–2025 연간 기각 A/B/기준선 **0/12/6** (각 100 ETF-연도). 군집 귀무에서 크기 0.39–0.58 로 왜곡. 정책 A 파이프라인 검정력 0.085 | 완료 |
+| W1 (03·04) | 이동 CUSUM 검정창 w 선정 · 20종 일반화 | **적격 창 0/4, 최적창 없음.** 지속 분산 ×2·×0.5 의 60일 검출률 0.03–0.10 | 완료 (부정적 결과) |
+| **W2 (05·06·07)** | 다중 기간 변동성 상태 · 노출 군집 공통 구간 · 가격 반응 | 탐색적 공통 구간 1,711개 (2021–2025 1,168). 독립적 유의성은 검증하지 않음 | **완료 (탐색적)** |
+| **W3 (08)** | 대표 6종 공동 SVR–GARCH–CUSUM 바텀업 통계 식별 (S1→S5, 57개 부분집합, DCC-t 귀무 50,000회 전체 재적합) | 유의 공동 구간 0. S1 귀무 부적합 (p 0.853). 검출력 사실상 없음 (V1 0.043) | **완료 — `LOW_POWER_INCONCLUSIVE`** |
+| 다음 | 흡수 이전 공동 통계량(표준화 전 분산·QLIKE)의 검출력 확인 → 이산·꼬리·군집을 재현하는 귀무 사전 등록 | — | 제안 |
+
+**W2 와 W3 의 관계.** W3 는 W2 가 남긴 문제, 즉 공통성에 보정된 귀무가 없다는 점을 다뤘다. 대상은 W2 의 분위 상태가 아니라 T12·W1 의 SVR–GARCH–CUSUM 통계량이고, 정상 시장 동조성을 보존한 귀무(DCC-t)에서 MC 로 판정했다. 결과는 공동성의 부재가 아니라 **판정 불가**다. 이 통계량으로는 알려진 공동 변화도 잡히지 않았다.
+
+**W1 과 W2 의 관계.** W2 는 W1 의 검정창 문제를 푼 연구가 아니다. W1 의 결론(적격 창 0/4)은 그대로 유지된다. W2 는 연구 대상을 바꿨다. CUSUM 이라는 단일 검정의 경보가 아니라 변동성 **상태 자체**를 여러 시간 규모로 기술하고, 그 상태가 자산 사이에서 언제 함께 나타나는지를 본다. W1 의 CUSUM 은 W2 에서 비교 대상(H3)으로만 쓰였고, 일별 경보를 다시 계산해 W1 집계 6,720행과 일치함을 확인했다.
+
+---
+
+## 3. W3 — 대표 6종 공동 CUSUM 바텀업 통계 식별 (노트북 08)
+
+### 3.1 설계 (계약 `W3-lock-2`, 공동 통계량 계산 전 동결)
+
+| 항목 | 내용 |
+|---|---|
+| 대상 | 069500 KOSPI200 · 229200 KOSDAQ150 (S1) → +148070 국채10년 (S2) → +153130 단기채 (S3) → +133690 나스닥100 (S4) → +261220 WTI (S5). 순서 고정 · 57개 부분집합 전부 |
+| 개별 통계량 | T12 연간 SVR–GARCH 잔차 (정책 A·B·base 동등) 의 W1 이동창 CUSUM. 주 창 w=20·30·60·120, 단기 3·7·14 는 적격성 연구 |
+| 꼬리점수 | Q = −log P_{H0-B}(T* ≥ T). (ETF, 정책, 창, 연중 위치 구간) 별 H0_CALIBRATION 2,000회 |
+| 공동 점수 | J_all = 구성원 최소 Q, J_2 = 두 번째 Q. 기준 ETF 069500, 시차 ±2 거래일 (귀무에서도 같은 탐색) |
+| 검정 | S1 = max J_all. S2–S5 = 신규 ETF 조건부 참여 (E 를 반복마다 재생성). 고정 순서 각 α=0.02. 부분집합 Holm α=0.02 |
+| 귀무 | **H0-B**: 평가연도마다 그해 이전 자료로 적합한 DCC(1,1)-t. 모든 반복에서 연간 SVR 재적합 (D15). 민감도 CCC-t (공통 난수). **H0-A**: 원형 이동·블록 재표집 (보조) |
+| 정밀도 | DCC 50,000 · CCC 5,000 · holdout 1,000 · robustness 1,000 · 대립 2,700 · H0-A 20,000 → 13.1시간. 최소 p = 2e-5, Clopper–Pearson 99% |
+
+### 3.2 판정
+
+| 대상 | 판정 |
+|---|---|
+| S1 (KOSPI·KOSDAQ) | `NULL_MODEL_INVALID` (069500 적합도 탈락) · 원시 p 0.853 → **확증 사슬 S1 에서 중단** |
+| S2·S3 | `NOT_ESTIMABLE` — S1 공동일 E₁ 이 비어 있다. 참여 부재의 증거가 아니다 |
+| S4·S5 | `NULL_MODEL_INVALID` · 원시 p 0.855 · 0.953 |
+| 부분집합 57 | 56 `NULL_MODEL_INVALID` · 1 `NOT_SIGNIFICANT` (229200+133690, p 0.270) |
+| 공동 구간 | 유의 0개. 탐색 구간 10개 (모두 쌍, 구간 p 최소 0.066) |
+| 단기 창 3·7·14 | `NOT_ELIGIBLE` — 크기 통과, V1 검출 0.009–0.016 |
+| 가격 (H6) | `EXPLORATORY_REUSED_DATA`. 미래 확증에는 그룹당 497–765 사건 필요 |
+| **종합** | **`LOW_POWER_INCONCLUSIVE`** + `NULL_MODEL_INVALID` + `NO_SIGNIFICANT_COMMON_INTERVAL` |
+
+결과를 보기 전에는 "S2 에서 확증이 멈춘다" 고 예상했다 (148070 지속성 경계). 실제로는 069500 의 적합도 탈락(r² 자기상관 4/5 년)이 먼저 적용돼 S1 에서 멈췄다. 규칙은 바꾸지 않았다.
+
+### 3.3 주요 그림
+
+<p align="center"><img src="research/joint_cusum_w3/figures/fig08_6_power.png" width="100%" alt="그림 08-6 합성 공동 변화의 검출력"></p>
+
+**그림 08-6 — 검출력.**
+- (가) 모든 대립 시나리오에서 공동 검정의 유의일 검출률이 0 이다.
+- (나) 영향 ETF 의 개별 신호도 V1(분산 ×2) 과 귀무 기준선(변화 없음) 의 첫 발화 비율이 거의 같다.
+- 이 검정으로는 알려진 공동 변화를 구별할 수 없다. 이 그림이 W3 의 결론을 정한다.
+
+<p align="center"><img src="research/joint_cusum_w3/figures/fig08_3_bottom_up.png" width="100%" alt="그림 08-3 바텀업 단계 판정"></p>
+
+**그림 08-3 — 바텀업 S1→S5.**
+- 관측 단계 통계량(점)은 DCC-t 귀무 분포의 중앙 근처다.
+- S1 에서 두 ETF 가 동시에 1% 꼬리에 든 날이 없어 S2·S3 는 추정할 수 없다.
+
+<p align="center"><img src="research/joint_cusum_w3/figures/fig08_9_null_validity.png" width="100%" alt="그림 08-9 귀무 적합도 게이트"></p>
+
+**그림 08-9 — 귀무 적합도.**
+- 탈락은 모두 "관측이 귀무보다 크다" 쪽이다: 군집(069500), 꼬리(261220), 이산성(153130).
+- 다른 결합 분포를 사후에 시도하지 않았다.
+
+<p align="center"><img src="research/joint_cusum_w3/figures/fig08_2_sequential_detection.png" width="100%" alt="그림 08-2 다중 기간 순차 탐지"></p>
+
+**그림 08-2 — 순차 탐지 (2024-08 · 2025-04).**
+- 단기 분위 후보(q=1·3·7·14)는 사건 초에 6종 모두 켜졌다.
+- W3 임계 CUSUM 경보는 2024-08 의 153130 하나뿐이고, 2025-04 에는 없다.
+- 단기 후보는 귀무에서도 하루 약 10% 켜지므로 조기 탐지 성공이 아니다.
+
+나머지 그림 08-1·4·5·7·8 은 [`research/joint_cusum_w3/figures/`](research/joint_cusum_w3/figures) 와 노트북 08 에 해석과 함께 있다.
+
+### 3.4 한계와 다음 연구
+
+- **검출력 먼저.** SVR 흡수 이전의 공동 통계량(표준화 전 분산, QLIKE 예측오차) 에서 V1 수준 변화의 검출력을 합성으로 확인한 뒤 실증한다.
+- **귀무모형.** 이산·두꺼운 꼬리·강한 군집을 재현하는 결합(t-copula, ETF 별 자유도) 을 사전 등록한다.
+- **자료.** 2021–2025 는 이미 본 자료다. 가격 가설의 확증(α=0.01 예약)은 2026 이후 독립 자료에서 한다.
+- **계약 외 사후 분석.** 귀무 첫 발화 기준선, 적합도 탈락의 연도별 방향표, H0-A 교집합 규칙 3건을 [보고서 §F](research/joint_cusum_w3/FINAL_W3_RESEARCH_REPORT.md) 에 공개했다.
+
+---
+
+## 4. W2 — 다중 기간 변동성 국면 (05 · 06 · 07)
+
+### 4.0 W2 핵심 발견
 
 모두 같은 2019–2026 가격 자료에서 사후로 기술한 값이다. 주 해석 기간은 2021–2025 다. 2020 은 파일럿이고, 2026 은 부분·비블라인드 기간이다.
 
@@ -39,26 +143,8 @@
 
 경로는 모두 `research/multihorizon_w2/` 아래다. 같은 수치가 05·06·07 노트북 본문에 있고, 노트북 본문 수치는 CLAIMS assert 47개가 실행 결과와 대조한다.
 
----
 
-## 2. Research Roadmap — 연구 계보
-
-| 단계 | 연구 | 핵심 결과 | 상태 |
-|---|---|---|---|
-| 1012 | ETF EDA · Track A 상관 전환 · Track B 논문 재현 | 20종 자산 구조와 중복 노출 규칙 확정. 상관 전환은 우연 수준(부정적 결과). Lee·Kim·Lee (2020) 원문 수치는 미재현 (`METHOD_FIDELITY_UNRESOLVED`) | 완료 |
-| T11 | SVR–GARCH CUSUM × ETF 20종 (70/30 · 이동창) | 정책 A 경보율이 iid 기준 미만 (w=60 0.39 vs 1.71/년). 사건 근접은 우연 수준 (최소 q=0.57). 테스트 분산 입력 규칙 하나로 기각 수가 4.5배 달라짐 | 완료 |
-| T12 | 연간 expanding 사후 검정 · 강건성 | 2021–2025 연간 기각 A/B/기준선 **0/12/6** (각 100 ETF-연도). 군집 귀무에서 크기 0.39–0.58 로 왜곡. 정책 A 파이프라인 검정력 0.085 | 완료 |
-| W1 (03·04) | 이동 CUSUM 검정창 w 선정 · 20종 일반화 | **적격 창 0/4, 최적창 없음.** 지속 분산 ×2·×0.5 의 60일 검출률 0.03–0.10 | 완료 (부정적 결과) |
-| **W2 (05·06·07)** | 다중 기간 변동성 상태 · 노출 군집 공통 구간 · 가격 반응 | 탐색적 공통 구간 1,711개 (2021–2025 1,168). 독립적 유의성은 검증하지 않음 | **완료 (탐색적)** |
-| **W3 (08)** | 대표 6종 공동 SVR–GARCH–CUSUM 바텀업 통계 식별 (S1→S5, 57개 부분집합, DCC-t 귀무) | 계약 W3-lock-2 동결, 전체 재적합 Monte Carlo 실행 중. 결과 없음 | **진행 중** |
-
-**W1 과 W2 의 관계.** W2 는 W1 의 검정창 문제를 푼 연구가 아니다. W1 의 결론(적격 창 0/4)은 그대로 유지된다. W2 는 연구 대상을 바꿨다. CUSUM 이라는 단일 검정의 경보가 아니라 변동성 **상태 자체**를 여러 시간 규모로 기술하고, 그 상태가 자산 사이에서 언제 함께 나타나는지를 본다. W1 의 CUSUM 은 W2 에서 비교 대상(H3)으로만 쓰였고, 일별 경보를 다시 계산해 W1 집계 6,720행과 일치함을 확인했다.
-
----
-
-## 3. W2 — 다중 기간 변동성 국면 (05 · 06 · 07)
-
-### 3.1 무엇을 쟀나
+### 4.1 무엇을 쟀나
 
 일간 로그수익률 `r_t = 100·log(C_t / C_{t−1})` [%] 에서 q 일 실현분산과 직전 대비 변화를 만든다.
 
@@ -77,7 +163,7 @@ $$V^{(q)}_t=\frac1q\sum_{s=t-q+1}^{t} r_s^2,\qquad D^{(q)}_t=\log\frac{V^{(q)}_t
 
 > 이 네 상태는 과거 분포의 상·하위 10% 라는 **경험적 규칙**이다. 참 레짐이나 통계적으로 검증된 변화점이 아니다. 규칙과 임계값은 신호를 계산하기 전에 계약 커밋 `1fbdb1d` 에 동결했다.
 
-### 3.2 가설과 판정
+### 4.2 가설과 판정
 
 | 가설 | 지지하는 관찰 | 비지지·제한 | 판정 형태 |
 |---|---|---|---|
@@ -87,7 +173,7 @@ $$V^{(q)}_t=\frac1q\sum_{s=t-q+1}^{t} r_s^2,\qquad D^{(q)}_t=\log\frac{V^{(q)}_t
 | H4 자산 간 공통성 | 같은 노출은 거의 같은 신호. 2024-08 · 2025-04 · 2022 공통 사건 | 다른 노출 일치도 낮음. 귀무 보정 없음 | 탐색적 공통성 |
 | H5 가격 반응 | 상태별 사전 가격·상대 움직임 차이. 레버리지 추적 차이 −0.54 → −1.21%p (사후 분할) | 방향 혼재. 사후 20일 상대값이 네 상태 모두 음수 (원인 판단 불가) | 기술적 관계 |
 
-### 3.3 주요 그림
+### 4.3 주요 그림
 
 <p align="center"><img src="research/multihorizon_w2/figures/fig05_2_U_V_heatmap.png" width="100%" alt="그림 05-2 대표 4종 기간별 실현분산 수준 분위"></p>
 
@@ -109,7 +195,10 @@ $$V^{(q)}_t=\frac1q\sum_{s=t-q+1}^{t} r_s^2,\qquad D^{(q)}_t=\log\frac{V^{(q)}_t
 
 ---
 
-## 4. Findings & Limitations — 확인한 것과 아직 말할 수 없는 것
+## 5. W2 Findings & Limitations — 확인한 것과 아직 말할 수 없는 것
+
+> W2 의 한계 "귀무분포 없음" 은 W3 가 DCC-t 귀무로 다뤘다. 결과는 §3 (`LOW_POWER_INCONCLUSIVE`).
+
 
 | 계산으로 확인한 사실 | 가정 아래에서만 가능한 해석 | 현재 자료로 판단할 수 없는 주장 |
 |---|---|---|
@@ -126,16 +215,20 @@ $$V^{(q)}_t=\frac1q\sum_{s=t-q+1}^{t} r_s^2,\qquad D^{(q)}_t=\log\frac{V^{(q)}_t
 
 ---
 
-## 5. Notebooks & Evidence
+## 6. Notebooks & Evidence
 
 | 노트북 | 질문 | 주요 결과 파일 |
 |---|---|---|
+| [**08 대표 6종 공동 CUSUM 바텀업 통계 식별**](notebooks/08_대표6종ETF_공동CUSUM_바텀업통계식별.ipynb) | 공동 CUSUM 반응이 DCC-t 시장 동조성을 넘는가, 신규 ETF 가 정보를 더하는가 (W3) | `stage_tests.csv` · `subset57_tests.csv` · `power_*.csv` · `joint_episodes.csv` · `null_validity_*.csv` |
 | [05 개별 ETF 다중 기간 변동성 국면](notebooks/05_개별ETF_다중기간_변동성국면연구.ipynb) | 한 ETF 안에서 어떤 상태가 어떤 기간 조합으로 나타나나 (H1–H3) | `overlap_intervals.csv` · `h1_level_vs_change_jaccard.csv` · `h3_*.csv` · `cusum_w1_reconciliation.csv` |
 | [06 노출 군집 공통 변동성 구간](notebooks/06_노출군집_공통변동성구간_연구.ipynb) | 같은 상태가 여러 노출 그룹에 함께 나타나나 (H4) | `within_group_pair_jaccard.csv` · `cross_intervals_group.csv` · `global_interval_rank.csv` |
 | [07 가격 반응 · ETF 상대 움직임 · CNN 인계](notebooks/07_가격반응_ETF상대움직임_CNN인계.ipynb) | 상태별 가격·상대 움직임은 어떤가, CNN 에 무엇을 넘기나 (H5) | `interval_price_reaction.csv` · `cnn_candidate_intervals_w2.csv` |
 
 | 문서 | 역할 |
 |---|---|
+| [`FINAL_W3_RESEARCH_REPORT.md`](research/joint_cusum_w3/FINAL_W3_RESEARCH_REPORT.md) | W3 §19 형식 종결 보고 · G7 감사 15문 · 계약 외 분석 공개 |
+| [`W3_연구계약.md`](research/joint_cusum_w3/W3_연구계약.md) · [`W3_계약개정_lock2.md`](research/joint_cusum_w3/W3_계약개정_lock2.md) · [`MC_REPS_FREEZE.md`](research/joint_cusum_w3/MC_REPS_FREEZE.md) | W3 사전 규칙·개정 사유·반복 수 동결 |
+| [`W3_RELEASE_MANIFEST.json`](research/joint_cusum_w3/W3_RELEASE_MANIFEST.json) · [`evidence/REPRO_RUNS_08.md`](research/joint_cusum_w3/evidence/REPRO_RUNS_08.md) · [`W3_PROTECTED_SHA256.csv`](research/joint_cusum_w3/W3_PROTECTED_SHA256.csv) | W3 릴리스 해시 · 재현 기록 · 보호 파일 252개 |
 | [`FINAL_W2_RESEARCH_REPORT.md`](research/multihorizon_w2/FINAL_W2_RESEARCH_REPORT.md) | 감사 질문 10개 · 주장→근거 C1–C13 · 게이트 G0–G7 · 한계 |
 | [`W2_연구계약.md`](research/multihorizon_w2/W2_연구계약.md) · [`CONTRACT_FREEZE_SHA256.txt`](research/multihorizon_w2/CONTRACT_FREEZE_SHA256.txt) | 사전 가설·정의·분석 규칙과 동결 해시 |
 | [`CNN_후보구간_인계계약_W2.md`](research/multihorizon_w2/CNN_후보구간_인계계약_W2.md) | 후보 구간 필드 사전. **정답 라벨이 아니다.** `px_post_*` 는 입력 금지, `exposure_group` 단위 분할 |
@@ -144,7 +237,19 @@ $$V^{(q)}_t=\frac1q\sum_{s=t-q+1}^{t} r_s^2,\qquad D^{(q)}_t=\log\frac{V^{(q)}_t
 
 ---
 
-## 6. Reproducibility
+## 7. Reproducibility
+
+**W3 (노트북 08).** W2 와 같은 두 입력(원자료 `data/raw`, T12 cache)이 필요하다. MC 산출물(`outputs/t15/mc/`, Git 제외, 약 2 GB)은 시드가 결정적이라 아래 체인으로 다시 만들 수 있다 (작업자 22개 약 13시간).
+
+```bash
+bash outputs/t15/run_lock2_chain.sh   # 또는 scripts/run_t15_mc.py fit → calibration → tables → eval(dcc·ccc·holdout·robustness) → alt → h0a → finalize
+uv run python scripts/t15_extension_decision.py
+uv run python scripts/t15_write_interpretation.py && uv run python scripts/t15_build_notebook.py --write
+uv run python scripts/run_t15_notebook.py           # 새 커널, 약 70초 (첫 셀이 계약·보호 파일·MC 산출물 해시를 대조)
+uv run python scripts/t15_release_manifest.py
+```
+
+**W2 (05·06·07).**
 
 **W2 재현에는 Git 에 없는 두 가지가 필요하다.** 저장소를 clone 하고 아래 명령만 실행하면 W2 결과가 자동으로 재현되는 것은 아니다.
 1. 동결된 원자료 `data/raw` (20 ETF, SHA 고정). 재배포 권리를 확인하지 못해 커밋하지 않았다.
@@ -164,7 +269,7 @@ uv run python scripts/t14_release_manifest.py         # 릴리스 해시 재계�
 - 일별 특징·상대수익률은 가격을 역산할 수 있어 `outputs/t14/` (Git 제외)에만 두고 해시만 기록한다.
 - 세부 경로와 게이트는 [보고서 §7–§8](research/multihorizon_w2/FINAL_W2_RESEARCH_REPORT.md) 을 본다.
 
-**검증 상태.** 로컬 `pytest -q tests` **176 passed**. W2 가 추가한 파일의 ruff 위반은 0건이고, 저장소 전체의 기존 ruff 부채 133건은 W1 시점과 같다. GitHub Actions CI 는 `1012`·`main` push 와 PR 에서만 돌기 때문에 이 브랜치에서는 실행되지 않았다.
+**검증 상태.** 로컬 `pytest -q tests` **200 passed** (W3 단위 22개 포함). W2·W3 가 추가한 파일의 ruff 위반은 0건이고, 저장소 전체의 기존 ruff 부채 133건은 W1 시점과 같다. GitHub Actions CI 는 `1012`·`main` push 와 PR 에서만 돌기 때문에 이 브랜치에서는 실행되지 않았다.
 
 **기본 패키지만 확인할 때** (원자료 불필요, 합성 데이터):
 
@@ -177,24 +282,25 @@ uv run python examples/synthetic_demo.py --out outputs/synthetic_demo.json   # �
 
 ---
 
-## 7. Research Infrastructure
+## 8. Research Infrastructure
 
 | 경로 | 내용 |
 |---|---|
+| [`src/r2h/joint_cusum/`](src/r2h/joint_cusum) | **W3** — 연도별 파이프라인 (`pipeline`) · DCC-t/CCC-t (`dcc`) · 꼬리점수·공동 점수 (`scores`) · MC 반복 (`mc`) · 추론 (`inference`) · H0-A · 적합도 게이트 · 분석·그림 |
 | [`src/r2h/multihorizon/`](src/r2h/multihorizon) | **W2** — 분산·분위·중첩 구간 (`core`) · 일별 CUSUM 재계산 (`cusum`) · 05/06/07 단계 · 관계 지표 · 그림 |
 | [`src/r2h/window_study/`](src/r2h/window_study) · [`src/r2h/annual_expanding/`](src/r2h/annual_expanding) | W1 검정창 연구 · T12 연간 expanding |
 | [`src/r2h/svrgarch_etf/`](src/r2h/svrgarch_etf) · [`src/r2h/paper2020/`](src/r2h/paper2020) | T11 오토런 · Track B 원본 모듈 (바이트 동일) |
 | [`src/r2h/data/`](src/r2h/data) · [`features/`](src/r2h/features) · [`detection/`](src/r2h/detection) · [`evaluation/`](src/r2h/evaluation) · [`backtest/`](src/r2h/backtest) | 1012 공통 기준선 — 관측 계약 · feature · 탐지 인터페이스 · 사건 평가 · 체결 규칙 (SCHEMA_ONLY) |
-| [`notebooks/`](notebooks) | 00–02 T12 · 03–04 W1 · **05–07 W2** · 1012 종합 · T11 |
-| [`research/`](research) | 연구별 계약·결과·보고서 — `multihorizon_w2/` · `window_study_w1/` · `t12_annual_expanding_v2/` · `svr_garch_cusum_etf/` |
-| [`scripts/`](scripts) | 노트북 생성기·실행기 (`t12_*` · `t13_*` · `t14_*`) · T11 오토런 |
+| [`notebooks/`](notebooks) | 00–02 T12 · 03–04 W1 · 05–07 W2 · **08 W3** · 1012 종합 · T11 |
+| [`research/`](research) | 연구별 계약·결과·보고서 — `joint_cusum_w3/` · `multihorizon_w2/` · `window_study_w1/` · `t12_annual_expanding_v2/` · `svr_garch_cusum_etf/` |
+| [`scripts/`](scripts) | 노트북 생성기·실행기 (`t12_*` · `t13_*` · `t14_*` · `t15_*`, W3 MC 실행기 `run_t15_mc.py`) · T11 오토런 |
 | [`tests/`](tests) | unit · integration · property · leakage · 노트북 규칙 (모든 코드 줄 한국어 주석 강제) |
 | [`docs/`](docs) | [계약 v0.1](docs/architecture/CONTRACT_v0.1.md) · [열린 결정](docs/decisions/OPEN_DECISIONS.md) · [출처](docs/provenance/PROVENANCE.md) · [이전 README 보존본](docs/history/README_1012_T11_T12_W1.md) |
 
 ### 규칙
 
 - 온라인 신호는 `available_until <= signal_at` 이어야 한다 (검증 함수가 강제). 사후 검정은 `mode="posthoc"` 이며 온라인 평가에 넣을 수 없다.
-- 정답 라벨은 탐지기와 독립된 정의로 만든다. W1·W2 의 경보와 후보 구간은 정답이 아니다.
+- 정답 라벨은 탐지기와 독립된 정의로 만든다. W1·W2·W3 의 경보와 후보 구간은 정답이 아니다.
 - 연구마다 계약을 신호 계산 전에 커밋으로 동결하고, 결과를 본 뒤 추가한 분석은 계약 외로 따로 공개한다.
 - 원시 시세·일별 수익률 파생값·API 키는 커밋하지 않는다.
 
@@ -218,45 +324,6 @@ print(event_metrics(alarms, events, ticker_years=len(calendar) / 252))
 
 ---
 
-## 8. W3 — 대표 6종 공동 CUSUM 바텀업 통계 식별 (노트북 08) · 진행 추적
-
-> 이 절은 작업 단계마다 갱신한다. **아직 결론이 없다.** 아래 수치는 설계·계산 상태이며 연구 결과가 아니다.
-
-**질문.** KOSPI200·KOSDAQ150 (S1) 에 국고채10년 → 단기채권 → 나스닥100 → WTI 원유를 하나씩 더할 때 묻는 것은 두 가지다.
-- 여러 자산의 CUSUM 공동 반응이 **기존 동적 시장 동조성(DCC-t 귀무)** 으로 설명되는가?
-- 새 자산이 **추가 정보**를 주는가?
-
-**설계 요약 (계약 `W3-lock-2`).**
-
-| 항목 | 내용 |
-|---|---|
-| 개별 통계량 | T12 연간 SVR–GARCH 잔차 (정책 A·B·base 동등), W1 이동창 CUSUM. 주 창 w=20·30·60·120, 단기 3·7·14 는 적격성 연구만 |
-| 꼬리점수 | Q = −log P_{H0-B}(T* ≥ T). (ETF, 정책, 창, 연중 위치 구간) 별 보정 반복 2,000회에서 계산 |
-| 공동 점수 | J_all = 구성원 최소 Q, J_2 = 두 번째 Q. 기준 ETF 069500, 시차 ±2 거래일 |
-| 주 경로 | S1 은 max J_all. S2–S5 는 신규 ETF 조건부 참여 (E 를 반복마다 재생성). 고정 순서, 각 α=0.02 |
-| 부분 분석 | 57개 부분집합 max J_all, Holm α=0.02 (민감도: minP) |
-| 귀무 | **H0-B 주**: 평가연도별 DCC(1,1)-t (그해 이전 자료로 적합). 모든 반복에서 연간 SVR 재적합. 민감도: CCC-t (공통 난수). **H0-A 보조**: 원형 이동·블록 재표집 |
-| 정밀도 | DCC 50,000 반복. 최소 p = 2e-5. Clopper–Pearson 99%. 부분집합 가족 해상도 B×0.02/57 = 17.5 |
-| 가격 (H6) | 5·10·20일, `EXPLORATORY_REUSED_DATA`. α=0.01 은 미래 독립 자료용 예약 |
-
-**진행 상태.**
-
-| 게이트 | 상태 | 근거 |
-|---|---|---|
-| G0 인수 | 완료 | W1 `7205e91` 조상, W2 `3ac04c5` 에서 분기 |
-| G1 계약 동결 | 완료: lock-1 `9cdeccb` → **lock-2 `955d126`** | [계약](research/joint_cusum_w3/W3_연구계약.md) · [개정 lock-2](research/joint_cusum_w3/W3_계약개정_lock2.md) · [설정 v2](configs/t15_joint_cusum_w3_v2.json) |
-| G2 비용 측정 | 완료: 반복 1회 CPU 약 17초, 작업자 22개 분당 74회. 계획 14.2시간 (예산 24시간) | [반복 수 동결](research/joint_cusum_w3/MC_REPS_FREEZE.md) · [벤치마크](research/joint_cusum_w3/evidence/G2_benchmark_lock2.csv) |
-| G3 통계 모듈 | 완료: `src/r2h/joint_cusum/`. 테스트 22개, 전체 pytest 198 통과 | 관측 경로가 T12 cache e·vhat 을 5e-10 이내로 재현 |
-| G4 합성 검증 | **실행 중**: H0_CALIBRATION 2,000 완료 (13:56, 27.5분, 꼬리표 칸당 최소 풀 9,989) · H0_EVALUATION DCC 50,000 **완료** (10/18 00:25, 628.9분) · CCC 5,000 완료 (63.7분) · holdout 1,000 완료 · robustness 1,000 완료 · 대립 2,700 진행 (01:55 시작) | 남은 순서: 대립 2,700 → H0-A 20,000 → finalize |
-| G5 실증 노트북 08 | 대기 (MC 완료 후) | 생성기 `scripts/t15_build_notebook.py` 53셀, 한국어 주석 규칙 통과 · 실행기 `scripts/run_t15_notebook.py` |
-| G6 경제적 해석 · G7 감사 · G8 릴리스 | 대기 | |
-
-**결과를 보기 전에 이미 정해진 귀결.** 귀무모형을 적합하는 단계에서 아래 사실이 확인됐다. 규칙은 바꾸지 않는다.
-- 2024 모형의 148070 주변 GARCH 지속성이 경계에 걸렸다 (α+β ≈ 0.999). 수치 게이트 N1 에 따라 148070 이 들어간 통계량은 H0-B 확증이 불가능하다. 따라서 **주 경로 확증 사슬은 S2 에서 멈춘다.** S2–S5 는 계산해서 보고하지만 확증은 아니다.
-- 153130 은 표준화 잔차의 자기상관(Ljung–Box p<0.01, 5/5 년)과 정확 0 수익률 17.2% 때문에 N3 탈락 가능성이 크다.
-
----
-
 ## 9. References & History
 
 | 연구 | 문서 |
@@ -265,6 +332,8 @@ print(event_metrics(alarms, events, ticker_years=len(calendar) / 252))
 | T11 | [T11 README](research/svr_garch_cusum_etf/README.md) · [노트북](notebooks/R2H_T11_svr_garch_cusum_etf.ipynb) |
 | T12 | [종결 보고](FINAL_RESEARCH_CLOSURE.md) · [재현 보고](research/t12_annual_expanding_v2/FINAL_REPRODUCTION_REPORT.md) · 노트북 [00](notebooks/00_환경과_데이터_검증.ipynb) → [01](notebooks/01_연간확장_실험재현.ipynb) → [02](notebooks/02_가설검증_강건성_심층해석.ipynb) |
 | W1 | [종결 보고](research/window_study_w1/FINAL_03_04_RESEARCH_CLOSURE.md) · [연구계약](research/03_04_연구계약.md) · 노트북 [03](notebooks/03_대표4종_검정창선정_심층연구.ipynb) → [04](notebooks/04_전체20종_검정창일반화_강건성연구.ipynb) |
+| W2 | [종결 보고](research/multihorizon_w2/FINAL_W2_RESEARCH_REPORT.md) · [연구계약](research/multihorizon_w2/W2_연구계약.md) · 노트북 [05](notebooks/05_개별ETF_다중기간_변동성국면연구.ipynb) → [06](notebooks/06_노출군집_공통변동성구간_연구.ipynb) → [07](notebooks/07_가격반응_ETF상대움직임_CNN인계.ipynb) |
+| W3 | [종결 보고](research/joint_cusum_w3/FINAL_W3_RESEARCH_REPORT.md) · [연구계약](research/joint_cusum_w3/W3_연구계약.md) · [개정 lock-2](research/joint_cusum_w3/W3_계약개정_lock2.md) · 노트북 [08](notebooks/08_대표6종ETF_공동CUSUM_바텀업통계식별.ipynb) |
 | 이전 README | [보존본](docs/history/README_1012_T11_T12_W1.md) — 1012 데이터 카드 · ETF 20종 명세 · 수식 · T11 상세 그림 |
 
 - 원 논문: Lee, S., Kim, C. K., & Lee, S. (2020). *Hybrid CUSUM Change Point Test for Time Series with Time-Varying Volatilities Based on Support Vector Regression.* **Entropy** 22(5), 578 — [doi:10.3390/e22050578](https://doi.org/10.3390/e22050578)
