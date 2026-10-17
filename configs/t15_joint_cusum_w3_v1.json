@@ -1,0 +1,194 @@
+{
+  "study_id": "t15_joint_cusum_w3",
+  "research_id": "R2H_W3_JOINT_CUSUM_08",
+  "protocol_version": "W3-lock-1",
+  "seed": 20261017,
+  "base": {
+    "w1_commit": "7205e91348c38584ecca74ea64e4bbc426730e86",
+    "w2_release_commit": "7df481d8e20aec2ddb3ad41eafbd25794f43e0fe",
+    "branch_start_commit": "3ac04c5888ee2fa5962c21679bd772da065ae19a",
+    "t12_run_id": "b_nb_20261016T181251",
+    "t12_frozen_root_expected": "SA/1016/R2H_T12_Final",
+    "t12_config": "configs/t12_annual_expanding_v2.json",
+    "w1_config": "configs/t13_window_study_v1.json",
+    "w2_config": "configs/t14_multihorizon_w2_v1.json"
+  },
+  "universe": {
+    "tickers": ["069500", "229200", "148070", "153130", "133690", "261220"],
+    "names": {
+      "069500": "KODEX 200",
+      "229200": "KODEX 코스닥150",
+      "148070": "KIWOOM 국고채10년",
+      "153130": "KODEX 단기채권",
+      "133690": "TIGER 미국나스닥100",
+      "261220": "KODEX WTI원유선물(H)"
+    },
+    "stages": {
+      "S1": ["069500", "229200"],
+      "S2": ["069500", "229200", "148070"],
+      "S3": ["069500", "229200", "148070", "153130"],
+      "S4": ["069500", "229200", "148070", "153130", "133690"],
+      "S5": ["069500", "229200", "148070", "153130", "133690", "261220"]
+    },
+    "stage_new_ticker": {"S2": "148070", "S3": "153130", "S4": "133690", "S5": "261220"},
+    "n_subsets_expected": 57,
+    "subset_sizes_expected": {"2": 15, "3": 20, "4": 15, "5": 6, "6": 1}
+  },
+  "sample": {
+    "return_unit": "100*diff(log(Close))",
+    "returns_start": "2019-01-03",
+    "returns_end": "2025-12-30",
+    "evaluation_years": [2021, 2022, 2023, 2024, 2025],
+    "excluded_years": {"2020": "PILOT_SHORT_HISTORY (T12) — not evaluated", "2026": "PARTIAL_NON_BLIND — not evaluated"},
+    "calendar_rule": "common trading days of the six ETFs = real KRX calendar; synthetic paths are placed on the same date index"
+  },
+  "pipeline": {
+    "svr": "T12 fit_annual / forecast_year unchanged (configs/t12_annual_expanding_v2.json folds: expanding, inner_train_fraction 0.7)",
+    "policies": ["A", "B", "base"],
+    "baseline_window": 60,
+    "baseline_min_periods": 40,
+    "cusum_function": "r2h.svrgarch_etf.rolling.rolling_cusum (W1 original, min_valid_frac 0.9)",
+    "cusum_scope": "within calendar year (residuals of one annual fit); first valid index = w-1",
+    "windows_primary": [20, 30, 60, 120],
+    "windows_short_eligibility": [3, 7, 14],
+    "window_1": "NOT_DEFINED (CUSUM-of-squares not applied)",
+    "not_available_is_not_no_alarm": true,
+    "w1_alarm_threshold": "pipeline_garch_annual_max (W1 frozen research/window_study_w1/results/03_synthetic/pipeline/pipeline_thresholds.csv) — used only for descriptive first-alarm dates; W1 0/4 eligibility verdict unchanged"
+  },
+  "tail_score": {
+    "definition": "u = (1 + #{T_cal >= T_obs}) / (N_pool + 1);  Q = -log(u)",
+    "pool": "per (ticker, policy, w): all calibration reps x all own-valid evaluation days 2021-2025",
+    "table": "sorted pool thinned to K equally spaced order statistics (exact count scaling); values above the pool maximum get u = 1/(N_pool+1) — no extrapolation",
+    "table_size_K": 100001,
+    "nan_rule": "T NaN (NOT_AVAILABLE or tau<=0) -> Q NaN; never 0"
+  },
+  "joint": {
+    "lags": [-2, -1, 0, 1, 2],
+    "lag_rule": "anchor ETF at day t unlagged; every other member uses max_{l in lags} Q(t+l) on the 2021-2025 trading-day sequence (crossing a year boundary allowed; NaN ignored; all-NaN -> NaN)",
+    "anchor_rule": "069500 if in S, else the first member of S in universe.tickers order",
+    "same_w_only": true,
+    "J_all": "min over members (anchor unlagged, others lag-maxed); any member NaN -> NaN",
+    "J_k": "k-th largest over members, k=2 (needs >= 2 non-NaN)",
+    "k_primary": 2,
+    "available_at": "close of t + max(0, largest positive lag actually used by the members that determine the statistic)",
+    "primary_test_statistics": {
+      "S1": "M_S1 = max over policy, w, evaluation day of J_all(S1) (= J_2 for two members)",
+      "S2..S5": "C_Sk = max over (policy, w) cells with |E| >= min_E of mean_{t in E_{k-1}(p,w)} Qlag_new(p,w,t); E_{k-1}(p,w) = {t : J_2(S_{k-1}, p, w, t) >= c_E}",
+      "c_E": 4.605170185988091,
+      "c_E_meaning": "-log(0.01): two members each at marginal null tail <= 1%",
+      "min_E": 5,
+      "joint_k2_of_Sk": "reported descriptively with its own null p, not part of the alpha budget; k=2 alone never claims new-ETF participation"
+    },
+    "secondary_test_statistic": "M_S = max over policy, w, evaluation day of J_all(S) for each of 57 subsets; J_2(S) descriptive only (J_2 of a superset is driven by its strongest pair)",
+    "new_ticker_columns": "for S2..S5 store new ETF daily Q, best lag, and its available_at separately"
+  },
+  "null_models": {
+    "H0B_primary": "DCC(1,1)-t: GARCH(1,1) margins with constant mean and standardized Student-t; DCC correlation targeting Qbar = sample correlation of standardized residuals; joint multivariate t (nu_c) for second stage and simulation",
+    "H0B_sensitivity": "CCC-t: same margins, constant R = Qbar, multivariate t",
+    "fit_sample": "2019-01-03 .. 2025-12-30 returns (one fit, no alternative fit window may be added later); limitation: real instability may be absorbed into parameters -> conservative",
+    "simulation": "burn-in 500 days from unconditional state, then 1718 days placed on the real date index",
+    "ccc_cannot_replace_dcc": true,
+    "validity_gate": {
+      "N1_numeric": "optimizer success; margins alpha,beta >= 0 and alpha+beta < 0.999; 2.1 < nu < 200; DCC a,b >= 0, a+b < 0.999; no parameter within 1e-4 of a bound; all simulated R_t positive definite with unit diagonal",
+      "N2_recovery": "unit tests recover DCC-t parameters on synthetic data (tests/unit/test_joint_cusum_w3.py)",
+      "N3_per_etf": "observed full-sample statistic inside the 0.5%-99.5% envelope of calibration reps: excess kurtosis, mean ACF of r^2 lags 1-5, variance; exact-zero return share: pass if observed <= 0.02 (price tick effect), else must be inside the envelope",
+      "N4_per_pair": "Pearson correlation, lower-5% tail co-exceedance rate, std of rolling 60-day correlation; a pair failing >= 2 of the 3 statistics is invalid",
+      "N5_marginal_cusum": "median and IQR of observed T(i,p,w) over own-valid 2021-2025 days vs null envelope — DIAGNOSTIC ONLY, not a gate (sustained variance shifts are exactly the tested departure; gating on them would be circular)",
+      "consequence": "H0-B test of a statistic is valid only if every member ETF passes N3, no member pair fails N4 and N1 holds; otherwise NULL_MODEL_INVALID. Fixed-sequence: if S3 (153130) is NULL_MODEL_INVALID the confirmatory chain stops and S4, S5 are reported but cannot be confirmatory (draft §8.2 + §10 consequence; decided before any joint statistic is computed)"
+    },
+    "H0A": {
+      "methods": ["circular_shift_within_year", "circular_block_bootstrap_within_year"],
+      "block_length": 20,
+      "same_transform_for_all_policies_and_windows_of_an_etf": true,
+      "rule": "per ETF and calendar year draw one transform; apply it to the own-valid segment [w-1, end] of every (policy, w) path of that ETF-year; anchor ETF 069500 is also transformed",
+      "role": "auxiliary; never replaces H0-B; the two methods are not combined as independent evidence"
+    }
+  },
+  "multiple_testing": {
+    "alpha_total": 0.05,
+    "alpha_primary": 0.02,
+    "alpha_secondary": 0.02,
+    "alpha_price_reserved": 0.01,
+    "primary_procedure": "fixed sequence S1 -> S2 -> S3 -> S4 -> S5, each at 0.02; the chain stops at the first stage that is not rejected or is NOT_ESTIMABLE / NULL_MODEL_INVALID / INSUFFICIENT_MONTE_CARLO; later stages are computed and reported but not confirmatory",
+    "secondary_procedure": "Holm over 57 subsets at 0.02; sensitivity: Westfall-Young single-step minP over the same null reps",
+    "mc_p_value": "(1 + #{null >= obs}) / (B + 1); zero exceedances reported as '<= 1/(B+1)', never smaller",
+    "mc_ci": "Clopper-Pearson 99% on #exceed / B; a decision whose CI contains its threshold -> INSUFFICIENT_MONTE_CARLO",
+    "family_resolution_rule": "a family is INSUFFICIENT_MONTE_CARLO if B * (its strictest threshold) < 10 (secondary strictest 0.02/57 = 0.000350877 -> B >= 28,500)",
+    "day_level_critical": "S1: (1-0.02) quantile of null M_S1; secondary subset S: (1-0.02/57) quantile of null M_S (Bonferroni, same resolution rule)",
+    "statuses": ["SIGNIFICANT_H0B", "SIGNIFICANT_H0A_ONLY", "EXPLORATORY", "NOT_SIGNIFICANT", "NOT_ESTIMABLE", "NULL_MODEL_INVALID", "INSUFFICIENT_MONTE_CARLO", "BLOCKED_BY_COMPUTE"]
+  },
+  "episodes": {
+    "day_rule": "significant day = J_max(S, t) = max over (policy, w) of the family statistic >= day-level critical",
+    "merge_gap_main": 0,
+    "merge_gap_sensitivity": 5,
+    "episode_level_threshold_c0": 4.605170185988091,
+    "episode_level_statistic": "cumulative excess sum(J_max - c0) over a run of J_max >= c0; null = max over runs per rep; boundary/duration claims only if this episode p <= 0.02 and the S1 day-level test rejected",
+    "fields": ["episode_start_at", "episode_end_at", "joint_anchor_at", "joint_confirmed_at", "episode_confirmed_at", "max_J", "n_days", "duration_trading_days", "cumulative_excess", "participants", "stage", "retrospective_p_value", "inference_completed_at"]
+  },
+  "direction": {
+    "ratio": "mean e^2 over [start, end] / mean e^2 over the 60 evaluation-available days before start (same policy)",
+    "expansion_if_ratio_ge": 1.25,
+    "contraction_if_ratio_le": 0.8,
+    "labels": ["COMMON_EXPANSION", "COMMON_CONTRACTION", "MIXED", "UNDETERMINED"],
+    "w2_cross_reference": "W2 EXPANSION / CONTRACTION / HIGH_LEVEL / LOW_LEVEL candidate days (descriptive)",
+    "no_significance_claim": true
+  },
+  "walk_forward_short": {
+    "q": [1, 3, 7, 14, 20, 30, 60, 120],
+    "q_daily_shock": 1,
+    "w2_rules": "zero-variance NaN with reason, strict-past expanding mid-rank, min reference 252, upper 0.90 / lower 0.10",
+    "energy_statistic": "E(h) = log(mean e^2[t-h+1..t] / mean e^2[t-h-59..t-h]), h in {1,3,7,14}; zero denominator -> NaN; exploratory candidate with marginal calibration tail only",
+    "outputs": ["first_observable_at", "first_expansion_candidate_at", "first_high_level_candidate_at", "first_cusum_valid_at", "first_cusum_alarm_at", "lag_short_to_cusum", "signal_end_at"],
+    "status_label": "EXPLORATORY_QUANTILE_CANDIDATE (not a calibrated alarm)"
+  },
+  "short_window_eligibility": {
+    "windows": [3, 7, 14],
+    "reference_windows": [20, 30, 60, 120],
+    "critical": "per (ticker, policy, w) 0.95 quantile of annual max over common days (index >= 119) in calibration reps",
+    "size_rule": "null holdout any-alarm per ETF-year: Wilson upper <= 0.10",
+    "power_rule": "V1 affected ETFs, detection within 60 days: Wilson lower >= 0.15, >= 30 detected, median delay <= 30",
+    "degeneracy": "share of NaN (tau<=0 or invalid) and number of distinct values under the null",
+    "verdict": ["ELIGIBLE", "NOT_ELIGIBLE", "INSUFFICIENT_PRECISION"]
+  },
+  "alternatives": {
+    "change_year": "uniform over evaluation years (seeded)",
+    "change_index_in_year": [130, 170],
+    "duration": "to the end of that calendar year",
+    "variance_up": 2.0,
+    "variance_down": 0.5,
+    "scenarios": {
+      "V1": {"up": ["069500", "229200"]},
+      "V2": {"up": ["069500", "229200", "148070"]},
+      "V3_d1": {"up": ["069500", "229200"], "delayed_up": {"148070": 1}},
+      "V3_d3": {"up": ["069500", "229200"], "delayed_up": {"148070": 3}},
+      "V3_d5": {"up": ["069500", "229200"], "delayed_up": {"148070": 5}},
+      "V4": {"up": ["148070", "133690"]},
+      "V5": {"up": ["069500", "229200"], "down": ["148070"]},
+      "V6": {"correlation_only": "innovation correlation replaced by R_alt: off-diagonal = max(Qbar_ij, 0.7) for all pairs, projected to nearest PD correlation; variances unchanged"},
+      "V7": {"normal_common_shock": "one-day standardized innovation z_i = -6 * sign(Qbar_{i,069500}) (069500: -6), no parameter change — negative control (counts as null)"}
+    },
+    "detection_horizon_days": [5, 10, 20, 60],
+    "targets": {
+      "V1": ["S1"], "V2": ["S1", "S2"], "V3_d1": ["S2"], "V3_d3": ["S2"], "V3_d5": ["S2"],
+      "V4": ["subset:148070+133690"], "V5": ["S1", "S2"], "V6": ["S1", "S5"], "V7": ["S1", "S5"]
+    }
+  },
+  "price": {
+    "horizons": [5, 10, 20],
+    "start_rule": "returns from the close of joint_confirmed_at (available_at) + 1 day",
+    "groups": ["single_etf_only", "two_or_more_etf", "h0b_significant", "matched_control_same_vol_level", "same_year_same_exposure_control"],
+    "matching": "same ETF and year, W2 U_V(q=20) decile at that day (strict past), no candidate within +-20 days; matching variables use information available at that day only",
+    "inference": "date-block bootstrap (block 20) for CIs; no iid t-test",
+    "label": "EXPLORATORY_REUSED_DATA",
+    "alpha_reserved_unused": 0.01
+  },
+  "monte_carlo": {
+    "seed_domains": ["smoke", "benchmark", "calibration", "null_eval_dcc", "null_eval_ccc", "null_holdout", "alt:<scenario>", "h0a:<method>"],
+    "seed_rule": "r2h.annual_expanding.config.rng_for(study_id, seed, domain, rep)",
+    "planned_reps_provisional": {"calibration": 2000, "null_eval_dcc": 30000, "null_eval_ccc": 5000, "null_holdout": 1000, "alt_per_scenario": 300, "h0a_per_method": 10000},
+    "reps_freeze": "final counts are frozen in research/joint_cusum_w3/MC_REPS_FREEZE.md after the G2 benchmark and before any observed joint statistic is computed",
+    "max_total_wall_hours": 24,
+    "over_budget_action": "stop and report required compute and attainable alpha (D1); do not start a multi-day run without approval",
+    "threads_per_worker": 1
+  }
+}
