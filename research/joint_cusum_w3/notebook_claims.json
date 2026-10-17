@@ -490,6 +490,22 @@
   "want": true
  },
  {
+  "id": "v1_base_Q_w20",
+  "expr": "[round(float(x),3) for x in V1D.set_index('signal').loc['cusum_Q_base_w20',['detected_60','null_detected_60']]]",
+  "want": [
+   0.207,
+   0.232
+  ]
+ },
+ {
+  "id": "v1_base_Q_w60",
+  "expr": "[round(float(x),3) for x in V1D.set_index('signal').loc['cusum_Q_base_w60',['detected_60','null_detected_60']]]",
+  "want": [
+   0.11,
+   0.092
+  ]
+ },
+ {
   "id": "price_multi_h10_blocks",
   "expr": "int(PRICE['summary'].set_index(['group','h']).loc[('two_or_more_etf',10),'n_date_blocks'])",
   "want": 6

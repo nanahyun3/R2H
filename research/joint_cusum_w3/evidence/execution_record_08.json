@@ -1,9 +1,9 @@
 {
   "notebook": "08_대표6종ETF_공동CUSUM_바텀업통계식별.ipynb",
   "status": "PASS",
-  "start_utc": "2026-10-17T18:08:07.039131+00:00",
-  "end_utc": "2026-10-17T18:09:20.850263+00:00",
-  "seconds": 69.38,
+  "start_utc": "2026-10-17T18:15:53.639542+00:00",
+  "end_utc": "2026-10-17T18:17:05.544362+00:00",
+  "seconds": 68.24,
   "returncode": 0,
   "log": "research/joint_cusum_w3/evidence/08_execution.log",
   "python": "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python"
