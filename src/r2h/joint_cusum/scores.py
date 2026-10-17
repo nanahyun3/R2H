@@ -19,52 +19,68 @@ LAGS: tuple[int, ...] = (-2, -1, 0, 1, 2)
 
 @dataclass(frozen=True)
 class TailTable:
-    """(ETF, 정책, 창) 칸마다 정렬 표본을 K 개 순서통계량으로 줄인 표와 원 풀 크기."""
+    """(ETF, 정책, 창, 연중 위치 구간) 칸마다 정렬 표본을 K 개 순서통계량으로 줄인 표와 원 풀 크기 (lock-2 §7.1)."""
 
-    table: np.ndarray  # (n_etf, n_pol, n_win, K) 오름차순
-    n_pool: np.ndarray  # (n_etf, n_pol, n_win)
+    table: np.ndarray  # (n_etf, n_pol, n_win, n_bin, K) 오름차순 (빈 칸은 NaN)
+    n_pool: np.ndarray  # (n_etf, n_pol, n_win, n_bin)
+    edges: np.ndarray  # 연중 위치 구간 경계 [e0, e1, ...) — 마지막 구간은 끝까지
 
 
-def build_tail_table(pool: np.ndarray, K: int) -> TailTable:
-    """pool: (reps, n_etf, n_pol, n_win, n_day) 보정 반복의 T. NaN 은 풀에서 뺀다."""
+def position_bin(pos: np.ndarray, edges: np.ndarray) -> np.ndarray:
+    """연중 0-기반 위치 → 구간 번호."""
+    return np.searchsorted(np.asarray(edges), np.asarray(pos), side="right") - 1
+
+
+def build_tail_table(pool: np.ndarray, pos: np.ndarray, edges: list[int], K: int) -> TailTable:
+    """pool: (reps, n_etf, n_pol, n_win, n_day) 보정 반복의 T, pos: (n_day,) 연중 위치. NaN 은 풀에서 뺀다."""
     _, ne, npol, nw, _ = pool.shape
-    tab = np.empty((ne, npol, nw, K))
-    npool = np.zeros((ne, npol, nw), dtype=np.int64)
+    e = np.asarray(edges)
+    b = position_bin(pos, e)
+    nb = e.size
+    tab = np.full((ne, npol, nw, nb, K), np.nan)
+    npool = np.zeros((ne, npol, nw, nb), dtype=np.int64)
     for i in range(ne):
         for p in range(npol):
             for w in range(nw):
-                v = pool[:, i, p, w, :].ravel()
-                v = np.sort(v[np.isfinite(v)])
-                n = v.size
-                ranks = np.round(np.linspace(0, n - 1, K)).astype(np.int64)
-                tab[i, p, w] = v[ranks]
-                npool[i, p, w] = n
-    return TailTable(tab, npool)
+                for k in range(nb):
+                    v = pool[:, i, p, w, :][:, b == k].ravel()
+                    v = np.sort(v[np.isfinite(v)])
+                    n = v.size
+                    if n == 0:
+                        continue
+                    ranks = np.round(np.linspace(0, n - 1, K)).astype(np.int64)
+                    tab[i, p, w, k] = v[ranks]
+                    npool[i, p, w, k] = n
+    return TailTable(tab, npool, e)
 
 
-def tail_u(T: np.ndarray, tt: TailTable) -> np.ndarray:
-    """u = (1 + #{T_cal ≥ T}) / (N+1). 순서통계량 표로 계수를 근사하고, 풀 최대값 초과는 1/(N+1) (외삽 없음)."""
-    ne, npol, nw, K = tt.table.shape
+def tail_u(T: np.ndarray, tt: TailTable, pos: np.ndarray) -> np.ndarray:
+    """u = (1 + #{T_cal ≥ T}) / (N+1) — 같은 (ETF, 정책, 창, 위치 구간) 의 풀 기준. 풀 최대값 초과는 1/(N+1) (외삽 없음)."""
+    ne, npol, nw, nb, K = tt.table.shape
+    b = position_bin(pos, tt.edges)
     u = np.full(T.shape, np.nan)
     for i in range(ne):
         for p in range(npol):
             for w in range(nw):
-                x = T[i, p, w]
-                ok = np.isfinite(x)
-                n = int(tt.n_pool[i, p, w])
-                pos = np.searchsorted(
-                    tt.table[i, p, w], x[ok], side="left"
-                )  # 표에서 x 보다 작은 순서통계량 수
-                # 표 위치 → 원 풀 순위: rank = pos·(n−1)/(K−1) (pos=K 이면 모든 값보다 큼)
-                below = np.where(pos >= K, n, np.round(pos * (n - 1) / (K - 1)))
-                count_ge = n - below
-                u[i, p, w, ok] = (1.0 + count_ge) / (n + 1.0)
+                for k in range(nb):
+                    n = int(tt.n_pool[i, p, w, k])
+                    m = b == k
+                    x = T[i, p, w, m]
+                    ok = np.isfinite(x)
+                    if n == 0 or not ok.any():
+                        continue
+                    # 표에서 x 보다 작은 순서통계량 수 → 원 풀 순위 pos·(n−1)/(K−1) (pos=K 이면 모든 값보다 큼)
+                    loc = np.searchsorted(tt.table[i, p, w, k], x[ok], side="left")
+                    below = np.where(loc >= K, n, np.round(loc * (n - 1) / (K - 1)))
+                    vals = np.full(x.shape, np.nan)
+                    vals[ok] = (1.0 + n - below) / (n + 1.0)
+                    u[i, p, w, m] = vals
     return u
 
 
-def q_score(T: np.ndarray, tt: TailTable) -> np.ndarray:
+def q_score(T: np.ndarray, tt: TailTable, pos: np.ndarray) -> np.ndarray:
     """Q = −log u. T 가 NaN (NOT_AVAILABLE) 이면 Q 도 NaN — 0 으로 바꾸지 않는다."""
-    return -np.log(tail_u(T, tt))
+    return -np.log(tail_u(T, tt, pos))
 
 
 # ── 시차 ───────────────────────────────────────────────────────────

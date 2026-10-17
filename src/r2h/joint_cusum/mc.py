@@ -1,7 +1,9 @@
-"""전체 재적합 Monte Carlo 반복 (계약 §9, D15).
+# ruff: noqa: E501  — 한국어 설명·표 머리 문자열
+"""전체 재적합 Monte Carlo 반복 (계약 W3-lock-2 §9–§11, D15).
 
-반복 1회 = 귀무(또는 대립) 다변량 경로 → 실제 날짜 index → ``run_pipeline`` (연간 SVR 재적합·A/B/base·7개 창 CUSUM)
-→ (평가 단계) 꼬리점수 Q → ``rep_statistics``. 시드는 (study_id, seed, 영역, rep) 의 sha256 → 실행 순서·프로세스와 무관.
+반복 1회 = 평가연도 y 마다 y 이전 자료로 적합한 귀무(model_y)에서 2019..y 경로 모의 → 실제 날짜 index →
+``run_pipeline_years`` (연간 SVR 재적합·A/B/base·7개 창 CUSUM) → (평가 단계) 위치 구간별 꼬리점수 Q → ``rep_statistics``.
+시드는 (study_id, seed, 영역, rep) 의 sha256 → 실행 순서·프로세스와 무관. DCC 와 CCC 평가는 같은 시드(공통 난수)를 쓴다.
 """
 
 from __future__ import annotations
@@ -15,7 +17,7 @@ from r2h.annual_expanding.config import rng_for
 from r2h.multihorizon.core import log_variance_ratio, midrank_past, realized_variance
 
 from .dcc import MultiT, Shock, nearest_correlation, simulate
-from .pipeline import run_pipeline
+from .pipeline import run_pipeline_years
 from .scores import (
     TailTable,
     all_subsets,
@@ -28,22 +30,29 @@ from .scores import (
 )
 
 N_PRIMARY_WIN = 4
+YEAR_STATS_N3 = ("kurt", "acf_r2", "var", "zero_share")
+YEAR_STATS_N4 = ("corr", "coexceed", "rollcorr_sd")
 
 
 def rep_rng(cfg: dict, domain: str, rep: int) -> np.random.Generator:
     return rng_for(cfg["study_id"], cfg["seed"], domain, rep)
 
 
-def simulate_panel(
-    model: MultiT,
+def simulate_year_paths(
+    models: dict[int, MultiT],
     dates: pd.DatetimeIndex,
     tickers: list[str],
     rng: np.random.Generator,
-    shock: Shock | None = None,
-) -> pd.DataFrame:
-    """모의 수익률을 관측과 같은 날짜 index 에 얹는다 (연도 경계·연초 결측·base rolling 일치)."""
-    r, _ = simulate(model, len(dates), rng, shock=shock)
-    return pd.DataFrame(r, index=dates, columns=tickers)
+    shocks: dict[int, Shock] | None = None,
+    burn: int = 500,
+) -> dict[int, pd.DataFrame]:
+    """평가연도 y 마다 model_y 에서 2019-01-03..y-12-31 경로 (같은 rng 를 연도 순서대로 소비 → 결정적)."""
+    out = {}
+    for y in sorted(models):
+        d = dates[dates < pd.Timestamp(f"{y + 1}-01-01")]
+        r, _ = simulate(models[y], len(d), rng, burn=burn, shock=None if shocks is None else shocks.get(y))
+        out[y] = pd.DataFrame(r, index=d, columns=tickers)
+    return out
 
 
 # ── 수익률 수준 진단 통계 (N3·N4) ───────────────────────────────────
@@ -113,47 +122,61 @@ def energy(e: np.ndarray, year_of_day: np.ndarray, hs: list[int]) -> np.ndarray:
 # ── 영역별 반복 ─────────────────────────────────────────────────────
 
 
-def calibration_rep(model: MultiT, dates: pd.DatetimeIndex, cfg: dict, rep: int) -> dict[str, np.ndarray]:
-    """보정 반복: T (7개 창), E(h), 수익률 진단. Q 표·단기 창 임계값·적합도 envelope 의 재료."""
-    tickers = list(cfg["universe"]["tickers"])
-    R = simulate_panel(model, dates, tickers, rep_rng(cfg, "calibration", rep))
-    out = run_pipeline(R, cfg)
-    hs = [1, 3, 7, 14]
-    return {
-        "T": out.T.astype(np.float32),
-        "E": energy(out.e, out.year_of_day, hs).astype(np.float32),
-        **{f"diag_{k}": v for k, v in return_diagnostics(R.to_numpy()).items()},
+def year_diagnostics(paths: dict[int, pd.DataFrame]) -> dict[str, np.ndarray]:
+    """연도 모형별 적합도 재료: 경로의 y 이전 구간(= model_y 의 적합 표본에 대응) 수익률 진단. 키 diag_<stat> (연도, k)."""
+    per = {
+        y: return_diagnostics(p[p.index < pd.Timestamp(f"{y}-01-01")].to_numpy())
+        for y, p in sorted(paths.items())
     }
+    ys = sorted(per)
+    return {f"diag_{k}": np.stack([per[y][k] for y in ys]) for k in per[ys[0]]}
 
 
-def annual_max_common(
-    T: np.ndarray, year_of_day: np.ndarray, pos: np.ndarray, start: int = 119
-) -> np.ndarray:
-    """(ETF, 정책, 창, 연도) 연중 공통일(위치 ≥ 119) 최대 T — W1 연간 최대 규약."""
+def annual_max_own(T: np.ndarray, year_of_day: np.ndarray, pos: np.ndarray, windows: list[int]) -> np.ndarray:
+    """(ETF, 정책, 창, 연도) 연중 own-valid 일(위치 ≥ w−1) 최대 T — W3 개별 신호 임계값의 재료 (lock-2 §6)."""
     years = np.unique(year_of_day)
     out = np.full((*T.shape[:-1], len(years)), np.nan)
-    for y_i, y in enumerate(years):
-        m = (year_of_day == y) & (pos >= start)
-        seg = T[..., m]
-        fin = np.isfinite(seg).any(axis=-1)
-        out[..., y_i] = np.where(fin, np.nanmax(np.where(np.isfinite(seg), seg, -np.inf), axis=-1), np.nan)
+    for w_i, w in enumerate(windows):
+        for y_i, y in enumerate(years):
+            m = (year_of_day == y) & (pos >= w - 1)
+            seg = T[..., w_i, :][..., m]
+            fin = np.isfinite(seg).any(axis=-1)
+            mx = np.where(np.isfinite(seg), seg, -np.inf).max(axis=-1)
+            out[..., w_i, y_i] = np.where(fin, mx, np.nan)
     return out
 
 
+def calibration_rep(
+    models: dict[int, MultiT], dates: pd.DatetimeIndex, cfg: dict, rep: int
+) -> dict[str, np.ndarray]:
+    """H0_CALIBRATION: T (7개 창), E(h), 연도별 수익률 진단, own-valid 연간 최대."""
+    tickers = list(cfg["universe"]["tickers"])
+    paths = simulate_year_paths(models, dates, tickers, rep_rng(cfg, "H0_CALIBRATION", rep))
+    out = run_pipeline_years(paths, cfg)
+    wins = list(cfg["pipeline"]["windows_primary"]) + list(cfg["pipeline"]["windows_short_eligibility"])
+    return {
+        "T": out.T.astype(np.float32),
+        "E": energy(out.e, out.year_of_day, [1, 3, 7, 14]).astype(np.float32),
+        "annual_max_own": annual_max_own(out.T, out.year_of_day, out.pos_in_year, wins),
+        **year_diagnostics(paths),
+    }
+
+
 def eval_rep(
-    model: MultiT,
+    models: dict[int, MultiT],
     dates: pd.DatetimeIndex,
     cfg: dict,
     tt: TailTable,
     domain: str,
     rep: int,
     holdout_extra: bool = False,
+    burn: int = 500,
 ) -> dict[str, np.ndarray]:
-    """귀무 평가·holdout 반복: 검정 통계량 전부 (+ holdout 은 단기 창 연간 최대와 q 신호 빈도)."""
+    """H0_EVALUATION (DCC·CCC 공통 시드)·holdout·ROBUSTNESS 반복: 모든 검정 통계량 (+ holdout 은 단기 창 연간 최대·q 신호 빈도)."""
     tickers = list(cfg["universe"]["tickers"])
-    R = simulate_panel(model, dates, tickers, rep_rng(cfg, domain, rep))
-    out = run_pipeline(R, cfg)
-    Q = q_score(out.T[:, :, :N_PRIMARY_WIN], tt)
+    paths = simulate_year_paths(models, dates, tickers, rep_rng(cfg, domain, rep), burn=burn)
+    out = run_pipeline_years(paths, cfg)
+    Q = q_score(out.T[:, :, :N_PRIMARY_WIN], tt, out.pos_in_year)
     st = rep_statistics(Q, cfg)
     res = {
         "M_subset": st.M_subset,
@@ -164,50 +187,56 @@ def eval_rep(
         "longest_run": st.longest_run,
     }
     if holdout_extra:
-        res["annual_max"] = annual_max_common(out.T, out.year_of_day, out.pos_in_year)
-        res["q_signal_rate"] = q_signal_rates(R, out.eval_dates, cfg)
+        wins = list(cfg["pipeline"]["windows_primary"]) + list(cfg["pipeline"]["windows_short_eligibility"])
+        res["annual_max_own"] = annual_max_own(out.T, out.year_of_day, out.pos_in_year, wins)
+        res["q_signal_rate"] = q_signal_rates(paths, out.eval_dates)
     return res
 
 
-def q_signal_rates(R: pd.DataFrame, eval_dates: pd.DatetimeIndex, cfg: dict) -> np.ndarray:
-    """귀무에서 단기 q (3·7·14) EXPANSION / HIGH_LEVEL 후보일 비율 (ETF, q, 채널) — 분위 후보가 경보가 아님을 보이는 기준."""
+def q_signal_rates(paths: dict[int, pd.DataFrame], eval_dates: pd.DatetimeIndex) -> np.ndarray:
+    """귀무에서 단기 q (3·7·14) EXPANSION / HIGH_LEVEL 후보일 비율 (ETF, q, 채널) — 분위 후보가 보정 경보가 아님을 보이는 기준."""
     qs = [3, 7, 14]
-    ev = np.asarray(R.index.isin(eval_dates))
-    out = np.full((R.shape[1], len(qs), 2), np.nan)
-    for i, tk in enumerate(R.columns):
-        r = R[tk].to_numpy(float)
-        for q_i, q in enumerate(qs):
-            v = realized_variance(r, q)
-            d, _, _ = log_variance_ratio(v, q)
-            ud, _, _ = midrank_past(d, 252)
-            uv, _, _ = midrank_past(v, 252)
-            out[i, q_i, 0] = np.nanmean(ud[ev] >= 0.9)
-            out[i, q_i, 1] = np.nanmean(uv[ev] >= 0.9)
-    return out
+    first = next(iter(paths.values()))
+    out = np.zeros((first.shape[1], len(qs), 2))
+    cnt = np.zeros_like(out)
+    for y, R in paths.items():
+        ev = np.asarray(R.index.year == y)
+        for i, tk in enumerate(R.columns):
+            r = R[tk].to_numpy(float)
+            for q_i, q in enumerate(qs):
+                v = realized_variance(r, q)
+                d, _, _ = log_variance_ratio(v, q)
+                ud, _, _ = midrank_past(d, 252)
+                uv, _, _ = midrank_past(v, 252)
+                for c, u in ((0, ud), (1, uv)):
+                    x = u[ev]
+                    ok = np.isfinite(x)
+                    out[i, q_i, c] += np.sum(x[ok] >= 0.9)
+                    cnt[i, q_i, c] += ok.sum()
+    return out / np.maximum(cnt, 1)
 
 
-# ── 대립 시나리오 ───────────────────────────────────────────────────
+# ── 대립 시나리오 (H1_POWER) ───────────────────────────────────────
 
 
 @dataclass(frozen=True)
 class AltDesign:
+    year: int
     tau: int  # 평가일 index (변화 시작)
     end: int  # 평가일 index (변화 끝, 포함) = 그해 마지막 평가일
-    tau_full: int  # 전체 날짜 index
-    end_full: int
     affected: tuple[str, ...]
-    shock: Shock
+    shock: Shock  # 그해 경로(2019..y) 기준 위치
 
 
 def alt_design(
-    model: MultiT,
+    models: dict[int, MultiT],
     dates: pd.DatetimeIndex,
     eval_dates: pd.DatetimeIndex,
     cfg: dict,
     name: str,
     rng: np.random.Generator,
 ) -> AltDesign:
-    """시나리오 이름 → 변화 연도·위치(설정 범위에서 균등)와 조작. 연도·위치 추출은 시나리오 시드 영역에서 먼저 한다."""
+    """시나리오 → 변화 연도·위치(설정 범위 균등)·조작. 연도·위치 추출을 경로 모의보다 먼저 한다."""
     a = cfg["alternatives"]
     tickers = list(cfg["universe"]["tickers"])
     years = cfg["sample"]["evaluation_years"]
@@ -216,32 +245,34 @@ def alt_design(
     k = int(rng.integers(lo, hi + 1))
     ymask = np.flatnonzero(eval_dates.year == y)
     tau, end = int(ymask[k]), int(ymask[-1])
-    tau_full = int(dates.get_loc(eval_dates[tau]))
-    end_full = int(dates.get_loc(eval_dates[end]))
+    pdates = dates[dates < pd.Timestamp(f"{y + 1}-01-01")]
+    tau_f = int(pdates.get_loc(eval_dates[tau]))
+    end_f = len(pdates) - 1
     spec = a["scenarios"][name]
-    n, N = len(dates), len(tickers)
+    n, N = len(pdates), len(tickers)
     vm = np.ones((n, N))
     affected: list[str] = []
     for t in spec.get("up", []):
-        vm[tau_full : end_full + 1, tickers.index(t)] = a["variance_up"]
+        vm[tau_f : end_f + 1, tickers.index(t)] = a["variance_up"]
         affected.append(t)
     for t in spec.get("down", []):
-        vm[tau_full : end_full + 1, tickers.index(t)] = a["variance_down"]
+        vm[tau_f : end_f + 1, tickers.index(t)] = a["variance_down"]
         affected.append(t)
     for t, d in spec.get("delayed_up", {}).items():
-        vm[tau_full + d : end_full + 1, tickers.index(t)] = a["variance_up"]
+        vm[tau_f + d : end_f + 1, tickers.index(t)] = a["variance_up"]
         affected.append(t)
     shock = Shock(var_mult=vm)
+    model = models[y]
     if "correlation_only" in spec:
         Ralt = nearest_correlation(np.maximum(model.qbar, 0.7) * (1 - np.eye(N)) + np.eye(N))
-        shock = Shock(corr_override=Ralt, corr_start=tau_full, corr_end=end_full + 1)
+        shock = Shock(corr_override=Ralt, corr_start=tau_f, corr_end=end_f + 1)
         affected = list(tickers)
     if "normal_common_shock" in spec:
         sgn = np.sign(model.qbar[:, tickers.index("069500")])
         sgn[sgn == 0] = 1.0
-        shock = Shock(z_override={tau_full: -6.0 * sgn})
+        shock = Shock(z_override={tau_f: -6.0 * sgn})
         affected = []
-    return AltDesign(tau, end, tau_full, end_full, tuple(affected), shock)
+    return AltDesign(y, tau, end, tuple(affected), shock)
 
 
 def _first_at_or_after(flag: np.ndarray, start: int) -> int:
@@ -250,7 +281,7 @@ def _first_at_or_after(flag: np.ndarray, start: int) -> int:
 
 
 def alt_rep(
-    model: MultiT,
+    models: dict[int, MultiT],
     dates: pd.DatetimeIndex,
     cfg: dict,
     tt: TailTable,
@@ -259,16 +290,17 @@ def alt_rep(
     name: str,
     rep: int,
 ) -> dict[str, object]:
-    """대립 반복: 경로 수준 통계량 + 변화 후 검출·지연·참여·구간 경계 + 단기 q 신호 대비 CUSUM 지연."""
+    """대립 반복: 경로 수준 통계량 + 변화 후 유의일 검출·지연·참여·구간 경계 + 단기 q 신호 대비 개별 CUSUM 지연."""
     tickers = list(cfg["universe"]["tickers"])
-    rng = rep_rng(cfg, f"alt:{name}", rep)
+    rng = rep_rng(cfg, f"H1_POWER:{name}", rep)
     years = cfg["sample"]["evaluation_years"]
-    ev_mask = (dates >= pd.Timestamp(f"{years[0]}-01-01")) & (dates < pd.Timestamp(f"{years[-1] + 1}-01-01"))
-    eval_dates = dates[ev_mask]
-    des = alt_design(model, dates, eval_dates, cfg, name, rng)
-    R = simulate_panel(model, dates, tickers, rng, shock=des.shock)
-    out = run_pipeline(R, cfg)
-    Q = q_score(out.T[:, :, :N_PRIMARY_WIN], tt)
+    eval_dates = dates[
+        (dates >= pd.Timestamp(f"{years[0]}-01-01")) & (dates < pd.Timestamp(f"{years[-1] + 1}-01-01"))
+    ]
+    des = alt_design(models, dates, eval_dates, cfg, name, rng)
+    paths = simulate_year_paths(models, dates, tickers, rng, shocks={des.year: des.shock})
+    out = run_pipeline_years(paths, cfg)
+    Q = q_score(out.T[:, :, :N_PRIMARY_WIN], tt, out.pos_in_year)
     st = rep_statistics(Q, cfg)
     Qlag, _ = lag_max(Q)
     c_E = float(cfg["joint"]["primary_test_statistics"]["c_E"])
@@ -280,20 +312,18 @@ def alt_rep(
         "rep": rep,
         "tau": des.tau,
         "end": des.end,
-        "year": int(eval_dates[des.tau].year),
+        "year": des.year,
         "C_stage": st.C_stage,
         "M_subset": st.M_subset,
     }
     subs = all_subsets(tickers)
     for fam, ckey in cfg["alternatives"]["targets_resolved"][name]:
         s = tuple(ckey)
-        st_ = member_stack(Q, Qlag, s, tickers)
-        ja = j_all(st_)
+        ja = j_all(member_stack(Q, Qlag, s, tickers))
         jmax = np.where(np.isfinite(ja), ja, -np.inf).max(axis=(0, 1))
-        c = crit[f"day:{'+'.join(s)}"]
-        sig = jmax >= c
+        sig = jmax >= crit[f"day:{'+'.join(s)}"]
         first = _first_at_or_after(sig, des.tau)
-        det = first >= 0 and first < des.tau + H
+        det = 0 <= first < des.tau + H
         res[f"{fam}:detected_60"] = bool(det)
         res[f"{fam}:delay"] = (first - des.tau) if det else np.nan
         res[f"{fam}:any_sig_before_tau"] = bool(sig[: des.tau].any())
@@ -302,36 +332,38 @@ def alt_rep(
             res[f"{fam}:ep_start_err"] = runs[0][0] - des.tau
             res[f"{fam}:ep_end_err"] = runs[0][1] - des.end
         res[f"{fam}:subset_index"] = subs.index(s)
-    # 참여: 변화 후 H 일 안에 어떤 ETF 의 시차 Q 가 c_E 이상인 날이 있는가 (정책·창 최대)
     part = np.where(np.isfinite(Qlag), Qlag, -np.inf).max(axis=(1, 2)) >= c_E  # (ETF, 일)
     res["participated"] = part[:, win].any(axis=1)
     res["affected_mask"] = np.array([t in des.affected for t in tickers])
-    # 단기 q EXPANSION (W2 규칙) 과 CUSUM (W1 동결 임계값·Q≥c_E) 의 첫 반응 지연 — 영향 ETF 별
+    # 영향 ETF 별 첫 반응 지연: 단기 q 확대(W2 규칙) · 개별 CUSUM (W3 own-valid 보정 임계값 · W1 참고 · Q≥c_E)
+    wins_all = list(cfg["pipeline"]["windows_primary"]) + list(cfg["pipeline"]["windows_short_eligibility"])
+    py = paths[des.year]
+    yev = np.asarray(py.index.year == des.year)
+    ystart = int(np.flatnonzero(out.year_of_day == des.year)[0])
     delays = {}
     for tk in des.affected:
         i = tickers.index(tk)
-        r = R[tk].to_numpy(float)
+        r = py[tk].to_numpy(float)
         rec = {}
         for q in (3, 7, 14):
             d, _, _ = log_variance_ratio(realized_variance(r, q), q)
             ud, _, _ = midrank_past(d, 252)
-            flag = ud[ev_mask] >= 0.9
+            flag = np.zeros(Q.shape[-1], bool)
+            flag[ystart : ystart + int(yev.sum())] = ud[yev] >= 0.9
             f = _first_at_or_after(flag, des.tau)
             rec[f"q{q}_EXP"] = (f - des.tau) if 0 <= f < des.tau + H else np.nan
         for p_i, p in enumerate(("A", "B", "base")):
-            for w_i, w in enumerate(cfg["pipeline"]["windows_primary"]):
+            for w_i, w in enumerate(wins_all):
                 Tw = out.T[i, p_i, w_i]
-                fa = _first_at_or_after(np.isfinite(Tw) & (Tw >= pipe_crit[p, w]), des.tau)
-                rec[f"cusum_w1crit_{p}_w{w}"] = (fa - des.tau) if 0 <= fa < des.tau + H else np.nan
-                fq = _first_at_or_after(np.isfinite(Q[i, p_i, w_i]) & (Q[i, p_i, w_i] >= c_E), des.tau)
-                rec[f"cusum_Q_{p}_w{w}"] = (fq - des.tau) if 0 <= fq < des.tau + H else np.nan
-        # 단기 적격성 창 (3·7·14) — 보정 연간 최대 임계값 대비 첫 경보 (W1 규약)
-        for w_i, w in enumerate(cfg["pipeline"]["windows_short_eligibility"]):
-            for p_i, p in enumerate(("A", "B", "base")):
-                Tw = out.T[i, p_i, N_PRIMARY_WIN + w_i]
-                cs = crit.get(f"short:{tk}:{p}:{w}", np.inf)
-                fa = _first_at_or_after(np.isfinite(Tw) & (Tw >= cs) & (out.pos_in_year >= 119), des.tau)
-                rec[f"short_{p}_w{w}"] = (fa - des.tau) if 0 <= fa < des.tau + H else np.nan
+                cw = crit.get(f"w3:{tk}:{p}:{w}", np.inf)
+                fa = _first_at_or_after(np.isfinite(Tw) & (Tw >= cw), des.tau)
+                rec[f"cusum_w3crit_{p}_w{w}"] = (fa - des.tau) if 0 <= fa < des.tau + H else np.nan
+                if w_i < N_PRIMARY_WIN:
+                    f1 = _first_at_or_after(np.isfinite(Tw) & (Tw >= pipe_crit[p, w]), des.tau)
+                    rec[f"cusum_w1crit_{p}_w{w}"] = (f1 - des.tau) if 0 <= f1 < des.tau + H else np.nan
+                    qq = Q[i, p_i, w_i]
+                    fq = _first_at_or_after(np.isfinite(qq) & (qq >= c_E), des.tau)
+                    rec[f"cusum_Q_{p}_w{w}"] = (fq - des.tau) if 0 <= fq < des.tau + H else np.nan
         delays[tk] = rec
     res["delays"] = delays
     return res

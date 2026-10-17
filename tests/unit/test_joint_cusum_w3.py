@@ -194,12 +194,20 @@ def test_conditional_participation_regenerates_E() -> None:
     assert np.isnan(scores.stage_conditional(Q, Qlag, ("069500", "229200"), "148070", t3, 4.6, 5).stat)
 
 
-def test_tail_score_no_extrapolation() -> None:
-    pool = np.random.default_rng(0).standard_normal((50, 1, 1, 1, 200))
-    tt = scores.build_tail_table(pool, 1001)
-    n = int(tt.n_pool[0, 0, 0])
-    u = scores.tail_u(np.array([[[[1e9, -1e9, np.nan]]]]), tt)[0, 0, 0]
-    assert u[0] == pytest.approx(1 / (n + 1)) and u[1] == pytest.approx(1.0) and np.isnan(u[2])
+def test_tail_score_no_extrapolation_and_position_bins() -> None:
+    """꼬리점수는 (ETF, 정책, 창, 연중 위치 구간) 풀 기준 — 풀 최대 초과는 1/(N+1), 구간이 다르면 다른 풀 (lock-2 §7.1)."""
+    rng = np.random.default_rng(0)
+    pos = np.tile(np.arange(100), 2)
+    pool = rng.standard_normal((50, 1, 1, 1, 200))
+    pool[..., pos >= 60] += 5.0  # 연중 뒤쪽 구간은 귀무 분포가 크다
+    tt = scores.build_tail_table(pool, pos, [0, 60], 1001)
+    n0, n1 = int(tt.n_pool[0, 0, 0, 0]), int(tt.n_pool[0, 0, 0, 1])
+    T = np.array([[[[1e9, -1e9, np.nan, 3.0]]]])
+    u = scores.tail_u(T, tt, np.array([10, 10, 10, 10]))[0, 0, 0]
+    assert u[0] == pytest.approx(1 / (n0 + 1)) and u[1] == pytest.approx(1.0) and np.isnan(u[2])
+    u_early = scores.tail_u(T, tt, np.array([10, 10, 10, 10]))[0, 0, 0, 3]
+    u_late = scores.tail_u(T, tt, np.array([70, 70, 70, 70]))[0, 0, 0, 3]
+    assert u_early < 0.01 < 0.9 < u_late and n1 > 0
 
 
 # ── 추론 (D2·D16) ──────────────────────────────────────────────────
@@ -239,7 +247,28 @@ def test_holm_marks_invalid_and_stops() -> None:
 
 
 def test_null_model_invalid_decision() -> None:
-    """구성원 하나라도 N3 탈락이면 그 통계량은 NULL_MODEL_INVALID (CCC 로 대체하지 않는다)."""
+    """연도 모형 5개 중 2개 이상에서 envelope 밖이면 탈락 → 그 ETF 포함 통계량은 NULL_MODEL_INVALID (CCC 대체 없음)."""
+    years = [2021, 2022, 2023, 2024, 2025]
+    cal = {f"diag_{s}": np.zeros((100, 5, 1)) for s in ("kurt", "acf_r2", "zero_share")}
+    cal["diag_var"] = np.ones((100, 5, 1))
+    lb = pd.DataFrame({"year": years, "ticker": "153130", "lb10_z_p": 0.5, "lb10_z2_p": 0.5})
+    obs = {
+        "kurt": np.zeros((5, 1)),
+        "acf_r2": np.zeros((5, 1)),
+        "var": np.ones((5, 1)),
+        "zero_share": np.full((5, 1), 0.172),
+    }
+    row = validity.n3_table(obs, cal, lb, np.array([True]), ["153130"], years)[0]
+    assert not row["zero_share_ok"] and not row["N3_pass"]
+    obs["zero_share"] = np.full((5, 1), 0.008)  # 호가 단위 수준 → 통과
+    assert validity.n3_table(obs, cal, lb, np.array([True]), ["153130"], years)[0]["N3_pass"]
+    obs["kurt"][[1], 0] = 9.0  # 한 해만 이탈 → 통과 (2/5 규칙)
+    assert validity.n3_table(obs, cal, lb, np.array([True]), ["153130"], years)[0]["N3_pass"]
+    obs["kurt"][[1, 3], 0] = 9.0  # 두 해 이탈 → 탈락
+    assert not validity.n3_table(obs, cal, lb, np.array([True]), ["153130"], years)[0]["N3_pass"]
+    assert not validity.n3_table(
+        {**obs, "kurt": np.zeros((5, 1))}, cal, lb, np.array([False]), ["153130"], years
+    )[0]["N3_pass"]
     n3 = [
         {"ticker": "069500", "N3_pass": True},
         {"ticker": "153130", "N3_pass": False},
@@ -253,34 +282,18 @@ def test_null_model_invalid_decision() -> None:
     assert validity.statistic_valid(("069500", "229200"), True, n3, n4)
     assert not validity.statistic_valid(("069500", "153130"), True, n3, n4)
     assert not validity.statistic_valid(("069500", "229200"), False, n3, n4)
-    cal = {
-        "diag_zero_share": np.zeros((100, 1)),
-        "diag_kurt": np.zeros((100, 1)),
-        "diag_acf_r2": np.zeros((100, 1)),
-        "diag_var": np.ones((100, 1)),
-    }
-    row = validity.n3_table(
-        {
-            "zero_share": np.array([0.172]),
-            "kurt": np.array([0.0]),
-            "acf_r2": np.array([0.0]),
-            "var": np.array([1.0]),
-        },
-        cal,
-        ["153130"],
-    )[0]
-    assert not row["zero_share_ok"] and not row["N3_pass"]
-    row2 = validity.n3_table(
-        {
-            "zero_share": np.array([0.008]),
-            "kurt": np.array([0.0]),
-            "acf_r2": np.array([0.0]),
-            "var": np.array([1.0]),
-        },
-        cal,
-        ["069500"],
-    )[0]
-    assert row2["N3_pass"]
+
+
+def test_per_year_null_paths_respect_time_boundary() -> None:
+    """연도 y 의 귀무 경로는 2019..y 까지만, 평가는 그해만 (y 이후 자료가 그해 귀무에 들어가지 않는다)."""
+    m = _toy_model(N=3)
+    dates = pd.bdate_range("2019-01-03", "2023-12-29")
+    paths = mc.simulate_year_paths({2021: m, 2022: m}, dates, ["a", "b", "c"], np.random.default_rng(0))
+    assert paths[2021].index.max() < pd.Timestamp("2022-01-01") and paths[2022].index.max() < pd.Timestamp(
+        "2023-01-01"
+    )
+    again = mc.simulate_year_paths({2021: m, 2022: m}, dates, ["a", "b", "c"], np.random.default_rng(0))
+    assert all(np.array_equal(paths[y].to_numpy(), again[y].to_numpy()) for y in paths)
 
 
 def test_episode_boundaries_and_excess() -> None:

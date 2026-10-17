@@ -17,7 +17,7 @@ from r2h.annual_expanding.fit import baseline_variance, fit_annual, forecast_yea
 from r2h.svrgarch_etf.rolling import rolling_cusum
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-CONFIG_PATH = REPO_ROOT / "configs" / "t15_joint_cusum_w3_v1.json"
+CONFIG_PATH = REPO_ROOT / "configs" / "t15_joint_cusum_w3_v2.json"
 POLICIES: tuple[str, ...] = ("A", "B", "base")
 
 
@@ -111,3 +111,23 @@ def run_pipeline(returns: pd.DataFrame, cfg: dict) -> PipelineOut:
                 {"ticker": tk, "year": y, "C": af.params[0], "gamma2": af.params[1], "eps": af.params[2]}
             )
     return PipelineOut(eval_dates, yod, pos, e, vh, T, fits)
+
+
+def run_pipeline_years(paths: dict[int, pd.DataFrame], cfg: dict) -> PipelineOut:
+    """평가연도별 경로 (lock-2 §10): 연도 y 는 paths[y] (y 이전 자료로 적합한 귀무에서 모의한 2019..y 경로) 로만 평가한다.
+
+    연도마다 ``run_pipeline`` 을 그해만 평가하도록 호출하고 날짜 축으로 이어 붙인다 (SVR 적합 수는 단일 경로와 같다).
+    """
+    parts = []
+    for y in cfg["sample"]["evaluation_years"]:
+        sub = {**cfg, "sample": {**cfg["sample"], "evaluation_years": [y]}}
+        parts.append(run_pipeline(paths[y], sub))
+    return PipelineOut(
+        eval_dates=pd.DatetimeIndex(np.concatenate([p.eval_dates.to_numpy() for p in parts])),
+        year_of_day=np.concatenate([p.year_of_day for p in parts]),
+        pos_in_year=np.concatenate([p.pos_in_year for p in parts]),
+        e=np.concatenate([p.e for p in parts], axis=-1),
+        vhat=np.concatenate([p.vhat for p in parts], axis=-1),
+        T=np.concatenate([p.T for p in parts], axis=-1),
+        fit_params=[f for p in parts for f in p.fit_params],
+    )
