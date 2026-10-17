@@ -142,7 +142,12 @@ def n5_marginal(obs: Obs, max_reps: int = 2000) -> pd.DataFrame:
 
 
 def _load(name: str, root: Path) -> dict[str, np.ndarray]:
-    return dict(np.load(mc_dir(root) / f"{name}.npz"))
+    """MC 결과. 사전 연장 규칙으로 덧붙인 반복(``<name>_from<start>.npz``)이 있으면 rep 순서대로 이어 붙인다."""
+    base = dict(np.load(mc_dir(root) / f"{name}.npz"))
+    for ext in sorted(mc_dir(root).glob(f"{name}_from*.npz"), key=lambda p: int(p.stem.split("_from")[1])):
+        add = dict(np.load(ext))
+        base = {k: np.concatenate([base[k], add[k]]) for k in base}
+    return base
 
 
 def h0a_status(pa: dict[str, inference.MCP | None], alpha: float) -> bool:

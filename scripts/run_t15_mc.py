@@ -287,7 +287,7 @@ def cmd_tables(cfg: dict) -> None:
     print("tables done", tt.table.shape, "min pool", int(tt.n_pool[tt.n_pool > 0].min()))
 
 
-def cmd_eval(cfg: dict, which: str, reps: int, workers: int) -> None:
+def cmd_eval(cfg: dict, which: str, reps: int, workers: int, start: int = 0) -> None:
     kind, domain = EVAL_DOMAIN[which]
     G.update(
         models=_models()[kind],
@@ -298,8 +298,12 @@ def cmd_eval(cfg: dict, which: str, reps: int, workers: int) -> None:
         holdout=which == "holdout",
         burn=2000 if which == "robustness" else 500,
     )
-    res = _run(_w_eval, list(range(reps)), workers, f"{which}")
-    np.savez(OUT / f"null_eval_{which}.npz", **_stack(res, reps))
+    res = _run(_w_eval, list(range(start, start + reps)), workers, f"{which}")
+    res = [(r - start, v) for r, v in res]  # 쌓기용 상대 번호 (시드는 절대 번호로 이미 정해짐)
+    name = (
+        f"null_eval_{which}.npz" if start == 0 else f"null_eval_{which}_from{start}.npz"
+    )  # 연장분은 별도 파일
+    np.savez(OUT / name, **_stack(res, reps))
 
 
 def cmd_alt(cfg: dict, reps: int, workers: int) -> None:
@@ -379,6 +383,7 @@ def main() -> None:
     ap.add_argument("--reps", type=int, default=2)
     ap.add_argument("--workers", type=int, default=1)
     ap.add_argument("--domain", default="dcc", choices=list(EVAL_DOMAIN))
+    ap.add_argument("--start", type=int, default=0)  # 사전 연장 규칙: 50,000 부터 이어서
     a = ap.parse_args()
     cfg = load_cfg()
     OUT.mkdir(parents=True, exist_ok=True)
@@ -392,7 +397,7 @@ def main() -> None:
     elif a.cmd == "tables":
         cmd_tables(cfg)
     elif a.cmd == "eval":
-        cmd_eval(cfg, a.domain, a.reps, a.workers)
+        cmd_eval(cfg, a.domain, a.reps, a.workers, a.start)
     elif a.cmd == "alt":
         cmd_alt(cfg, a.reps, a.workers)
     elif a.cmd == "h0a":
