@@ -878,7 +878,7 @@ def price_response(
     events = []
     # 2종 이상·H0-B 유의: 구간 표의 집합 구간에서 (구성원 ETF 별)
     sig_any = ep[ep.day_level_status.eq("SIGNIFICANT_H0B")]
-    multi = ep[ep.size.ge(2)]
+    multi = ep[ep["size"].ge(2)]
     for kind, frame in (("two_or_more_etf", multi), ("h0b_significant", sig_any)):
         for _, e in frame.iterrows():
             t = pos[pd.Timestamp(e.joint_confirmed_at).date()]
@@ -1014,7 +1014,7 @@ def pair_correlation_shift(obs: Obs, ep: pd.DataFrame, window: int = 60) -> pd.D
     r = obs.R.loc[obs.dates].to_numpy()
     pos = {d.date(): k for k, d in enumerate(obs.dates)}
     rows = []
-    for _, e in ep[ep.size.ge(2)].iterrows():
+    for _, e in ep[ep["size"].ge(2)].iterrows():
         a, b = pos[e.episode_start_at], pos[e.episode_end_at]
         if a < window or b + window >= len(obs.dates):
             continue

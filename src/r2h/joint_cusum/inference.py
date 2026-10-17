@@ -109,6 +109,8 @@ def minp_adjusted(
 ) -> dict[str, float]:
     """Westfall–Young 단일단계 minP (민감도). null: (B, m). 각 반복의 귀무 p 는 다른 반복들 대비 순위로 만든다."""
     cols = [j for j, h in enumerate(names) if valid[h] and np.isfinite(obs[h])]
+    if not cols:
+        return {}  # 유효한 가설이 없으면 조정 p 도 없다
     X = np.where(np.isfinite(null), null, -np.inf)[:, cols]
     B = X.shape[0]
     # 반복 b 의 귀무 p_j = (1 + #{b' ≠ b : X_b'j ≥ X_bj}) / B  (자기 자신 제외 순위)
