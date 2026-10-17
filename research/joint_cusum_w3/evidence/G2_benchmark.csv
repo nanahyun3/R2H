@@ -1,0 +1,8 @@
+mode,workers,rep,cpu_s,wall_s,throughput_rep_per_min,max_rss_mb_parent
+sequential,1,0,19.21,18.79,,205.6
+sequential,1,1,16.65,17.67,,205.6
+sequential,1,2,15.93,15.32,,205.6
+parallel,4,8,,31.63,15.18,205.6
+parallel,8,16,,25.76,37.27,205.6
+parallel,16,32,,29.61,64.84,205.6
+parallel,22,44,,34.7,76.08,205.6
