@@ -247,7 +247,7 @@ print(event_metrics(alarms, events, ticker_years=len(calendar) / 252))
 | G1 계약 동결 | 완료: lock-1 `9cdeccb` → **lock-2 `955d126`** | [계약](research/joint_cusum_w3/W3_연구계약.md) · [개정 lock-2](research/joint_cusum_w3/W3_계약개정_lock2.md) · [설정 v2](configs/t15_joint_cusum_w3_v2.json) |
 | G2 비용 측정 | 완료: 반복 1회 CPU 약 17초, 작업자 22개 분당 74회. 계획 14.2시간 (예산 24시간) | [반복 수 동결](research/joint_cusum_w3/MC_REPS_FREEZE.md) · [벤치마크](research/joint_cusum_w3/evidence/G2_benchmark_lock2.csv) |
 | G3 통계 모듈 | 완료: `src/r2h/joint_cusum/`. 테스트 22개, 전체 pytest 198 통과 | 관측 경로가 T12 cache e·vhat 을 5e-10 이내로 재현 |
-| G4 합성 검증 | **실행 중**: H0_CALIBRATION 2,000 완료 (13:56, 27.5분, 꼬리표 칸당 최소 풀 9,989) · H0_EVALUATION DCC 50,000 진행 (13:56 시작, 21:37 기준 35,000/50,000, 완료 예상 00:25 전후) | 남은 순서: CCC 5,000 → holdout 1,000 → robustness 1,000 → 대립 2,700 → H0-A 20,000 |
+| G4 합성 검증 | **실행 중**: H0_CALIBRATION 2,000 완료 (13:56, 27.5분, 꼬리표 칸당 최소 풀 9,989) · H0_EVALUATION DCC 50,000 진행 (13:56 시작, 23:07 기준 42,500/50,000, 완료 예상 00:25 전후) | 남은 순서: CCC 5,000 → holdout 1,000 → robustness 1,000 → 대립 2,700 → H0-A 20,000 |
 | G5 실증 노트북 08 | 대기 (MC 완료 후) | 생성기 `scripts/t15_build_notebook.py` 53셀, 한국어 주석 규칙 통과 · 실행기 `scripts/run_t15_notebook.py` |
 | G6 경제적 해석 · G7 감사 · G8 릴리스 | 대기 | |
 
