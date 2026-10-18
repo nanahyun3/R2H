@@ -1,0 +1,10 @@
+..................................                                       [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/unit/test_k200_gpu.py:11: could not import 'torch': No module named 'torch'
+34 passed, 1 skipped in 16.38s
+...........                                                              [100%]
+11 passed in 4.73s
+
+# 전체 저장소 pytest (R2H .venv, 2026-10-19): 273 passed, 1 skipped, 15 errors
+# 15 errors = tests/unit/test_etf_shock_11.py — 11번 테스트가 outputs/t18/daily_etf_states.csv.gz (Git 제외 로컬 산출물, SA/1018 작업트리에만 있음)를 읽는데 12번 작업트리에는 없다. 12번 변경과 무관한 환경 의존 (원본 11번 작업트리에서는 통과 기록).
+# tests/integration/test_notebook_rules.py: 31 passed (노트북 12 글꼴 셀 추가 후)

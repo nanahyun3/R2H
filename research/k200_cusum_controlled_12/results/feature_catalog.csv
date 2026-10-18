@@ -1,0 +1,29 @@
+feature,group,available_at,decision,reason,coverage_2020_2025,first_valid,r2_from_others,max_abs_spearman,most_similar,incremental_r2_future_rv20
+ret,return,close_t,KEEP,기본 입력,1,2020-01-02,0.8904388147,0.9860466154,e_B1,0.006800702355
+abs_ret,return,close_t,DROP_DUPLICATE,e2_B1 과 Spearman 0.95,1,2020-01-02,0.7426524348,0.9455572393,e2_B1,0.02642193155
+rv5,multi_horizon_vol,close_t,KEEP,단기 변동성,1,2020-01-02,0.9182282255,0.8060857259,rv_ratio_5_60,0.01100792811
+rv20,multi_horizon_vol,close_t,KEEP,기준 변동성 (증분 R² 기준선),1,2020-01-02,0.891847981,0.6435159646,rv60,
+rv60,multi_horizon_vol,close_t,KEEP,장기 변동성,1,2020-01-02,0.8927538405,0.6435159646,rv20,0.01066114647
+rv_ratio_5_60,vol_expansion,close_t,OPTIONAL,rv5·rv60 로 재구성 가능 (R² 0.89),1,2020-01-02,0.8921151146,0.8060857259,rv5,0.004943912945
+vhat_B1,svr_forecast,close_t-1 (t 예측),KEEP,SVR 정책 A 예측분산,1,2020-01-02,0.7405713966,0.7306355825,rv5,0.0002095179637
+e_B1,svr_residual,close_t,DROP_DUPLICATE,ret 과 Spearman 0.99,1,2020-01-02,0.8907129539,0.9860466154,ret,0.009209194578
+e2_B1,svr_residual,close_t,KEEP,잔차 크기 (척도 ≠ 1 주의),1,2020-01-02,0.6733009109,0.9455572393,abs_ret,0.02202377475
+dlog_vhat20_B1,svr_forecast_change,close_t,OPTIONAL,X4 — 증분 정보 작음,0.9864222675,2020-02-03,0.5679739296,0.6520340112,vhat_B1,0.001199778199
+cos_w20_B1,cusum_rolling,close_t,KEEP,다른 피처와 중복 낮음 (R² 0.22),0.9871011541,2020-01-31,0.2194057883,0.3976567491,cos_w30_B1,0.003170907736
+cos_w30_B1,cusum_rolling,close_t,OPTIONAL,w20 과 0.40,0.9803122878,2020-02-14,0.2561503326,0.3976567491,cos_w20_B1,0.000207807397
+cos_w60_B1,cusum_rolling,close_t,KEEP,기준 창,0.9599456891,2020-03-27,1,1,cos_w60_B0,0.01510342571
+cos_w60_B0,cusum_rolling,close_t,DROP_DUPLICATE,B1 과 유효일 동일 (연초 NA 만 다름),0.7596741344,2020-03-27,1,1,cos_w60_B1,0.02662354111
+cos_w120_B1,cusum_rolling,close_t,KEEP,기억 채널 (X-D7),0.9192124915,2020-06-25,0.5994094062,0.4326218561,cos_w60_B0,0.03095027591
+cos_w252_B1,cusum_rolling,close_t,KEEP_WITH_CAVEAT,최대 252일 이월 — 시점 피처 아님 (X-D7),0.8295994569,2021-01-07,0.7844039371,0.3990490727,cos_w120_B1,0.05208531312
+cos_raw_w60,cusum_raw,close_t,KEEP,SVR 흡수 전 신호 (잔차 CoS 와 0.59),0.9599456891,2020-03-27,0.5402993813,0.5903879481,cos_w60_B1,0.007285908264
+cos_w60_refit21,cusum_rolling,close_t,DROP_DUPLICATE,B1 과 0.89,0.9599456891,2020-03-27,0.9879210037,0.8910396873,cos_w60_B1,0.0220441486
+page_up_B1,cusum_page,close_t,EXCLUDE_NONSTATIONARY,2020 척도 누적 후 단조 감쇠 — 증분 R² 0.098 은 추세 대리 (X-D1),1,2020-01-02,0.6736533121,0.6572396736,page_up_refit21,0.09795649135
+page_dn_B1,cusum_page,close_t,KEEP,분산 감소 채널 (S12 검출),1,2020-01-02,0.5736823183,0.7274933466,abs_ret,0.03714833302
+page_up_refit21,cusum_page,close_t,OPTIONAL,재학습으로 누적 완화,1,2020-01-02,0.6146630664,0.6572396736,page_up_B1,0.002998093957
+P20_score,change_point_price,close_t,KEEP,중복 낮음 (R² 0.30),1,2020-01-02,0.2957635196,0.2413785847,V20_two_score,0.006430338547
+V5_two_score,change_point_vol,close_t,OPTIONAL,rv_ratio 와 0.65,1,2020-01-02,0.632627878,0.6479136101,rv_ratio_5_60,0.00432022508
+V20_two_score,change_point_vol,close_t,KEEP,주 변화점 규칙의 점수,1,2020-01-02,0.7761917194,0.5561716968,rv20,0.004285881936
+V60_two_score,change_point_vol,close_t,OPTIONAL,rv60 과 0.50,1,2020-01-02,0.771230586,0.4951540267,rv60,0.02996238523
+M20_60_score,change_point_ma,close_t,KEEP,"중복 낮음 (R² 0.36), 증분 0.044",1,2020-01-02,0.3551660218,0.2284403434,rv20,0.04345016993
+K60_score,change_point_kurt,close_t,KEEP,꼬리 모양 채널,1,2020-01-02,0.5156939597,0.4140452726,V60_two_score,0.002248627076
+POSTHOC_future_rv20,label_posthoc,close_t+20,POSTHOC_ONLY,평가 전용 — AE 입력 금지,0.9864222675,2020-01-02,,,,

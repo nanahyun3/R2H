@@ -1,0 +1,527 @@
+[
+ {
+  "claim": "B1 경보 α0.05",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['B1','alarm_days_a05']",
+  "expected": 43.0,
+  "round": 6
+ },
+ {
+  "claim": "B1 2020 경보",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['B1','alarm_days_a05_2020']",
+  "expected": 43.0,
+  "round": 6
+ },
+ {
+  "claim": "B1 2021-25 경보",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['B1','alarm_days_a05_2021_2025']",
+  "expected": 0.0,
+  "round": 6
+ },
+ {
+  "claim": "B0 경보",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['B0','alarm_days_a05']",
+  "expected": 45.0,
+  "round": 6
+ },
+ {
+  "claim": "B0 유효일",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['B0','valid_days']",
+  "expected": 1119.0,
+  "round": 6
+ },
+ {
+  "claim": "B1 유효일",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['B1','valid_days']",
+  "expected": 1414.0,
+  "round": 6
+ },
+ {
+  "claim": "반년 분할 유효일",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['E1_half_year','valid_days']",
+  "expected": 765.0,
+  "round": 6
+ },
+ {
+  "claim": "w252 2021-25 경보",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['E2_w252','alarm_days_a05_2021_2025']",
+  "expected": 159.0,
+  "round": 6
+ },
+ {
+  "claim": "Page 상방 h",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['E3_page_up','crit_a05']",
+  "expected": 57.0,
+  "round": 0
+ },
+ {
+  "claim": "원수익률 CoS 임계",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['E3_raw_rolling_cos','crit_a05']",
+  "expected": 2.22,
+  "round": 2
+ },
+ {
+  "claim": "원수익률 CoS 경보",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['E3_raw_rolling_cos','alarm_days_a05']",
+  "expected": 0.0,
+  "round": 6
+ },
+ {
+  "claim": "변화점 재학습만 경보",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['E8_refit_only','alarm_days_a05']",
+  "expected": 31.0,
+  "round": 6
+ },
+ {
+  "claim": "유예20 2021-25 경보",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['E9_grace20','alarm_days_a05_2021_2025']",
+  "expected": 27.0,
+  "round": 6
+ },
+ {
+  "claim": "유예60 2021-25 경보",
+  "file": "experiment_summary.csv",
+  "expr": "df.set_index('experiment_id').loc['E9_grace60','alarm_days_a05_2021_2025']",
+  "expected": 26.0,
+  "round": 6
+ },
+ {
+  "claim": "유예20 2021-01-04 log2",
+  "file": "refit_boundary_breaks.csv",
+  "expr": "df.query(\"pipeline=='refitV20_g20' and refit_date=='2021-01-04'\").log2_ratio.iloc[0]",
+  "expected": 2.2,
+  "round": 1
+ },
+ {
+  "claim": "유예20 경계 전 e2",
+  "file": "refit_boundary_breaks.csv",
+  "expr": "df.query(\"pipeline=='refitV20_g20' and refit_date=='2021-01-04'\").pre_mean_e2.iloc[0]",
+  "expected": 0.29,
+  "round": 2
+ },
+ {
+  "claim": "재적합 동기 초기화 후 유예20 1-2월 경보",
+  "file": "refit_synced_reset_alarms.csv",
+  "expr": "df.query(\"pipeline=='refitV20_g20' and variant=='refit_synced_reset'\").alarm_days_2021_JanFeb.iloc[0]",
+  "expected": 0.0,
+  "round": 6
+ },
+ {
+  "claim": "21일 재학습 동기 초기화 유효일",
+  "file": "refit_synced_reset_alarms.csv",
+  "expr": "df.query(\"pipeline=='refit21' and variant=='refit_synced_reset'\").valid_days.iloc[0]",
+  "expected": 0.0,
+  "round": 6
+ },
+ {
+  "claim": "E11 크기 asymptotic",
+  "file": "size_holdout.csv",
+  "expr": "df[(df.svr=='B1')&(df.detector=='rolling_cos')&(df.reset=='none')&(df.w.astype(str).isin(['60','60.0']))&(df.alpha==0.05)&(df.calibration=='asymptotic')].holdout_rate.iloc[0]",
+  "expected": 0.1016,
+  "round": 4
+ },
+ {
+  "claim": "E11 크기 normal_mc",
+  "file": "size_holdout.csv",
+  "expr": "df[(df.svr=='B1')&(df.detector=='rolling_cos')&(df.reset=='none')&(df.w.astype(str).isin(['60','60.0']))&(df.alpha==0.05)&(df.calibration=='normal_mc')].holdout_rate.iloc[0]",
+  "expected": 0.012,
+  "round": 4
+ },
+ {
+  "claim": "E11 크기 iid_bootstrap_presample",
+  "file": "size_holdout.csv",
+  "expr": "df[(df.svr=='B1')&(df.detector=='rolling_cos')&(df.reset=='none')&(df.w.astype(str).isin(['60','60.0']))&(df.alpha==0.05)&(df.calibration=='iid_bootstrap_presample')].holdout_rate.iloc[0]",
+  "expected": 0.0156,
+  "round": 4
+ },
+ {
+  "claim": "E11 크기 block_bootstrap_presample",
+  "file": "size_holdout.csv",
+  "expr": "df[(df.svr=='B1')&(df.detector=='rolling_cos')&(df.reset=='none')&(df.w.astype(str).isin(['60','60.0']))&(df.alpha==0.05)&(df.calibration=='block_bootstrap_presample')].holdout_rate.iloc[0]",
+  "expected": 0.1952,
+  "round": 4
+ },
+ {
+  "claim": "E11 크기 garch_t_N1",
+  "file": "size_holdout.csv",
+  "expr": "df[(df.svr=='B1')&(df.detector=='rolling_cos')&(df.reset=='none')&(df.w.astype(str).isin(['60','60.0']))&(df.alpha==0.05)&(df.calibration=='garch_t_N1')].holdout_rate.iloc[0]",
+  "expected": 0.06,
+  "round": 4
+ },
+ {
+  "claim": "Wilson 통과 행",
+  "file": "size_holdout.csv",
+  "expr": "int(df.size_ok.sum())",
+  "expected": 549,
+  "round": 6
+ },
+ {
+  "claim": "크기 전체 행",
+  "file": "size_holdout.csv",
+  "expr": "len(df)",
+  "expected": 1068,
+  "round": 6
+ },
+ {
+  "claim": "블록 ICC 중앙",
+  "file": "size_holdout.csv",
+  "expr": "df.block_icc.median()",
+  "expected": 0.12,
+  "round": 2
+ },
+ {
+  "claim": "역할 교환 w60",
+  "file": "size_calibration_uncertainty.csv",
+  "expr": "df.query(\"detector=='rolling_cos_w60' and alpha==0.05\").swap_rate_on_cal.iloc[0]",
+  "expected": 0.042,
+  "round": 3
+ },
+ {
+  "claim": "홀드아웃 w60",
+  "file": "size_calibration_uncertainty.csv",
+  "expr": "df.query(\"detector=='rolling_cos_w60' and alpha==0.05\").holdout_rate.iloc[0]",
+  "expected": 0.06,
+  "round": 3
+ },
+ {
+  "claim": "위약 초과 CoS",
+  "file": "placebo_comparison.csv",
+  "expr": "int(((df.metric=='event_mean_pctile')&(df.detector=='rolling_cos')&(df.real>df.random_q95)).sum())",
+  "expected": 9,
+  "round": 6
+ },
+ {
+  "claim": "위약 초과 Page",
+  "file": "placebo_comparison.csv",
+  "expr": "int(((df.metric=='event_mean_pctile')&(df.detector=='page_two')&(df.real>df.random_q95)).sum())",
+  "expected": 8,
+  "round": 6
+ },
+ {
+  "claim": "위약 평균 아래 CoS 비율",
+  "file": "placebo_comparison.csv",
+  "expr": "((d:=df[(df.metric=='event_mean_pctile')&(df.detector=='rolling_cos')]).real<d.random_mean).mean()",
+  "expected": 0.75,
+  "round": 2
+ },
+ {
+  "claim": "위약 평균 아래 Page 비율",
+  "file": "placebo_comparison.csv",
+  "expr": "((d:=df[(df.metric=='event_mean_pctile')&(df.detector=='page_two')]).real<d.random_mean).mean()",
+  "expected": 0.64,
+  "round": 2
+ },
+ {
+  "claim": "QLIKE 전체 B1",
+  "file": "svr_training_summary.csv",
+  "expr": "df[(df.pipeline=='B1')&(df.year.astype(str)=='all')].qlike.iloc[0]",
+  "expected": 1.716,
+  "round": 3
+ },
+ {
+  "claim": "QLIKE 전체 refitV20_g0",
+  "file": "svr_training_summary.csv",
+  "expr": "df[(df.pipeline=='refitV20_g0')&(df.year.astype(str)=='all')].qlike.iloc[0]",
+  "expected": 1.547,
+  "round": 3
+ },
+ {
+  "claim": "QLIKE 전체 adaptiveV20",
+  "file": "svr_training_summary.csv",
+  "expr": "df[(df.pipeline=='adaptiveV20')&(df.year.astype(str)=='all')].qlike.iloc[0]",
+  "expected": 1.544,
+  "round": 3
+ },
+ {
+  "claim": "QLIKE 전체 refit21",
+  "file": "svr_training_summary.csv",
+  "expr": "df[(df.pipeline=='refit21')&(df.year.astype(str)=='all')].qlike.iloc[0]",
+  "expected": 1.58,
+  "round": 3
+ },
+ {
+  "claim": "QLIKE 21-25 B1",
+  "file": "svr_training_summary.csv",
+  "expr": "(lambda d:(d.qlike*d.n_eligible).sum()/d.n_eligible.sum())(df[(df.pipeline=='B1')&(df.year.astype(str).isin(['2021','2022','2023','2024','2025']))])",
+  "expected": 1.393,
+  "round": 3
+ },
+ {
+  "claim": "QLIKE 21-25 adaptive",
+  "file": "svr_training_summary.csv",
+  "expr": "(lambda d:(d.qlike*d.n_eligible).sum()/d.n_eligible.sum())(df[(df.pipeline=='adaptiveV20')&(df.year.astype(str).isin(['2021','2022','2023','2024','2025']))])",
+  "expected": 1.402,
+  "round": 3
+ },
+ {
+  "claim": "QLIKE 21-25 win252",
+  "file": "svr_training_summary.csv",
+  "expr": "(lambda d:(d.qlike*d.n_eligible).sum()/d.n_eligible.sum())(df[(df.pipeline=='win252')&(df.year.astype(str).isin(['2021','2022','2023','2024','2025']))])",
+  "expected": 1.525,
+  "round": 3
+ },
+ {
+  "claim": "합성 S08_one_day_extreme page_up NA α0.05",
+  "file": "synthetic_size_power.csv",
+  "expr": "df[(df.scenario=='S08_one_day_extreme')&(df.detector=='page_up')&df.w.isna()&(df.svr=='B1')&(df.reset=='none')&(df.alpha==0.05)&(df.calibration=='garch_t_N1')].detection_rate.iloc[0]",
+  "expected": 0.325,
+  "round": 3
+ },
+ {
+  "claim": "합성 S08_one_day_extreme page_two NA α0.05",
+  "file": "synthetic_size_power.csv",
+  "expr": "df[(df.scenario=='S08_one_day_extreme')&(df.detector=='page_two')&df.w.isna()&(df.svr=='B1')&(df.reset=='none')&(df.alpha==0.05)&(df.calibration=='garch_t_N1')].detection_rate.iloc[0]",
+  "expected": 0.145,
+  "round": 3
+ },
+ {
+  "claim": "합성 S08_one_day_extreme page_up_sn NA α0.05",
+  "file": "synthetic_size_power.csv",
+  "expr": "df[(df.scenario=='S08_one_day_extreme')&(df.detector=='page_up_sn')&df.w.isna()&(df.svr=='B1')&(df.reset=='none')&(df.alpha==0.05)&(df.calibration=='garch_t_N1')].detection_rate.iloc[0]",
+  "expected": 0.64,
+  "round": 3
+ },
+ {
+  "claim": "합성 S12_var_x0.5 page_down NA α0.05",
+  "file": "synthetic_size_power.csv",
+  "expr": "df[(df.scenario=='S12_var_x0.5')&(df.detector=='page_down')&df.w.isna()&(df.svr=='B1')&(df.reset=='none')&(df.alpha==0.05)&(df.calibration=='garch_t_N1')].detection_rate.iloc[0]",
+  "expected": 0.085,
+  "round": 3
+ },
+ {
+  "claim": "합성 S03_var_x3 page_up_sn NA α0.05",
+  "file": "synthetic_size_power.csv",
+  "expr": "df[(df.scenario=='S03_var_x3')&(df.detector=='page_up_sn')&df.w.isna()&(df.svr=='B1')&(df.reset=='none')&(df.alpha==0.05)&(df.calibration=='garch_t_N1')].detection_rate.iloc[0]",
+  "expected": 0.095,
+  "round": 3
+ },
+ {
+  "claim": "합성 S03_var_x3 rolling_cos 60 α0.05",
+  "file": "synthetic_size_power.csv",
+  "expr": "df[(df.scenario=='S03_var_x3')&(df.detector=='rolling_cos')&df.w.astype(str).isin(['60','60.0'])&(df.svr=='B1')&(df.reset=='none')&(df.alpha==0.05)&(df.calibration=='garch_t_N1')].detection_rate.iloc[0]",
+  "expected": 0.065,
+  "round": 3
+ },
+ {
+  "claim": "합성 S03_var_x3 rolling_cos 60 α0.2",
+  "file": "synthetic_size_power.csv",
+  "expr": "df[(df.scenario=='S03_var_x3')&(df.detector=='rolling_cos')&df.w.astype(str).isin(['60','60.0'])&(df.svr=='B1')&(df.reset=='none')&(df.alpha==0.2)&(df.calibration=='garch_t_N1')].detection_rate.iloc[0]",
+  "expected": 0.15,
+  "round": 3
+ },
+ {
+  "claim": "지속형 분산 변화 최대 검출 (B1·none·N1, α0.05)",
+  "file": "synthetic_size_power.csv",
+  "expr": "df[(df.scenario.isin(['S01_var_x1.5','S02_var_x2','S03_var_x3','S05_long_persistent','S06_gradual','S10_repeated','S11_year_boundary']))&(df.reset=='none')&(df.svr.astype(str).isin(['B1','NA','nan']))&(df.alpha==0.05)&(df.calibration=='garch_t_N1')].detection_rate.max()",
+  "expected": 0.095,
+  "round": 3
+ },
+ {
+  "claim": "X1 S08 대응 차이",
+  "file": "synthetic_effects.csv",
+  "expr": "df[(df.family=='X1')&(df.scenario=='S08_one_day_extreme')&(df.alpha==0.05)&(df.child=='B1|page_up_sn|NA|none')]['diff'].iloc[0]",
+  "expected": 0.315,
+  "round": 3
+ },
+ {
+  "claim": "연초 초기화 S11 손실 α0.2",
+  "file": "synthetic_effects.csv",
+  "expr": "df[(df.family=='E1')&(df.scenario=='S11_year_boundary')&(df.alpha==0.2)&(df.child=='B1|rolling_cos|60|annual')].child_rate.iloc[0]",
+  "expected": 0.015,
+  "round": 3
+ },
+ {
+  "claim": "Page 상방 S08 RESET_TRIGGER_GAIN",
+  "file": "synthetic_effects.csv",
+  "expr": "df[(df.family=='E5_placebo')&(df.scenario=='S08_one_day_extreme')&(df.alpha==0.05)&(df.child=='B1|page_up|NA|cp:V20_two:0.99:20')]['diff'].iloc[0]",
+  "expected": 0.065,
+  "round": 3
+ },
+ {
+  "claim": "X9 ×3 α0.05",
+  "file": "x9_forecast_level_synthetic.csv",
+  "expr": "df[(df.scenario=='S03_var_x3')&(df.variant=='up')&(df.alpha==0.05)].detection_rate.iloc[0]",
+  "expected": 0.095,
+  "round": 3
+ },
+ {
+  "claim": "X9 ×3 α0.2",
+  "file": "x9_forecast_level_synthetic.csv",
+  "expr": "df[(df.scenario=='S03_var_x3')&(df.variant=='up')&(df.alpha==0.2)].detection_rate.iloc[0]",
+  "expected": 0.27,
+  "round": 3
+ },
+ {
+  "claim": "AE 증분 page_up_B1",
+  "file": "ae_redundancy.csv",
+  "expr": "df.set_index('feature').loc['page_up_B1','incremental_r2_future_rv20_over_rv20']",
+  "expected": 0.098,
+  "round": 3
+ },
+ {
+  "claim": "AE 증분 cos_w252_B1",
+  "file": "ae_redundancy.csv",
+  "expr": "df.set_index('feature').loc['cos_w252_B1','incremental_r2_future_rv20_over_rv20']",
+  "expected": 0.052,
+  "round": 3
+ },
+ {
+  "claim": "AE 증분 cos_w120_B1",
+  "file": "ae_redundancy.csv",
+  "expr": "df.set_index('feature').loc['cos_w120_B1','incremental_r2_future_rv20_over_rv20']",
+  "expected": 0.031,
+  "round": 3
+ },
+ {
+  "claim": "AE 증분 M20_60_score",
+  "file": "ae_redundancy.csv",
+  "expr": "df.set_index('feature').loc['M20_60_score','incremental_r2_future_rv20_over_rv20']",
+  "expected": 0.043,
+  "round": 3
+ },
+ {
+  "claim": "AE 증분 page_dn_B1",
+  "file": "ae_redundancy.csv",
+  "expr": "df.set_index('feature').loc['page_dn_B1','incremental_r2_future_rv20_over_rv20']",
+  "expected": 0.037,
+  "round": 3
+ },
+ {
+  "claim": "AE w20 R2",
+  "file": "ae_redundancy.csv",
+  "expr": "df.set_index('feature').loc['cos_w20_B1','r2_from_others']",
+  "expected": 0.22,
+  "round": 2
+ },
+ {
+  "claim": "AE M20_60 R2",
+  "file": "ae_redundancy.csv",
+  "expr": "df.set_index('feature').loc['M20_60_score','r2_from_others']",
+  "expected": 0.36,
+  "round": 2
+ },
+ {
+  "claim": "AE e-ret Spearman",
+  "file": "ae_redundancy.csv",
+  "expr": "df.set_index('feature').loc['e_B1','max_abs_spearman']",
+  "expected": 0.99,
+  "round": 2
+ },
+ {
+  "claim": "AE abs-e2 Spearman",
+  "file": "ae_redundancy.csv",
+  "expr": "df.set_index('feature').loc['abs_ret','max_abs_spearman']",
+  "expected": 0.95,
+  "round": 2
+ },
+ {
+  "claim": "AE refit21-B1 Spearman",
+  "file": "ae_redundancy.csv",
+  "expr": "df.set_index('feature').loc['cos_w60_refit21','max_abs_spearman']",
+  "expected": 0.89,
+  "round": 2
+ },
+ {
+  "claim": "AE raw CoS Spearman",
+  "file": "ae_redundancy.csv",
+  "expr": "df.set_index('feature').loc['cos_raw_w60','max_abs_spearman']",
+  "expected": 0.59,
+  "round": 2
+ },
+ {
+  "claim": "귀무 부적합 파이프라인 수",
+  "file": "null_validity.csv",
+  "expr": "df[df.outside].pipeline.nunique()",
+  "expected": 10,
+  "round": 6
+ },
+ {
+  "claim": "원장 행",
+  "file": "feature_store_audit.csv",
+  "expr": "int(df.set_index('check').loc['rows_total','value'])",
+  "expected": 681999,
+  "round": 6
+ },
+ {
+  "claim": "원장 감사 통과",
+  "file": "feature_store_audit.csv",
+  "expr": "int(df['pass'].sum())",
+  "expected": 18,
+  "round": 6
+ },
+ {
+  "claim": "원장 감사 항목",
+  "file": "feature_store_audit.csv",
+  "expr": "len(df)",
+  "expected": 18,
+  "round": 6
+ },
+ {
+  "claim": "사건 E2_w120 단일 충격형",
+  "file": "event_response_by_shock_type.csv",
+  "expr": "df[(df.experiment=='E2_w120')&(df.type=='단일 충격형')&(df.year>=2021)].mean_pctile.mean()",
+  "expected": 0.67,
+  "round": 2
+ },
+ {
+  "claim": "사건 E2_w120 누적형",
+  "file": "event_response_by_shock_type.csv",
+  "expr": "df[(df.experiment=='E2_w120')&(df.type=='누적형')&(df.year>=2021)].mean_pctile.mean()",
+  "expected": 0.35,
+  "round": 2
+ },
+ {
+  "claim": "사건 E3_page_down 단일 충격형",
+  "file": "event_response_by_shock_type.csv",
+  "expr": "df[(df.experiment=='E3_page_down')&(df.type=='단일 충격형')&(df.year>=2021)].mean_pctile.mean()",
+  "expected": 0.65,
+  "round": 2
+ },
+ {
+  "claim": "사건 E3_page_down 누적형",
+  "file": "event_response_by_shock_type.csv",
+  "expr": "df[(df.experiment=='E3_page_down')&(df.type=='누적형')&(df.year>=2021)].mean_pctile.mean()",
+  "expected": 0.38,
+  "round": 2
+ },
+ {
+  "claim": "사건 X1_page_up_sn 단일 충격형",
+  "file": "event_response_by_shock_type.csv",
+  "expr": "df[(df.experiment=='X1_page_up_sn')&(df.type=='단일 충격형')&(df.year>=2021)].mean_pctile.mean()",
+  "expected": 0.81,
+  "round": 2
+ },
+ {
+  "claim": "사건 X1_page_up_sn 누적형",
+  "file": "event_response_by_shock_type.csv",
+  "expr": "df[(df.experiment=='X1_page_up_sn')&(df.type=='누적형')&(df.year>=2021)].mean_pctile.mean()",
+  "expected": 0.55,
+  "round": 2
+ },
+ {
+  "claim": "사건 E3_raw_rolling_cos 누적형",
+  "file": "event_response_by_shock_type.csv",
+  "expr": "df[(df.experiment=='E3_raw_rolling_cos')&(df.type=='누적형')&(df.year>=2021)].mean_pctile.mean()",
+  "expected": 0.66,
+  "round": 2
+ },
+ {
+  "claim": "사건 E3_raw_rolling_cos 단일 충격형",
+  "file": "event_response_by_shock_type.csv",
+  "expr": "df[(df.experiment=='E3_raw_rolling_cos')&(df.type=='단일 충격형')&(df.year>=2021)].mean_pctile.mean()",
+  "expected": 0.6,
+  "round": 2
+ }
+]

@@ -3,7 +3,7 @@
  "protocol_version": "12-lock-2",
  "branch": "research/12_k200_cusum_controlled_gpu",
  "base_commit": "4a3af99",
- "current_phase": "P08-P09 interpretation, AE handoff, notebook",
+ "current_phase": "P09 DONE (completion with stated limitations)",
  "checkpoints": {
   "P00": {
    "status": "DONE",
@@ -21,7 +21,32 @@
   },
   "P07": {
    "status": "DONE",
-   "note": "13 scenarios x 200 paths x 5 pipelines; detection at matched alpha; paired effects 1176 rows"
+   "note": "13 scenarios x 200 paths x 5 pipelines; detection at matched alpha; paired effects 1176 rows",
+   "commit": "94df438"
+  },
+  "P03": {
+   "status": "DONE",
+   "commit": "1b2bffe"
+  },
+  "P04": {
+   "status": "DONE",
+   "commit": "1b2bffe"
+  },
+  "P05": {
+   "status": "DONE",
+   "commit": "1b2bffe"
+  },
+  "P06": {
+   "status": "DONE",
+   "commit": "1b2bffe"
+  },
+  "P08": {
+   "status": "DONE",
+   "note": "feature store 681,999 rows, catalog, AE contract"
+  },
+  "P09": {
+   "status": "DONE",
+   "note": "notebook 12 fresh kernel PASS x2, CLAIMS 75/75, byte-identical x3 (56 files)"
   }
  },
  "gates": {
@@ -29,11 +54,11 @@
   "G1": "PASS (B0==B1 at pos>=59 every year; B1 +295 valid days)",
   "G2": "PASS (annual generalized path == B0, unit test)",
   "G3": "PASS (464 registered: 457 OFAT_OK, 6 INTERACTION, 1 ROOT, 0 CONFOUNDED)",
-  "G4": "PASS float64 (0 alarm flips; rolling max abs err 1.5e-14); float32 NUMERICAL_DISAGREEMENT",
+  "G4": "PASS float64 (0 alarm flips); float32 NUMERICAL_DISAGREEMENT (not used)",
   "G5": "PARTIAL — holdout 549/1068 Wilson-OK; deviations are a common set-to-set fluctuation (role swap reverses sign: w60 6.0%->4.2%); report size error +-1-1.5pp",
-  "G6": "PENDING",
-  "G7": "PENDING",
-  "G8": "PENDING final check",
+  "G6": "PASS (fresh kernel 488 s)",
+  "G7": "PASS (CLAIMS 75/75)",
+  "G8": "PASS (651 protected files unchanged, checked in notebook before/after)",
   "G9": "PASS for N1 (alpha 0.129, beta 0.815, nu 7.06 interior); N0 FAILED (alpha=0, beta=0.0008)",
   "feature_store_audit": "PASS 18/18 (681,999 rows = 463 experiments x 1473 days)"
  },
@@ -106,5 +131,34 @@
   "svr_policies": "mostly LOW_POWER_INCONCLUSIVE; small SVR_REFIT_GAIN for Page two on S08 (refit21 +0.085)",
   "windows": "w20/w30 lose vs w60; w252 gains on year boundary at alpha .2",
   "X9_forecast_level": "x3 detection .10 (a.05) / .27 (a.20); not promoted"
+ },
+ "completion": {
+  "done": [
+   "11 lineage",
+   "2020-2025 continuous",
+   "annual reset comparison",
+   "window/formula comparison",
+   "4 change-point families",
+   "cp reset vs placebo",
+   "SVR window/refit",
+   "reset x refit single & interaction",
+   "matched-alpha synthetic 13 scenarios",
+   "extra proxies judged (X1,X3,X4,X9)",
+   "AE handoff",
+   "fresh-kernel notebook",
+   "CLAIMS==results",
+   "prior research unchanged"
+  ],
+  "partial": [
+   "G5 size: Wilson 549/1068, common set fluctuation +-1-1.5pp",
+   "observed confirmatory p: NULL_MODEL_INVALID for all SVR pipelines"
+  ],
+  "not_done": [
+   "X1'/X1'' Page variants",
+   "X5 policy-B residuals",
+   "X-D6 b/c refit re-standardization",
+   "X-D9 b/c horizon/alpha relaxation",
+   "pooled 1500-path calibration"
+  ]
  }
 }

@@ -80,6 +80,14 @@ matplotlib.use("Agg")  # 화면 없이 파일로 저장
 import numpy as np  # 수치 배열
 import pandas as pd  # 결과표
 from IPython.display import Image, Markdown, display  # 표·그림·문단 출력
+import matplotlib.pyplot as plt  # 그림 기본 설정
+from matplotlib import font_manager  # 한글 글꼴 등록
+
+FONT_FILE = Path("/usr/share/fonts/truetype/nanum/NanumGothic.ttf")  # 한글 도판용 나눔고딕
+assert FONT_FILE.is_file(), "한글 도판 렌더링을 위한 나눔고딕 파일이 없습니다"  # 글꼴 없으면 중단
+font_manager.fontManager.addfont(str(FONT_FILE))  # matplotlib 글꼴 목록에 등록
+plt.rcParams["font.family"] = font_manager.FontProperties(fname=str(FONT_FILE)).get_name()  # 한글 글꼴 사용
+plt.rcParams["axes.unicode_minus"] = False  # 음수 기호 깨짐 방지
 
 # 11번과 같은 고정 환경이어야 한다 (user-site 차단 포함).
 EXPECTED_ENV = {"python": "3.12.3", "numpy": "2.5.4", "pandas": "3.0.6", "scipy": "1.18.1", "matplotlib": "3.11.2", "scikit-learn": "1.9.1"}  # 고정 환경
