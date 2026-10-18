@@ -29,6 +29,7 @@
 ### 1.1 승계 게이트 (계산 전, 실패하면 중단)
 
 1. `RELEASE_MANIFEST.json` 의 09 노트북·파일 SHA256 전부 일치, `CONTRACT_FREEZE_SHA256.txt` 일치.
+   - **개정 1 (후보 구간 계산 전, 첫 게이트 실행에서 발견)**: `evidence/reproducibility_report.md` 1개는 매니페스트 작성 뒤 W4 최종 커밋 `172cbb3` 이 문서 한 줄(검증 파일 수 89→91)만 고쳐 지문이 다르다. 이 파일만 설정 `w4_post_manifest_edits` 의 새 지문으로 대조한다. 결과·데이터 파일은 예외 없이 매니페스트와 대조한다.
 2. `group_daily_states` 에서 날짜·q 별 `Σ 1[GROUP_A=1]` = `global_daily_counts.n_A`, `Σ isfinite(GROUP_A)` = `n_eval_A` (전 행).
 3. 기간별 최대 A·17/17 일수를 다시 계산해 `global_by_period.csv` 와 일치 (PRIMARY q20·q60, PILOT q20 17/17 일수 포함). 기대값은 CSV 에서 읽는다.
 4. `shock_intervals.csv` 0행, `w4_final.json` 판정 `VALID_ZERO_INTERVALS`.

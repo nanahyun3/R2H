@@ -5,6 +5,14 @@
   "design_status": "POST_HOC_EXPLORATORY — 09(W4) 결과를 본 뒤 설계",
   "w4_dir": "research/peer_relative_shock_w4",
   "w4_manifest": "research/peer_relative_shock_w4/RELEASE_MANIFEST.json",
+  "w4_post_manifest_edits": {
+    "research/peer_relative_shock_w4/evidence/reproducibility_report.md": {
+      "sha256": "16887db5850ae5501bcae4a51b8d6a35f1e73c91a4d373694988fabab7689b28",
+      "manifest_sha256": "8486e2b94ab8ea825c45ba9d881a76166b1badecc447d19d80de64fff1a3dde8",
+      "commit": "172cbb3",
+      "reason": "매니페스트 작성 뒤 문서 한 줄 정정 (바이트 동일 검증 파일 수 89 -> 91). 결과·데이터 변화 없음"
+    }
+  },
   "w4_inputs": {
     "group_daily_states": "research/peer_relative_shock_w4/results/group_daily_states.csv",
     "global_daily_counts": "research/peer_relative_shock_w4/results/global_daily_counts.csv",
