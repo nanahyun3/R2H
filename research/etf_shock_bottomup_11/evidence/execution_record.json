@@ -1,0 +1,10 @@
+{
+  "notebook": "11_대표6종ETF_개별급변구간_바텀업_누적수익률_CUSUM.ipynb",
+  "status": "PASS",
+  "start_utc": "2026-10-18T14:41:47.855543+00:00",
+  "end_utc": "2026-10-18T14:43:03.002944+00:00",
+  "seconds": 70.86,
+  "returncode": 0,
+  "log": "research/etf_shock_bottomup_11/evidence/11_execution.log",
+  "python": "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1018/R2H_W4_Peer_Shock/../../1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python"
+}
