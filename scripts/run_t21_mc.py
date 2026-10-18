@@ -35,7 +35,7 @@ def main() -> None:
     a = ap.parse_args()
     cfg = C.load_cfg()
     m = C.load_market(cfg, ROOT)
-    g = S.fit_dgp(m.r[: m.eval_start])
+    g = S.dgp_for(m, cfg)
     out = ROOT / "outputs" / "t21" / "mc" / a.tag
     out.mkdir(parents=True, exist_ok=True)
     seed = cfg["seed"]
@@ -49,28 +49,35 @@ def main() -> None:
     )
     t0 = time.monotonic()
     start = datetime.now(UTC)
-    res, fails = [], []
+    shard = 100  # 체크포인트 단위 (§2.3): 조각마다 저장, 재실행 시 완료 조각은 건너뜀
+    fails, done = [], 0
     with ProcessPoolExecutor(max_workers=a.workers) as ex:
-        futs = {ex.submit(MC.run_path, (st, i, sc, *common)): (st, i, sc) for st, i, sc in jobs}
-        for k, f in enumerate(as_completed(futs), 1):
-            try:
-                res.append(f.result())
-            except Exception as err:  # 실패 경로는 성공으로 세지 않는다
-                fails.append({"job": futs[f], "error": repr(err)})
-            if k % 50 == 0 or k == len(jobs):
-                el = time.monotonic() - t0
-                eta = start + timedelta(seconds=el / k * len(jobs))
-                (out / "progress.json").write_text(
-                    json.dumps(
-                        {"done": k, "total": len(jobs), "failed": len(fails), "elapsed_s": round(el, 1),
-                         "eta_utc": eta.isoformat(), "updated_utc": datetime.now(UTC).isoformat()},
-                        indent=1,
-                    ),
-                    encoding="utf-8",
-                )
-    MC.save_results(res, out)
+        for s0 in range(0, len(jobs), shard):
+            sd = out / f"shard_{s0 // shard:04d}"
+            if (sd / "DONE").exists():
+                done += min(shard, len(jobs) - s0)
+                continue
+            part = jobs[s0 : s0 + shard]
+            futs = {ex.submit(MC.run_path, (st, i, sc, *common)): (st, i, sc) for st, i, sc in part}
+            res = []
+            for f in as_completed(futs):
+                try:
+                    res.append(f.result())
+                except Exception as err:  # 실패 경로는 성공으로 세지 않는다
+                    fails.append({"job": futs[f], "error": repr(err)})
+            MC.save_results(res, sd)
+            (sd / "DONE").write_text(str(len(res)), encoding="utf-8")
+            done += len(part)
+            el = time.monotonic() - t0
+            eta = start + timedelta(seconds=el / max(1, done) * len(jobs))
+            (out / "progress.json").write_text(
+                json.dumps({"done": done, "total": len(jobs), "failed": len(fails), "elapsed_s": round(el, 1),
+                            "eta_utc": eta.isoformat(), "updated_utc": datetime.now(UTC).isoformat()}, indent=1),
+                encoding="utf-8",
+            )
+    MC.merge_shards(out)
     (out / "failures.json").write_text(json.dumps(fails, default=str, indent=1), encoding="utf-8")
-    print("완료", len(res), "실패", len(fails), "초", round(time.monotonic() - t0, 1))
+    print("완료", done, "실패", len(fails), "초", round(time.monotonic() - t0, 1))
 
 
 if __name__ == "__main__":

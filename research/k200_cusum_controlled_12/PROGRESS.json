@@ -1,9 +1,9 @@
 {
  "study_id": "t21_k200_cusum_controlled_12",
- "protocol_version": "12-lock-1",
+ "protocol_version": "12-lock-2",
  "branch": "research/12_k200_cusum_controlled_gpu",
  "base_commit": "4a3af99",
- "current_phase": "P03",
+ "current_phase": "P07 (N1 MC running) / P03-P06 observed code ready",
  "checkpoints": {
   "P00": {
    "status": "DONE",
@@ -16,7 +16,7 @@
   },
   "P02": {
    "status": "DONE",
-   "commit": null,
+   "commit": "05878d2",
    "note": "B0/B1 residual path byte-identical to W3 run_pipeline 069500 A"
   }
  },
@@ -26,10 +26,11 @@
   "G2": "PENDING",
   "G3": "PENDING",
   "G4": "PASS float64 (0 alarm flips; rolling max abs err 1.5e-14); float32 NUMERICAL_DISAGREEMENT",
-  "G5": "PENDING",
+  "G5": "PENDING (N1); N0 record: 963/1068 Wilson-OK, cluster CI audit running",
   "G6": "PENDING",
   "G7": "PENDING",
-  "G8": "PENDING"
+  "G8": "PENDING",
+  "G9": "PASS for N1 (alpha 0.129, beta 0.815, nu 7.06 interior); N0 FAILED (alpha=0, beta=0.0008)"
  },
  "pilot_costs_seconds": {
   "svr_fit_once": 0.08,
@@ -40,13 +41,31 @@
   "mc_path_scenario_5pipelines_14workers": 44.7
  },
  "mc": {
-  "chain": "outputs/t21/run_mc_chain.sh",
-  "null": "1000 cal + 500 holdout, 10 pipelines",
-  "scenarios": "13 x 200, 5 pipelines",
-  "estimated_hours": 3.7,
-  "progress_files": [
-   "outputs/t21/mc/main_null/progress.json",
-   "outputs/t21/mc/main_scen/progress.json"
-  ]
+  "status": "RUNNING",
+  "chain": "outputs/t21/run_mc_chain_n1.sh",
+  "progress": [
+   "outputs/t21/mc/n1_null/progress.json",
+   "outputs/t21/mc/n1_scen/progress.json"
+  ],
+  "estimated_hours": 3.6
+ },
+ "null_models": {
+  "N0_iid_t_2019": {
+   "status": "FAILED_DEGENERATE",
+   "kept_at": [
+    "research/k200_cusum_controlled_12/results_n0_iid_t_2019",
+    "outputs/t21/mc/n0_null",
+    "outputs/t21/calib_n0"
+   ]
+  },
+  "N1_garch_t_2019_2020": {
+   "status": "RUNNING",
+   "chain": "outputs/t21/run_mc_chain_n1.sh",
+   "progress": [
+    "outputs/t21/mc/n1_null/progress.json",
+    "outputs/t21/mc/n1_scen/progress.json"
+   ],
+   "estimated_hours": 3.6
+  }
  }
 }

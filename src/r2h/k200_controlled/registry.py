@@ -14,6 +14,7 @@ from .core import sha16
 
 ROLLING = ("rolling_cos", "raw_rolling_cos")
 PAGE = ("page_up", "page_down", "page_two")
+PAGE_SN = ("page_up_sn", "page_down_sn", "page_two_sn")
 RESET_SCHEDULES = (
     "annual",
     "half_year",
@@ -30,8 +31,8 @@ KEYS = ("svr", "detector", "w", "reset", "calibration")
 
 
 def cfg(svr: str = "B1", detector: str = "rolling_cos", w: int | str = 60, reset: str = "none",
-        calibration: str = "garch_t_full_pipeline") -> dict:
-    if detector in PAGE or detector == "posthoc_full":
+        calibration: str = "garch_t_N1") -> dict:
+    if detector in PAGE or detector in PAGE_SN or detector == "posthoc_full":
         w = "NA"
     if detector == "raw_rolling_cos":
         svr = "NA"
@@ -97,6 +98,8 @@ def build() -> pd.DataFrame:
     add("X_w20_reset", "X_interaction", cfg(w=20, reset=PRIMARY_RESET), "B1", True)
     add("X_refit21_page_two", "X_interaction", cfg(svr="refit21", detector="page_two"), "B1", True)
 
+    for d in PAGE_SN:  # 능동 발견 X1 (DISCOVERY_LOG) — 결과를 본 뒤 추가한 사후 확장
+        add(f"X1_{d}", "EXPLORATORY_EXTENSION", cfg(detector=d), f"E3_{d[:-3]}", note="EXPLORATORY_EXTENSION")
     df = pd.DataFrame(rows)
     by_id = {r["experiment_id"]: r for r in rows}
     checks, changed, before, after, hashes, fixed_hash = [], [], [], [], [], []

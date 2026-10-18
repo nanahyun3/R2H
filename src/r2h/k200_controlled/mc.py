@@ -98,3 +98,24 @@ def save_results(results: list[dict], out: Path) -> None:
     pd.DataFrame(meta).to_csv(out / "meta.csv", index=False)
     trig = pd.concat([d["triggers"] for d in results], ignore_index=True)
     trig.to_parquet(out / "triggers.parquet", index=False)
+
+
+def merge_shards(out: Path) -> None:
+    """조각 디렉터리들을 (집합, 시나리오, 파이프라인) 별 하나의 배열로 합친다 (rep 오름차순)."""
+    shards = sorted(p for p in out.glob("shard_*") if (p / "DONE").exists())
+    meta = pd.concat([pd.read_csv(p / "meta.csv") for p in shards], ignore_index=True)
+    trig = pd.concat([pd.read_parquet(p / "triggers.parquet") for p in shards], ignore_index=True)
+    names = sorted({f.name for p in shards for f in p.glob("e__*.npy")})
+    for nm in names:
+        _, st, sc, _pl = nm[:-4].split("__")
+        parts, reps = [], []
+        for p in shards:
+            f = p / nm
+            if f.exists():
+                parts.append(np.load(f))
+                mm = pd.read_csv(p / "meta.csv")
+                reps.append(mm[(mm["set"] == st) & (mm["scenario"] == sc)].sort_values("rep")["rep"].to_numpy())
+        E, R = np.concatenate(parts), np.concatenate(reps)
+        np.save(out / nm, E[np.argsort(R, kind="stable")])
+    meta.sort_values(["set", "scenario", "rep"]).to_csv(out / "meta.csv", index=False)
+    trig.to_parquet(out / "triggers.parquet", index=False)

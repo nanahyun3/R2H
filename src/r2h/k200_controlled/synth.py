@@ -30,9 +30,15 @@ SCENARIOS: tuple[str, ...] = (
 )
 
 
-def fit_dgp(r_2019: np.ndarray) -> GarchT:
-    """2019 수익률만으로 적합 (평가 구간 정보 없음)."""
-    return fit_garch_t(np.asarray(r_2019, float))
+def fit_dgp(r_hist: np.ndarray) -> GarchT:
+    """귀무 DGP 적합. lock-2: 2019–2020 수익률 (2021–2025 오경보 블록 정보 없음). lock-1 의 2019 단독 적합은 α=0 으로 퇴화(N0)."""
+    return fit_garch_t(np.asarray(r_hist, float))
+
+
+def dgp_for(m, cfg: dict) -> GarchT:
+    """설정의 적합 끝날 이전 수익률로 DGP 적합 (MC·보정 공통)."""
+    end = pd.Timestamp(cfg["calibration_E11"]["null_dgp_fit_end"])
+    return fit_dgp(m.r[np.asarray(m.dates < end)])
 
 
 def base_innovations(g: GarchT, n: int, rng: np.random.Generator) -> np.ndarray:

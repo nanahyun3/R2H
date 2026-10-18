@@ -21,8 +21,8 @@ from r2h.k200_controlled import report as RP  # noqa: E402
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--calib", default="outputs/t21/calib")
-    ap.add_argument("--null-tag", default="main_null")
+    ap.add_argument("--calib", default="outputs/t21/calib_n1")
+    ap.add_argument("--null-tag", default="n1_null")
     ap.add_argument("--results", default="research/k200_cusum_controlled_12/results")
     a = ap.parse_args()
     out = RP.run(ROOT, ROOT / a.calib, ROOT / "outputs" / "t21" / "mc" / a.null_tag, ROOT / a.results)

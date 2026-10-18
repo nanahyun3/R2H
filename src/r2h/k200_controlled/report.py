@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 
 from . import analysis as A
+from . import audit as AU
 from . import calib as K
 from . import core as C
 from . import observed as O
@@ -192,6 +193,7 @@ def ae_features(ob: O.Observed) -> pd.DataFrame:
     f["vhat_B1"] = b1.vhat
     f["e_B1"] = b1.e
     f["e2_B1"] = b1.e**2
+    f["dlog_vhat20_B1"] = np.log(b1.vhat) - np.log(pd.Series(b1.vhat).shift(20).to_numpy())  # X4 예측분산 변화
     for w in (20, 30, 60, 120, 252):
         eid = "B1" if w == 60 else f"E2_w{w}"
         f[f"cos_w{w}_B1"] = ob.raw[eid]["T"]
@@ -261,12 +263,14 @@ def run(root: Path, calib_dir: Path, null_dir: Path, results: Path, store: Path 
     ledger = A.build_ledger(ob, cal, invalid, src)
     summ = A.experiment_summary(ob, ledger, raw_sum)
     size = pd.read_csv(calib_dir / "size_holdout.csv")
+    size_rows, size_agg = AU.size_decomposition(size, invalid)
+    led_audit = AU.ledger_audit(ledger, len(ob.m.eval_dates), len(ob.raw))
     cp_sum, cp_jac = change_point_summary(ob)
     svr_s, svr_fits = svr_summary(ob)
     feats = ae_features(ob)
     red, corr = ae_redundancy(feats)
     plc = placebo_table(ob, cal, cfg["seed"])
-    store = store or root / "outputs" / "t21" / "feature_store"
+    store = store or root / "outputs" / "t21" / "feature_store_n1"
     store.mkdir(parents=True, exist_ok=True)
     ledger.to_parquet(store / "daily_cusum_features.parquet", index=False, partition_cols=None)
     feats.reset_index(names="date").to_parquet(store / "ae_candidate_wide.parquet", index=False)
@@ -274,7 +278,9 @@ def run(root: Path, calib_dir: Path, null_dir: Path, results: Path, store: Path 
     tables = {
         "experiment_summary.csv": summ,
         "null_validity.csv": validity,
-        "size_holdout.csv": size,
+        "size_holdout.csv": size_rows,
+        "size_fail_decomposition.csv": size_agg,
+        "feature_store_audit.csv": led_audit,
         "change_point_summary.csv": cp_sum,
         "change_point_overlap.csv": cp_jac,
         "svr_training_summary.csv": svr_s,

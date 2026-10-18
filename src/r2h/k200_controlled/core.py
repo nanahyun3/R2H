@@ -381,3 +381,26 @@ def calibrate_page_two(
         else:
             lo = a1
     return best
+
+
+def selfnorm(e: np.ndarray, lo: int = 61, hi: int = 252, min_valid: int = 120) -> np.ndarray:
+    """자기정규화 잔차 (EXPLORATORY X1): e_t / √m̂_t, m̂_t = [t−hi, t−lo] 유효 e² 평균 (과거만). 유효 < min_valid 이면 NaN.
+
+    정책 A 표준화 잔차의 척도가 1 이 아닐 때 Page 증분의 기울기가 척도에 끌려가는 문제를 덜기 위한 대안이다.
+    배열은 (경로, 일) 또는 (일,) 을 받는다.
+    """
+    E = np.atleast_2d(np.asarray(e, float))
+    sq = np.where(np.isfinite(E), E**2, 0.0)
+    ok = np.isfinite(E).astype(float)
+    cs = np.concatenate([np.zeros((E.shape[0], 1)), np.cumsum(sq, axis=1)], axis=1)
+    cn = np.concatenate([np.zeros((E.shape[0], 1)), np.cumsum(ok, axis=1)], axis=1)
+    n = E.shape[1]
+    t = np.arange(n)
+    a = np.clip(t - hi, 0, n)
+    b = np.clip(t - lo + 1, 0, n)
+    s = cs[:, b] - cs[:, a]
+    c = cn[:, b] - cn[:, a]
+    with np.errstate(invalid="ignore", divide="ignore"):
+        m = np.where(c >= min_valid, s / c, np.nan)
+        out = E / np.sqrt(m)
+    return out[0] if np.ndim(e) == 1 else out

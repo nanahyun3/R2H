@@ -1,6 +1,6 @@
 {
   "study_id": "t21_k200_cusum_controlled_12",
-  "protocol_version": "12-lock-1",
+  "protocol_version": "12-lock-2",
   "base_ref": "research/11_etf_shock_bottomup@4a3af99",
   "seed": 20261019,
   "data": {
@@ -11,11 +11,21 @@
     "return_unit": "100*diff(log(Close))",
     "returns_start": "2019-01-03",
     "returns_end": "2025-12-30",
-    "warmup_years": [2019],
+    "warmup_years": [
+      2019
+    ],
     "evaluation_start": "2020-01-01",
     "evaluation_end": "2025-12-31",
-    "excluded": {"2026": "PARTIAL_NON_BLIND — not used"},
-    "w3_reproduction_years": [2021, 2022, 2023, 2024, 2025]
+    "excluded": {
+      "2026": "PARTIAL_NON_BLIND — not used"
+    },
+    "w3_reproduction_years": [
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ]
   },
   "svr": {
     "base_policy": "A",
@@ -25,14 +35,29 @@
     "min_inner_val_n": 50,
     "fit_function": "r2h.annual_expanding.fit.fit_annual (unchanged)",
     "forecast_function": "r2h.annual_expanding.fit.forecast_year policy A (unchanged); context = all valid returns before the refit date",
-    "training_windows": ["expanding", 252, 504, 756],
-    "refit_schedules": ["annual", 63, 21],
+    "training_windows": [
+      "expanding",
+      252,
+      504,
+      756
+    ],
+    "refit_schedules": [
+      "annual",
+      63,
+      21
+    ],
     "history_shorter_than_window": "use all available history, flag HISTORY_TRUNCATED (identical to expanding on that segment)"
   },
   "cusum": {
     "rolling_function": "r2h.svrgarch_etf.rolling.rolling_cusum (unchanged, min_valid_frac 0.9)",
     "primary_window": 60,
-    "windows": [20, 30, 60, 120, 252],
+    "windows": [
+      20,
+      30,
+      60,
+      120,
+      252
+    ],
     "rolling_reset_semantics": "window may not reach before the last reset date; first w-1 days after a reset = WINDOW_NOT_AVAILABLE",
     "page": {
       "input": "standardized residual squared x_t = e_t^2",
@@ -60,17 +85,65 @@
     "information": "score at t uses returns/prices up to close t only; threshold = quantile of the rule's own scores strictly before t (expanding, min 120 prior scores, warm-up 2019)",
     "application": "trigger confirmed at close t -> reset/refit takes effect from t+1",
     "edge": "trigger only on entry into exceedance (no repeat while the score stays above threshold)",
-    "refractory_gaps": [0, 10, 20],
+    "refractory_gaps": [
+      0,
+      10,
+      20
+    ],
     "primary_gap": 20,
-    "quantiles": [0.95, 0.99],
-    "P_price_slope": {"L": [5, 10, 20], "score": "OLS slope of log price over [t-L+1,t] minus the same over [t-2L+1,t-L]; strength = abs; direction = sign"},
-    "V_volatility": {"L": [5, 20, 60], "score": "ln(var(r[t-L+1..t]) / var(r[t-2L+1..t-L])) (ddof=1); variants two_sided |score|, expansion score>0, contraction -score>0"},
-    "M_moving_average": {"pairs": [[5, 20], [10, 60], [20, 60]], "score": "gap_t = ln(MA_s/MA_l) of Close; change = gap_t - gap_{t-s}; strength = abs; cross flag = sign(gap_t) != sign(gap_{t-1})"},
-    "K_kurtosis": {"L": [60, 120], "score": "excess kurtosis of r over [t-L+1,t] minus over [t-2L+1,t-L]; strength = abs; winsorized 1/99 variant recorded for outlier influence"},
+    "quantiles": [
+      0.95,
+      0.99
+    ],
+    "P_price_slope": {
+      "L": [
+        5,
+        10,
+        20
+      ],
+      "score": "OLS slope of log price over [t-L+1,t] minus the same over [t-2L+1,t-L]; strength = abs; direction = sign"
+    },
+    "V_volatility": {
+      "L": [
+        5,
+        20,
+        60
+      ],
+      "score": "ln(var(r[t-L+1..t]) / var(r[t-2L+1..t-L])) (ddof=1); variants two_sided |score|, expansion score>0, contraction -score>0"
+    },
+    "M_moving_average": {
+      "pairs": [
+        [
+          5,
+          20
+        ],
+        [
+          10,
+          60
+        ],
+        [
+          20,
+          60
+        ]
+      ],
+      "score": "gap_t = ln(MA_s/MA_l) of Close; change = gap_t - gap_{t-s}; strength = abs; cross flag = sign(gap_t) != sign(gap_{t-1})"
+    },
+    "K_kurtosis": {
+      "L": [
+        60,
+        120
+      ],
+      "score": "excess kurtosis of r over [t-L+1,t] minus over [t-2L+1,t-L]; strength = abs; winsorized 1/99 variant recorded for outlier influence"
+    },
     "primary_rule_for_reset_refit": "V20 two_sided q0.99 gap20 (fixed before results)"
   },
   "reset_E5": {
-    "detectors": ["rolling w60", "page_upper", "page_lower", "page_two_sided"],
+    "detectors": [
+      "rolling w60",
+      "page_upper",
+      "page_lower",
+      "page_two_sided"
+    ],
     "placebos": {
       "calendar": "same number of resets, evenly spaced over evaluation days",
       "random": "same number of resets, uniform dates with the same refractory gap, 200 draws",
@@ -78,24 +151,54 @@
     }
   },
   "svr_policy_E6_E10": {
-    "E6_training_window": ["expanding", 252, 504, 756],
-    "E7_refit_frequency": ["annual", 63, 21],
-    "E8_change_response": ["none", "cusum_reset_only", "svr_refit_only", "reset_and_refit"],
-    "E9_refit_grace_days": [0, 20, 60],
+    "E6_training_window": [
+      "expanding",
+      252,
+      504,
+      756
+    ],
+    "E7_refit_frequency": [
+      "annual",
+      63,
+      21
+    ],
+    "E8_change_response": [
+      "none",
+      "cusum_reset_only",
+      "svr_refit_only",
+      "reset_and_refit"
+    ],
+    "E9_refit_grace_days": [
+      0,
+      20,
+      60
+    ],
     "E10_adaptive_window": "on primary-rule triggers (V20 two_sided q0.95 gap20): strength past-percentile >= 0.995 -> refit trailing 252; >= 0.99 -> 504; >= 0.95 -> 756; scheduled annual expanding refits unchanged"
   },
   "calibration_E11": {
-    "null_dgp": "GARCH(1,1)-t (r2h.joint_cusum.dcc.fit_garch_t) fitted to 2019 returns only, simulated on the real 2019-2025 calendar; full pipeline re-run per path",
-    "methods": ["asymptotic_1.3397", "normal_mc", "iid_bootstrap_presample", "block_bootstrap_presample", "garch_t_full_pipeline"],
+    "null_dgp": "GARCH(1,1)-t (r2h.joint_cusum.dcc.fit_garch_t) fitted to 2019-01-03..2020-12-30 returns (lock-2; lock-1 2019-only fit was degenerate alpha=0, beta=0.0008 = iid t, kept as N0); simulated on the real 2019-2025 calendar; full pipeline re-run per path",
+    "methods": [
+      "asymptotic_1.3397",
+      "normal_mc",
+      "iid_bootstrap_presample",
+      "block_bootstrap_presample",
+      "garch_t_full_pipeline"
+    ],
     "false_alarm_metric": "probability of >=1 alarm day in a calendar-year block (2021..2025 blocks) under the null",
-    "alpha_levels": [0.05, 0.20],
+    "alpha_levels": [
+      0.05,
+      0.2
+    ],
     "primary_alpha": 0.05,
     "calibration_reps": 1000,
     "size_holdout_reps": 500,
-    "null_validity_checks": "per year: mean e^2, excess kurtosis, Ljung-Box Q(10) on e^2, ARCH-LM(5); observed outside null central 99% in any year -> NULL_MODEL_INVALID for confirmatory p-values"
+    "null_validity_checks": "per year: mean e^2, excess kurtosis, Ljung-Box Q(10) on e^2, ARCH-LM(5); observed outside null central 99% in any year -> NULL_MODEL_INVALID for confirmatory p-values",
+    "null_dgp_rule": "prefer fit window ending 2020-12-30 (no data from the 2021-2025 false-alarm blocks); fall back to 2019-2025 only if a parameter is on a bound (alpha<=1e-4, beta<=1e-4, persistence>=0.999-1e-4, nu at its limits)",
+    "null_dgp_fit_end": "2021-01-01",
+    "primary_calibration_id": "garch_t_N1"
   },
   "synthetic": {
-    "base": "GARCH(1,1)-t fitted to 2019; same base innovations for rep i across scenarios (paired)",
+    "base": "GARCH(1,1)-t fitted to 2019-2020 (same as null, lock-2); same base innovations for rep i across scenarios (paired)",
     "change_window": "tau uniform over evaluation days 2021-03-02..2025-09-30 unless stated",
     "detection_horizon_days": 60,
     "reps_per_scenario": 500,
@@ -117,7 +220,14 @@
     },
     "multiplier_semantics": "r_t = mu + sqrt(m_t) * (GARCH-t innovation path); GARCH recursion unchanged",
     "detection": "first alarm day in [tau, tau+H]; delay = alarm - tau; delay summarized only over detected reps; pre-tau alarms reported separately",
-    "pipelines": ["B1_annual_expanding", "refit_63", "refit_21", "trailing_252", "refit_on_V20", "reset_and_refit_V20"]
+    "pipelines": [
+      "B1_annual_expanding",
+      "refit_63",
+      "refit_21",
+      "trailing_252",
+      "refit_on_V20",
+      "reset_and_refit_V20"
+    ]
   },
   "compute": {
     "cpu_workers_max": 16,

@@ -3,8 +3,8 @@
 | 항목 | 값 |
 |---|---|
 | 브랜치 | `research/12_k200_cusum_controlled_gpu` (기준 `research/11_etf_shock_bottomup@4a3af99`) |
-| 계약 | `12-lock-1` — `RESEARCH_CONTRACT.md`, `configs/t21_k200_cusum_controlled_v1.json` |
-| 현재 단계 | P03 — 실제 자료 통제실험 계산 중 · 합성/귀무 MC 백그라운드 실행 (약 3.7시간) |
+| 계약 | `12-lock-2` — `RESEARCH_CONTRACT.md` + `RESEARCH_CONTRACT_LOCK2.md` (귀무 DGP 적합 구간 2019→2019–2020) |
+| 현재 단계 | N1 귀무·합성 MC 실행 중 (약 3.6시간, 조각 체크포인트). N0 귀무(2019 단독 GARCH-t)는 α=0 퇴화로 실패 — `results_n0_iid_t_2019/` 에 보존, 1차 결과 아님 |
 | 원격 게시 범위 | 이 브랜치를 처음 push 하면 그동안 로컬에만 있던 09·10·11 커밋(`172cbb3`·`20f19fb`·`58013b2`·`4a3af99` 계보)도 함께 원격에 올라간다 (사용자 승인 §1.2) |
 | 차단 | `BLOCKERS.md` |
 

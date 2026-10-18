@@ -43,7 +43,9 @@ def reset_positions(m: Market, reset: str, cp_effect: dict[tuple[str, float, int
 
 
 def raw_statistic(detector: str, e: np.ndarray, r_eval: np.ndarray, w, resets: list[int]) -> dict[str, np.ndarray]:
-    """원시 경로. rolling → T, page → S (경보 후 재설정 없는 자유 상태) 와 상태코드."""
+    """원시 경로. rolling → T, page → S (경보 후 재설정 없는 자유 상태) 와 상태코드. ``*_sn`` = 자기정규화 잔차 (X1)."""
+    if detector.endswith("_sn"):
+        return raw_statistic(detector[:-3], C.selfnorm(e), r_eval, w, resets)
     if detector == "rolling_cos":
         return {"T": C.rolling_segmented(e, int(w), resets)}
     if detector == "raw_rolling_cos":

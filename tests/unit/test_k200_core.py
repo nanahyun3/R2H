@@ -141,3 +141,16 @@ def test_mask_crossing_equals_segmented() -> None:
         got = mask_crossing(full, M, w)
         for i, rs in enumerate(resets):
             assert np.array_equal(got[i], C.rolling_segmented(E[i], w, rs), equal_nan=True)
+
+
+def test_selfnorm_uses_past_only_and_rescales() -> None:
+    rng = _rng(8)
+    e = 2.0 * rng.standard_normal(600)
+    z = C.selfnorm(e)
+    assert np.isnan(z[: 61 + 120 - 1]).all()
+    assert np.nanmean(z[400:] ** 2) == pytest.approx(1.0, abs=0.25)
+    e2 = e.copy()
+    e2[500:] = 99.0  # 미래 변경이 과거 값에 영향 없음
+    assert np.array_equal(C.selfnorm(e2)[:500], z[:500], equal_nan=True)
+    B = np.stack([e, e2])
+    assert np.array_equal(C.selfnorm(B)[1], C.selfnorm(e2), equal_nan=True)

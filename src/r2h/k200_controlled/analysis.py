@@ -67,21 +67,24 @@ def observed_alarms(ob: Observed, eid: str, row, crit) -> np.ndarray:
     if row.detector in ("rolling_cos", "raw_rolling_cos"):
         return np.nan_to_num(T, nan=-np.inf) >= crit
     e = ob.paths[row.svr].e
+    det = row.detector
+    if det.endswith("_sn"):
+        e, det = C.selfnorm(e), det[:-3]
     rs = ob.resets[eid]
-    if row.detector in LAM:
-        return C.page_alarm(e, LAM[row.detector], crit, rs)[1]
+    if det in LAM:
+        return C.page_alarm(e, LAM[det], crit, rs)[1]
     hu, hd = crit
     return C.page_alarm(e, 2.0, hu, rs)[1] | C.page_alarm(e, 0.5, hd, rs)[1]
 
 
 def crit_for(cal: dict, row, alpha: float):
-    if row.calibration != "garch_t_full_pipeline":
+    if row.calibration != "garch_t_N1":
         return cal["alt"][row.calibration][alpha]
     return cal["res"][key_of(row)]["crit"][alpha]
 
 
 def table_for(cal: dict, row) -> dict | None:
-    if row.calibration != "garch_t_full_pipeline":
+    if row.calibration != "garch_t_N1":
         return None
     return cal["res"][key_of(row)]["table"]
 

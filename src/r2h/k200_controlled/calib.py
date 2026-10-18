@@ -135,3 +135,23 @@ def mask_crossing(T: np.ndarray, reset_mask: np.ndarray, w: int) -> np.ndarray:
     lag[:, w - 1 :] = c[:, : c.shape[1] - w + 1]
     T[(c - lag) > 0] = np.nan
     return T
+
+
+def cluster_bootstrap_ci(alarm: np.ndarray, blocks: list[np.ndarray], reps: int = 2000, seed: int = 0) -> tuple[float, float]:
+    """경로 단위 군집 부트스트랩 95% 구간 — 같은 경로의 5개 연도 블록 상관을 보존 (경로를 복원추출)."""
+    hits = np.stack([np.atleast_2d(alarm)[:, b].any(axis=1) for b in blocks], axis=1).mean(axis=1)
+    rng = np.random.default_rng([seed, 31])
+    idx = rng.integers(0, hits.size, size=(reps, hits.size))
+    boot = hits[idx].mean(axis=1)
+    return float(np.quantile(boot, 0.025)), float(np.quantile(boot, 0.975))
+
+
+def block_hit_icc(alarm: np.ndarray, blocks: list[np.ndarray]) -> float:
+    """같은 경로 블록 간 경보 지시의 군집내 상관 (ANOVA 추정). Wilson 이 가정하는 독립성 점검용."""
+    H = np.stack([np.atleast_2d(alarm)[:, b].any(axis=1) for b in blocks], axis=1).astype(float)
+    n, k = H.shape
+    if n < 2 or H.var() == 0:
+        return float("nan")
+    msb = k * np.var(H.mean(axis=1), ddof=1)
+    msw = np.sum((H - H.mean(axis=1, keepdims=True)) ** 2) / (n * (k - 1))
+    return float((msb - msw) / (msb + (k - 1) * msw))
