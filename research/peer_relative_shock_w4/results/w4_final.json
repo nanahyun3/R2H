@@ -16,6 +16,18 @@
       "all17_A_and_B_non_NA_days": 1225
     }
   },
+  "pilot_2020_days17": {
+    "q20": {
+      "A": 16,
+      "B": 0,
+      "AB": 0
+    },
+    "q60": {
+      "A": 0,
+      "B": 0,
+      "AB": 0
+    }
+  },
   "n_intervals": 0,
   "sensitivity_verdicts": {
     "MAIN": "VALID_ZERO_INTERVALS",

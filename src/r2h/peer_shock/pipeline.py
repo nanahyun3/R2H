@@ -188,6 +188,25 @@ def daily_counts(main: dict, cfg: dict) -> pd.DataFrame:
     return gl
 
 
+def global_by_period(main: dict, cfg: dict) -> pd.DataFrame:
+    """기간 지위(2019 기준·2020 파일럿·2021–25 주분석·2026 부분)별 17/17 충족일·최대 참여·NA 일수."""
+    g = main["global"].assign(period=_period(main["global"]["date"], cfg))
+    f = main["final"].assign(period=_period(main["final"]["date"], cfg)).set_index("date")["FINAL_SHOCK"]
+    rows = []
+    for (per, q), d in g.groupby(["period", "q"], sort=False):
+        rec = {"period": per, "q": q, "days": len(d), "first": pd.Timestamp(d["date"].min()).date(),
+               "last": pd.Timestamp(d["date"].max()).date()}
+        for k in ("A", "B", "AB"):
+            rec[f"days17_{k}"] = int((d[f"GLOBAL_{k}"] == 1).sum())
+            rec[f"na_{k}"] = int(d[f"GLOBAL_{k}"].isna().sum())
+            rec[f"max_n_{k}"] = int(d[f"n_{k}"].max())
+        ff = f.reindex(d["date"])
+        rec["final_true"] = int((ff == 1).sum())
+        rec["final_na"] = int(ff.isna().sum())
+        rows.append(rec)
+    return pd.DataFrame(rows)
+
+
 def bottleneck(main: dict, cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame]:
     """병목: (1) 그룹별 '그날 AB 가 0 인' 비율과 최대 참여일에 빠진 그룹, (2) 한 그룹을 뺀 16/16 진단 일수.
 
@@ -501,6 +520,8 @@ def run(root: Path) -> dict:
     write_csv(fl, out / "final_daily_labels.csv")
     write_csv(kospi_aux_table(main, cfg), out / "kospi200_aux_diagnostics.csv")
     write_csv(main["intervals"], out / "shock_intervals.csv")
+    gbp = global_by_period(main, cfg)
+    write_csv(gbp, out / "global_by_period.csv")
     bt, dist = bottleneck(main, cfg)
     write_csv(bt, out / "bottleneck_groups.csv")
     write_csv(dist, out / "participation_distribution.csv")
@@ -514,12 +535,15 @@ def run(root: Path) -> dict:
     full = {f"q{q}": {"days": int((gp["q"] == q).sum()),
                       "all17_A_and_B_non_NA_days": int(((gp["q"] == q) & (gp["n_eval_A"] == 17) & (gp["n_eval_B"] == 17)).sum())}
             for q in cfg["q_main"]}
-    final = {"verdict": main["verdict"], "primary_fully_evaluable": full, "n_intervals": len(main["intervals"]),
+    pil = gbp[gbp["period"] == "PILOT"].set_index("q")
+    final = {"verdict": main["verdict"], "primary_fully_evaluable": full,
+             "pilot_2020_days17": {f"q{q}": {k: int(pil.loc[q, f"days17_{k}"]) for k in ("A", "B", "AB")} for q in cfg["q_main"]}, "n_intervals": len(main["intervals"]),
              "sensitivity_verdicts": dict(zip(sens["variant"], sens["verdict"])),
              "calendar": [str(dates[0].date()), str(dates[-1].date()), len(dates)],
              "n_peer_tickers": len(tickers) - len(eval_set)}
     (out / "w4_final.json").write_text(json.dumps(final, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    return {"cfg": cfg, "main": main, "res": res, "sens": sens, "final": final}
+    return {"cfg": cfg, "main": main, "res": res, "sens": sens, "final": final, "closes": closes, "sig": sig,
+            "w2ref": w2ref, "uni": uni, "groups": groups, "mapping": mapping, "peers": peers, "dates": dates}
 
 
 def results_digest(root: Path) -> dict[str, str]:

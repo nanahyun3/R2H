@@ -1,0 +1,647 @@
+{
+ "F01_sigma20_grid": {
+  "069500": {
+   "A_days": 95,
+   "max": 43.42,
+   "median": 17.47
+  },
+  "091170": {
+   "A_days": 110,
+   "max": 43.46,
+   "median": 22.68
+  },
+  "091180": {
+   "A_days": 53,
+   "max": 64.86,
+   "median": 22.5
+  },
+  "091230": {
+   "A_days": 192,
+   "max": 63.16,
+   "median": 28.06
+  },
+  "102110": {
+   "A_days": 95,
+   "max": 44.03,
+   "median": 17.39
+  },
+  "114800": {
+   "A_days": 97,
+   "max": 41.55,
+   "median": 17.81
+  },
+  "117680": {
+   "A_days": 174,
+   "max": 64.14,
+   "median": 27.35
+  },
+  "122630": {
+   "A_days": 96,
+   "max": 81.55,
+   "median": 34.93
+  },
+  "132030": {
+   "A_days": 128,
+   "max": 33.2,
+   "median": 14.08
+  },
+  "133690": {
+   "A_days": 80,
+   "max": 65.66,
+   "median": 17.51
+  },
+  "143860": {
+   "A_days": 48,
+   "max": 47.59,
+   "median": 25.11
+  },
+  "148070": {
+   "A_days": 261,
+   "max": 14.68,
+   "median": 5.52
+  },
+  "153130": {
+   "A_days": 269,
+   "max": 2.49,
+   "median": 0.17
+  },
+  "161510": {
+   "A_days": 75,
+   "max": 31.79,
+   "median": 14.95
+  },
+  "192090": {
+   "A_days": 49,
+   "max": 67.36,
+   "median": 16.07
+  },
+  "219480": {
+   "A_days": 76,
+   "max": 63.31,
+   "median": 13.68
+  },
+  "229200": {
+   "A_days": 121,
+   "max": 65.85,
+   "median": 24.47
+  },
+  "261220": {
+   "A_days": 59,
+   "max": 99.76,
+   "median": 31.79
+  },
+  "261240": {
+   "A_days": 159,
+   "max": 21.88,
+   "median": 7.95
+  },
+  "305540": {
+   "A_days": 197,
+   "max": 100.7,
+   "median": 32.64
+  }
+ },
+ "F02_sigma60_grid": {
+  "069500": {
+   "A_days": 90,
+   "max": 29.5,
+   "median": 18.17
+  },
+  "091170": {
+   "A_days": 74,
+   "max": 34.95,
+   "median": 23.76
+  },
+  "091180": {
+   "A_days": 0,
+   "max": 48.16,
+   "median": 22.76
+  },
+  "091230": {
+   "A_days": 186,
+   "max": 47.8,
+   "median": 28.61
+  },
+  "102110": {
+   "A_days": 90,
+   "max": 29.72,
+   "median": 18.13
+  },
+  "114800": {
+   "A_days": 88,
+   "max": 30.49,
+   "median": 18.53
+  },
+  "117680": {
+   "A_days": 97,
+   "max": 52.41,
+   "median": 28.41
+  },
+  "122630": {
+   "A_days": 91,
+   "max": 60.13,
+   "median": 36.32
+  },
+  "132030": {
+   "A_days": 109,
+   "max": 24.09,
+   "median": 14.5
+  },
+  "133690": {
+   "A_days": 79,
+   "max": 40.8,
+   "median": 18.12
+  },
+  "143860": {
+   "A_days": 0,
+   "max": 40.04,
+   "median": 25.93
+  },
+  "148070": {
+   "A_days": 300,
+   "max": 11.88,
+   "median": 5.56
+  },
+  "153130": {
+   "A_days": 352,
+   "max": 1.43,
+   "median": 0.19
+  },
+  "161510": {
+   "A_days": 28,
+   "max": 25.79,
+   "median": 16.54
+  },
+  "192090": {
+   "A_days": 64,
+   "max": 42.14,
+   "median": 17.46
+  },
+  "219480": {
+   "A_days": 97,
+   "max": 37.81,
+   "median": 13.81
+  },
+  "229200": {
+   "A_days": 126,
+   "max": 43.48,
+   "median": 27.13
+  },
+  "261220": {
+   "A_days": 0,
+   "max": 67.67,
+   "median": 34.2
+  },
+  "261240": {
+   "A_days": 23,
+   "max": 15.7,
+   "median": 8.12
+  },
+  "305540": {
+   "A_days": 169,
+   "max": 64.9,
+   "median": 34.51
+  }
+ },
+ "F03_level_vs_rank": {
+  "max_A_q20": [
+   "153130",
+   0.2195918367
+  ],
+  "zero_A_q60": [
+   "091180",
+   "143860",
+   "261220"
+  ]
+ },
+ "F04_A_heatmap": {
+  "q20_max_date": "2020-03-16",
+  "q20_max_etf_A_same_day": 20,
+  "q60_max_date": "2020-04-07",
+  "q60_max_etf_A_same_day": 19
+ },
+ "F05_leverage_normalization": {
+  "ratio_114800": 1.0254,
+  "ratio_122630": 1.0044
+ },
+ "F06_peer_network": {
+  "late_excluded": 10,
+  "n_peers": 42,
+  "tier1_edges": 31,
+  "tier2_edges": 24
+ },
+ "F07_peer_ratio_grid": {
+  "069500": {
+   "B_DOWN": 30,
+   "B_UP": 31
+  },
+  "091170": {
+   "B_DOWN": 50,
+   "B_UP": 84
+  },
+  "091180": {
+   "B_DOWN": 77,
+   "B_UP": 46
+  },
+  "091230": {
+   "B_DOWN": 119,
+   "B_UP": 88
+  },
+  "102110": {
+   "B_DOWN": 63,
+   "B_UP": 38
+  },
+  "114800": {
+   "B_DOWN": 82,
+   "B_UP": 66
+  },
+  "117680": {
+   "B_DOWN": 46,
+   "B_UP": 88
+  },
+  "122630": {
+   "B_DOWN": 66,
+   "B_UP": 19
+  },
+  "132030": {
+   "B_DOWN": 47,
+   "B_UP": 43
+  },
+  "133690": {
+   "B_DOWN": 26,
+   "B_UP": 106
+  },
+  "143860": {
+   "B_DOWN": 126,
+   "B_UP": 5
+  },
+  "148070": {
+   "B_DOWN": 82,
+   "B_UP": 84
+  },
+  "153130": {
+   "B_DOWN": 92,
+   "B_UP": 90
+  },
+  "161510": {
+   "B_DOWN": 123,
+   "B_UP": 81
+  },
+  "192090": {
+   "B_DOWN": 21,
+   "B_UP": 4
+  },
+  "219480": {
+   "B_DOWN": 59,
+   "B_UP": 2
+  },
+  "229200": {
+   "B_DOWN": 23,
+   "B_UP": 56
+  },
+  "261220": {
+   "B_DOWN": 27,
+   "B_UP": 31
+  },
+  "261240": {
+   "B_DOWN": 83,
+   "B_UP": 38
+  },
+  "305540": {
+   "B_DOWN": 18,
+   "B_UP": 22
+  }
+ },
+ "F08_peer_ratio_rank_heat": {},
+ "F09_B_direction_map": {
+  "q20": {
+   "down": 1260,
+   "up": 1022
+  },
+  "q60": {
+   "down": 1544,
+   "up": 1364
+  }
+ },
+ "F10_kospi200_four": {
+  "core_B_DOWN": 71,
+  "core_B_UP": 87,
+  "core_L_abs_median_pctpt": 0.894,
+  "group_AB_days": 8
+ },
+ "F11_domestic_peer": {
+  "091170": {
+   "AB": 20,
+   "B_DOWN": 50,
+   "B_UP": 84
+  },
+  "091180": {
+   "AB": 7,
+   "B_DOWN": 77,
+   "B_UP": 46
+  },
+  "091230": {
+   "AB": 26,
+   "B_DOWN": 119,
+   "B_UP": 88
+  },
+  "117680": {
+   "AB": 37,
+   "B_DOWN": 46,
+   "B_UP": 88
+  },
+  "143860": {
+   "AB": 14,
+   "B_DOWN": 126,
+   "B_UP": 5
+  },
+  "161510": {
+   "AB": 13,
+   "B_DOWN": 123,
+   "B_UP": 81
+  },
+  "229200": {
+   "AB": 5,
+   "B_DOWN": 23,
+   "B_UP": 56
+  },
+  "305540": {
+   "AB": 0,
+   "B_DOWN": 18,
+   "B_UP": 22
+  }
+ },
+ "F12_overseas_bond_cmd_fx_peer": {
+  "132030": {
+   "AB": 0,
+   "B_DOWN": 47,
+   "B_UP": 43
+  },
+  "133690": {
+   "AB": 4,
+   "B_DOWN": 26,
+   "B_UP": 106
+  },
+  "148070": {
+   "AB": 39,
+   "B_DOWN": 82,
+   "B_UP": 84
+  },
+  "153130": {
+   "AB": 83,
+   "B_DOWN": 92,
+   "B_UP": 90
+  },
+  "192090": {
+   "AB": 0,
+   "B_DOWN": 21,
+   "B_UP": 4
+  },
+  "219480": {
+   "AB": 0,
+   "B_DOWN": 59,
+   "B_UP": 2
+  },
+  "261220": {
+   "AB": 0,
+   "B_DOWN": 27,
+   "B_UP": 31
+  },
+  "261240": {
+   "AB": 0,
+   "B_DOWN": 83,
+   "B_UP": 38
+  }
+ },
+ "F13_group_A_timeline": {
+  "q20_max_all": 17,
+  "q20_max_primary": 12,
+  "q60_max_all": 16,
+  "q60_max_primary": 6
+ },
+ "F14_group_B_timeline": {
+  "q20_max_all": 8,
+  "q20_max_primary": 7,
+  "q60_max_all": 10,
+  "q60_max_primary": 7
+ },
+ "F15_group_AB_timeline": {
+  "q20_max_all": 6,
+  "q20_max_primary": 3,
+  "q60_max_all": 5,
+  "q60_max_primary": 2
+ },
+ "F16_count_A": {
+  "pilot_max": {
+   "20": 17,
+   "60": 16
+  },
+  "q20_max": 12,
+  "q20_max_date": "2025-04-11",
+  "q60_max": 6,
+  "q60_max_date": "2022-11-21"
+ },
+ "F17_count_B": {
+  "pilot_max": {
+   "20": 8,
+   "60": 10
+  },
+  "q20_max": 7,
+  "q20_max_date": "2021-04-09",
+  "q60_max": 7,
+  "q60_max_date": "2024-08-06"
+ },
+ "F18_count_AB": {
+  "pilot_max": {
+   "20": 6,
+   "60": 5
+  },
+  "q20_max": 3,
+  "q20_max_date": "2022-10-04",
+  "q60_max": 2,
+  "q60_max_date": "2024-04-11"
+ },
+ "F19_A_B_intersection": {
+  "q20": {
+   "AB_share_of_A": 0.1261,
+   "AB_total": 307,
+   "A_total": 2434,
+   "B_total": 2282
+  },
+  "q60": {
+   "AB_share_of_A": 0.2215,
+   "AB_total": 457,
+   "A_total": 2063,
+   "B_total": 2908
+  }
+ },
+ "F20_horizon_20_vs_60": {
+  "A": 0.4742,
+  "AB": 0.2596,
+  "B": 0.3363,
+  "jaccard_group_day_A": 0.3033,
+  "jaccard_group_day_AB": 0.1747
+ },
+ "F21_global_A_17of17": {
+  "q20_days17": 0,
+  "q20_min_gap": 5,
+  "q20_pilot_days17": 16,
+  "q60_days17": 0,
+  "q60_min_gap": 11,
+  "q60_pilot_days17": 0
+ },
+ "F22_global_B_17of17": {
+  "q20_days17": 0,
+  "q20_min_gap": 10,
+  "q20_pilot_days17": 0,
+  "q60_days17": 0,
+  "q60_min_gap": 10,
+  "q60_pilot_days17": 0
+ },
+ "F23_global_AB_17of17": {
+  "q20_days17": 0,
+  "q20_min_gap": 14,
+  "q20_pilot_days17": 0,
+  "q60_days17": 0,
+  "q60_min_gap": 15,
+  "q60_pilot_days17": 0
+ },
+ "F24_final_shock_timeline": {
+  "n_intervals": 0,
+  "primary_days": 1225,
+  "primary_evaluable_days": 1225,
+  "primary_evaluable_share": 1.0,
+  "primary_final_true_days": 0,
+  "verdict": "VALID_ZERO_INTERVALS"
+ },
+ "F25_interval_durations": {
+  "intervals_all_variants": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "max_group_run": {
+   "20": 26,
+   "60": 61
+  }
+ },
+ "F26_bottleneck": {
+  "q20": {
+   "loo_AB_max": 0,
+   "loo_A_max": 0,
+   "loo_B_max": 0,
+   "sole_blocker_AB_max": 0
+  },
+  "q60": {
+   "loo_AB_max": 0,
+   "loo_A_max": 0,
+   "loo_B_max": 0,
+   "sole_blocker_AB_max": 0
+  }
+ },
+ "F27_participation_distribution": {
+  "q20_AB_max": 3,
+  "q20_A_max": 12,
+  "q20_B_max": 7,
+  "q60_AB_max": 2,
+  "q60_A_max": 6,
+  "q60_B_max": 7
+ },
+ "F28_event_E2024_08": {
+  "q20": {
+   "final_days": 0,
+   "max_n_A": 10,
+   "max_n_AB": 3,
+   "max_n_A_date": "2024-08-07",
+   "max_n_B": 5
+  },
+  "q60": {
+   "final_days": 0,
+   "max_n_A": 4,
+   "max_n_AB": 2,
+   "max_n_A_date": "2024-09-25",
+   "max_n_B": 7
+  }
+ },
+ "F29_event_E2025_04": {
+  "q20": {
+   "final_days": 0,
+   "max_n_A": 12,
+   "max_n_AB": 1,
+   "max_n_A_date": "2025-04-11",
+   "max_n_B": 4
+  },
+  "q60": {
+   "final_days": 0,
+   "max_n_A": 4,
+   "max_n_AB": 1,
+   "max_n_A_date": "2025-04-10",
+   "max_n_B": 3
+  }
+ },
+ "F30_event_E2022_bond": {
+  "q20": {
+   "final_days": 0,
+   "max_n_A": 9,
+   "max_n_AB": 3,
+   "max_n_A_date": "2022-10-11",
+   "max_n_B": 4
+  },
+  "q60": {
+   "final_days": 0,
+   "max_n_A": 6,
+   "max_n_AB": 1,
+   "max_n_A_date": "2022-11-21",
+   "max_n_B": 3
+  }
+ },
+ "F31_w3_comparison": {
+  "w3_episodes": 20,
+  "w4_final_days_during_w3": 0,
+  "w4_max_n_AB_during_w3": 3
+ },
+ "F32_definition_cases": {
+  "A 만 (자기 과거 고변동성, Peer 와 같이 움직임)": {
+   "days": 222,
+   "longest_run": [
+    "2022-10-06",
+    "2022-11-22"
+   ],
+   "ticker": "148070"
+  },
+  "AB (둘 다)": {
+   "days": 83,
+   "longest_run": [
+    "2022-08-26",
+    "2022-10-05"
+   ],
+   "ticker": "153130"
+  },
+  "B↑ 만 (Peer 대비 상대 확대, 자기 과거 기준 평범)": {
+   "days": 102,
+   "longest_run": [
+    "2021-11-09",
+    "2021-11-26"
+   ],
+   "ticker": "133690"
+  },
+  "B↓ 만 (Peer 가 더 크게 움직임)": {
+   "days": 123,
+   "longest_run": [
+    "2023-11-06",
+    "2023-12-08"
+   ],
+   "ticker": "161510"
+  }
+ },
+ "F33_eligibility": {
+  "peer_insufficient_total": 130,
+  "zero_den_total": 0,
+  "zero_num_total": 0
+ },
+ "F34_summary_limits": {
+  "verdict": "VALID_ZERO_INTERVALS"
+ }
+}

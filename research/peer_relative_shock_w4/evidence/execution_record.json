@@ -1,0 +1,10 @@
+{
+  "notebook": "09_ETF20종_Peer상대변동성_급변구간정의.ipynb",
+  "status": "PASS",
+  "start_utc": "2026-10-18T10:24:12.338382+00:00",
+  "end_utc": "2026-10-18T10:25:31.833497+00:00",
+  "seconds": 77.18,
+  "returncode": 0,
+  "log": "research/peer_relative_shock_w4/evidence/09_execution.log",
+  "python": "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python"
+}
