@@ -13126,8 +13126,8 @@ L 994.32 1101.119579
    </g>
   </g>
   <g id="text_97">
-   <!-- F28 · W2 2024-08 다자산 변동성 확대 — W4 최대 A 10/17 (q20, 2024-08-07), B 5, AB 3 · FINAL 0일 -->
-   <g transform="translate(240.304492 16.4) scale(0.115 -0.115)">
+   <!-- F28 · W2 2024-08 다자산 변동성 확대 — W4 최대 A 10/17 (q20, 첫 도달 2024-08-07), B 5, AB 3 · FINAL 0일 -->
+   <g transform="translate(220.869492 16.4) scale(0.115 -0.115)">
     <defs>
      <path id="NanumGothic-68" d="M 1293 2125 
 Q 1293 1965 1184 1862 
@@ -13525,39 +13525,44 @@ z
     <use xlink:href="#NanumGothic-11" transform="translate(2799.8125 0)"/>
     <use xlink:href="#NanumGothic-d" transform="translate(2860.40625 0)"/>
     <use xlink:href="#NanumGothic-1" transform="translate(2890.703125 0)"/>
-    <use xlink:href="#NanumGothic-13" transform="translate(2918.703125 0)"/>
-    <use xlink:href="#NanumGothic-11" transform="translate(2979.296875 0)"/>
-    <use xlink:href="#NanumGothic-13" transform="translate(3039.890625 0)"/>
-    <use xlink:href="#NanumGothic-15" transform="translate(3100.484375 0)"/>
-    <use xlink:href="#NanumGothic-e" transform="translate(3161.078125 0)"/>
-    <use xlink:href="#NanumGothic-11" transform="translate(3197.375 0)"/>
-    <use xlink:href="#NanumGothic-19" transform="translate(3257.96875 0)"/>
-    <use xlink:href="#NanumGothic-e" transform="translate(3318.5625 0)"/>
-    <use xlink:href="#NanumGothic-11" transform="translate(3354.859375 0)"/>
-    <use xlink:href="#NanumGothic-18" transform="translate(3415.453125 0)"/>
-    <use xlink:href="#NanumGothic-a" transform="translate(3476.046875 0)"/>
-    <use xlink:href="#NanumGothic-d" transform="translate(3512.34375 0)"/>
-    <use xlink:href="#NanumGothic-1" transform="translate(3542.640625 0)"/>
-    <use xlink:href="#NanumGothic-23" transform="translate(3570.640625 0)"/>
-    <use xlink:href="#NanumGothic-1" transform="translate(3631.234375 0)"/>
-    <use xlink:href="#NanumGothic-16" transform="translate(3659.234375 0)"/>
-    <use xlink:href="#NanumGothic-d" transform="translate(3719.828125 0)"/>
-    <use xlink:href="#NanumGothic-1" transform="translate(3750.125 0)"/>
-    <use xlink:href="#NanumGothic-22" transform="translate(3778.125 0)"/>
-    <use xlink:href="#NanumGothic-23" transform="translate(3850.828125 0)"/>
-    <use xlink:href="#NanumGothic-1" transform="translate(3911.421875 0)"/>
-    <use xlink:href="#NanumGothic-14" transform="translate(3939.421875 0)"/>
-    <use xlink:href="#NanumGothic-1" transform="translate(4000.015625 0)"/>
-    <use xlink:href="#NanumGothic-68" transform="translate(4028.015625 0)"/>
-    <use xlink:href="#NanumGothic-1" transform="translate(4057.015625 0)"/>
-    <use xlink:href="#NanumGothic-27" transform="translate(4085.015625 0)"/>
-    <use xlink:href="#NanumGothic-2a" transform="translate(4135.3125 0)"/>
-    <use xlink:href="#NanumGothic-2f" transform="translate(4159.515625 0)"/>
-    <use xlink:href="#NanumGothic-22" transform="translate(4232.21875 0)"/>
-    <use xlink:href="#NanumGothic-2d" transform="translate(4304.921875 0)"/>
-    <use xlink:href="#NanumGothic-1" transform="translate(4353.328125 0)"/>
-    <use xlink:href="#NanumGothic-11" transform="translate(4381.328125 0)"/>
-    <use xlink:href="#NanumGothic-a4c" transform="translate(4441.921875 0)"/>
+    <use xlink:href="#NanumGothic-b50" transform="translate(2918.703125 0)"/>
+    <use xlink:href="#NanumGothic-1" transform="translate(3012.703125 0)"/>
+    <use xlink:href="#NanumGothic-628" transform="translate(3040.703125 0)"/>
+    <use xlink:href="#NanumGothic-5f3" transform="translate(3134.703125 0)"/>
+    <use xlink:href="#NanumGothic-1" transform="translate(3228.703125 0)"/>
+    <use xlink:href="#NanumGothic-13" transform="translate(3256.703125 0)"/>
+    <use xlink:href="#NanumGothic-11" transform="translate(3317.296875 0)"/>
+    <use xlink:href="#NanumGothic-13" transform="translate(3377.890625 0)"/>
+    <use xlink:href="#NanumGothic-15" transform="translate(3438.484375 0)"/>
+    <use xlink:href="#NanumGothic-e" transform="translate(3499.078125 0)"/>
+    <use xlink:href="#NanumGothic-11" transform="translate(3535.375 0)"/>
+    <use xlink:href="#NanumGothic-19" transform="translate(3595.96875 0)"/>
+    <use xlink:href="#NanumGothic-e" transform="translate(3656.5625 0)"/>
+    <use xlink:href="#NanumGothic-11" transform="translate(3692.859375 0)"/>
+    <use xlink:href="#NanumGothic-18" transform="translate(3753.453125 0)"/>
+    <use xlink:href="#NanumGothic-a" transform="translate(3814.046875 0)"/>
+    <use xlink:href="#NanumGothic-d" transform="translate(3850.34375 0)"/>
+    <use xlink:href="#NanumGothic-1" transform="translate(3880.640625 0)"/>
+    <use xlink:href="#NanumGothic-23" transform="translate(3908.640625 0)"/>
+    <use xlink:href="#NanumGothic-1" transform="translate(3969.234375 0)"/>
+    <use xlink:href="#NanumGothic-16" transform="translate(3997.234375 0)"/>
+    <use xlink:href="#NanumGothic-d" transform="translate(4057.828125 0)"/>
+    <use xlink:href="#NanumGothic-1" transform="translate(4088.125 0)"/>
+    <use xlink:href="#NanumGothic-22" transform="translate(4116.125 0)"/>
+    <use xlink:href="#NanumGothic-23" transform="translate(4188.828125 0)"/>
+    <use xlink:href="#NanumGothic-1" transform="translate(4249.421875 0)"/>
+    <use xlink:href="#NanumGothic-14" transform="translate(4277.421875 0)"/>
+    <use xlink:href="#NanumGothic-1" transform="translate(4338.015625 0)"/>
+    <use xlink:href="#NanumGothic-68" transform="translate(4366.015625 0)"/>
+    <use xlink:href="#NanumGothic-1" transform="translate(4395.015625 0)"/>
+    <use xlink:href="#NanumGothic-27" transform="translate(4423.015625 0)"/>
+    <use xlink:href="#NanumGothic-2a" transform="translate(4473.3125 0)"/>
+    <use xlink:href="#NanumGothic-2f" transform="translate(4497.515625 0)"/>
+    <use xlink:href="#NanumGothic-22" transform="translate(4570.21875 0)"/>
+    <use xlink:href="#NanumGothic-2d" transform="translate(4642.921875 0)"/>
+    <use xlink:href="#NanumGothic-1" transform="translate(4691.328125 0)"/>
+    <use xlink:href="#NanumGothic-11" transform="translate(4719.328125 0)"/>
+    <use xlink:href="#NanumGothic-a4c" transform="translate(4779.921875 0)"/>
    </g>
   </g>
   <g id="text_98">

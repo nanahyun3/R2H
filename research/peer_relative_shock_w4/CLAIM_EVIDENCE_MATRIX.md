@@ -18,4 +18,4 @@
 | C14 | 영변동성 0건, Peer 부족 130 (전부 2019 132030) | `results/zero_volatility_audit.csv` | `core.peer_log_ratio` | 09 §15, F33 |
 | C15 | 20·60일 그룹-일 Jaccard A 0.30 · AB 0.17 | `results/figure_captions.json F20` | `figures.f20_horizons` | 09 §10, F20 |
 
-노트북 09 의 마지막 CLAIMS 셀이 해석 문단 수치 30개를 결과 파일과 다시 대조한다 (30/30).
+노트북 09 의 마지막 CLAIMS 셀이 해석 문단 수치 33개를 결과 파일과 다시 대조한다 (33/33).

@@ -376,7 +376,7 @@ class W4Figures:
             i = pg[f"n_{k}"].idxmax()
             cap[f"q{q}_max"] = int(pg[f"n_{k}"].max())
             cap[f"q{q}_max_date"] = str(pd.Timestamp(pg.loc[i, "date"]).date())
-            ax.annotate(f"q{q} 최대 {cap[f'q{q}_max']} ({cap[f'q{q}_max_date']})", (pg.loc[i, "date"], pg.loc[i, f"n_{k}"]),
+            ax.annotate(f"q{q} 최대 {cap[f'q{q}_max']} (첫 도달 {cap[f'q{q}_max_date']})", (pg.loc[i, "date"], pg.loc[i, f"n_{k}"]),
                         xytext=(10, 8), textcoords="offset points", fontsize=8, color=c)
         ax.axhline(17, color=INK, ls="--", lw=1)
         ax.text(self.dates[5], 17.2, "17/17 — 급변 정의선", fontsize=8)
@@ -644,7 +644,7 @@ class W4Figures:
         gc = cases[(cases["event"] == ev) & (cases["level"] == "global")].set_index("q")
         cap = {f"q{q}": {"max_n_A": int(gc.loc[q, "max_n_A"]), "max_n_B": int(gc.loc[q, "max_n_B"]), "max_n_AB": int(gc.loc[q, "max_n_AB"]),
                          "max_n_A_date": gc.loc[q, "max_n_A_date"], "final_days": int(gc.loc[q, "final_days"])} for q in (20, 60)}
-        fig.suptitle(f"F{num} · {title} — W4 최대 A {cap['q20']['max_n_A']}/17 (q20, {cap['q20']['max_n_A_date']}), B {cap['q20']['max_n_B']}, AB {cap['q20']['max_n_AB']} · FINAL {cap['q20']['final_days']}일", fontsize=11.5)
+        fig.suptitle(f"F{num} · {title} — W4 최대 A {cap['q20']['max_n_A']}/17 (q20, 첫 도달 {cap['q20']['max_n_A_date']}), B {cap['q20']['max_n_B']}, AB {cap['q20']['max_n_AB']} · FINAL {cap['q20']['final_days']}일", fontsize=11.5)
         footnote(fig, f"창 {s.date()} ~ {en.date()}. W2 참조: {self.cfg['events'][ev]['w2_ref']}. W2 는 mean(r²) 기반·KOSPI200 은 구성원 하나라도(OR)·3그룹 이상 교차, W4 는 표본표준편차·Core Pair 둘 다(AND)·17/17·Peer 상대 괴리.")
         fig.tight_layout(rect=(0, 0.02, 1, 0.97))
         return self._save(fig, f"F{num}_event_{ev}", cap)
@@ -774,13 +774,18 @@ class W4Figures:
         ax.legend(fontsize=8, ncol=2)
         style(ax)
         v = self.m["verdict"]
+        mpt = pd.read_csv(self.root / "research/peer_relative_shock_w4/results/max_participation_days.csv")
+        mp = {(r.state, r.q): f"{r.max_groups}/17 · {r.n_days_at_max}일 · " + ", ".join(sp.replace("~", "–")[2:] for sp in r.spans.split(";")) for r in mpt.itertuples()}
+        g20 = self.gl[self.gl["q"] == 20]
+        a17 = g20[g20["GLOBAL_A"] == 1].assign(date=lambda d: pd.to_datetime(d["date"]).dt.date)
         txt = (f"최종 판정: {v['verdict']}\n"
                f"· 주분석 1,225일, 판정 가능 {v['primary_evaluable_share']*100:.0f}% · 17 그룹 A·B 모두 평가 가능\n"
                f"· FINAL_SHOCK = 1: {v['primary_final_true_days']}일 → 급변 구간 0개\n"
-               f"· 최대 참여: A 12/17 (q20, 2025-04) · B 7/17 · AB 3/17 (2024-08~09)\n"
+               "· 최대 참여 (주분석 q20, 도달일 전체):\n"
+               f"   A {mp[('A', 20)]}\n   B {mp[('B', 20)]}\n   AB {mp[('AB', 20)]}\n"
                f"· 민감도 4종(504일 기준·A 0.95·B 2.5%·KOSPI 4종)도 모두 0일\n\n"
                "확정된 계산 사실\n· 이 정의(17/17 ∧ A ∧ 양방향 B)는 2019–2026 자료에서 한 번도 충족되지 않는다\n"
-               "· A 만은 2020-03-16~04-06 (파일럿) q20 에서 17/17 을 16일 충족 — 그날 B 는 3–6/17\n\n"
+               f"· A 만은 {a17['date'].min()}~{a17['date'].max()} (파일럿) q20 에서 17/17 을 {len(a17)}일 충족 — 그날 B 는 {a17['n_B'].min()}–{a17['n_B'].max()}/17\n\n"
                "검증되지 않은 해석\n· 0 이 '시장 급변이 없었다' 를 뜻하지 않는다 (B 는 상대 괴리라 공동 발생을 요구하기 어렵다)\n"
                "· 라벨이 없으므로 CNN 정답·예측 성능 주장 불가\n\n"
                "다음 연구 조건\n· 정의 변경은 새 계약(lock-2)으로만 · 독립 정답 정의 사전 등록")

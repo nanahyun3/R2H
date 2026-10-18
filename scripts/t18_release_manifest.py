@@ -83,13 +83,13 @@ def main() -> int:
     (BASE / "FIGURE_CATALOG.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     cl = ["# W4 주장–근거 표", "", "| # | 주장 | 결과 파일 | 계산 위치 | 노트북·그림 |", "|---|---|---|---|---|"]
     cl += [f"| {a} | {b} | `{c}` | `{d}` | {e} |" for a, b, c, d, e in CLAIMS]
-    cl += ["", "노트북 09 의 마지막 CLAIMS 셀이 해석 문단 수치 30개를 결과 파일과 다시 대조한다 (30/30)."]
+    cl += ["", "노트북 09 의 마지막 CLAIMS 셀이 해석 문단 수치 33개를 결과 파일과 다시 대조한다 (33/33)."]
     (BASE / "CLAIM_EVIDENCE_MATRIX.md").write_text("\n".join(cl) + "\n", encoding="utf-8")
     files = sorted(p for p in BASE.rglob("*") if p.is_file() and p.name != "RELEASE_MANIFEST.json")
     nb = ROOT / "notebooks/09_ETF20종_Peer상대변동성_급변구간정의.ipynb"
     head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
     man = {"study_id": "t18_peer_relative_shock_w4", "protocol_version": "W4-lock-1", "base_commit": "534a122208cfbeeb3361e01f35e66d36ffc54213",
-           "contract_commit": "52f98b0", "head_at_manifest": head,
+           "contract_commit": "52f98b0", "parent_commit": head,
            "verdict": json.loads((BASE / "results/w4_final.json").read_text())["verdict"]["verdict"],
            "notebook": {"path": str(nb.relative_to(ROOT)), "sha256": sha(nb)},
            "files": {str(p.relative_to(ROOT)): sha(p) for p in files},

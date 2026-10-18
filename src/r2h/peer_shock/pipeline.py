@@ -207,6 +207,46 @@ def global_by_period(main: dict, cfg: dict) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def max_participation(main: dict, cfg: dict) -> pd.DataFrame:
+    """주분석 최대 참여 그룹 수에 도달한 날 전부와 연속 구간 (첫 도달일 하나만 보고하지 않기 위해)."""
+    g = main["global"].assign(period=_period(main["global"]["date"], cfg))
+    g = g[g["period"] == "PRIMARY"]
+    cal = list(pd.DatetimeIndex(sorted(g["date"].unique())))
+    pos = {d: i for i, d in enumerate(cal)}
+    rows = []
+    for q in cfg["q_main"]:
+        x = g[g["q"] == q]
+        for k in ("A", "B", "AB"):
+            m = int(x[f"n_{k}"].max())
+            days = sorted(pd.DatetimeIndex(x.loc[x[f"n_{k}"] == m, "date"]))
+            spans, s0 = [], days[0]
+            for a, b in zip(days[:-1], days[1:]):
+                if pos[b] != pos[a] + 1:
+                    spans.append(f"{s0.date()}~{a.date()}")
+                    s0 = b
+            spans.append(f"{s0.date()}~{days[-1].date()}")
+            rows.append({"q": q, "state": k, "max_groups": m, "n_days_at_max": len(days),
+                         "first_day": days[0].date(), "spans": ";".join(spans)})
+    return pd.DataFrame(rows)
+
+
+def peer_missing_days(closes: pd.DataFrame, mapping: pd.DataFrame) -> pd.DataFrame:
+    """채택 Peer 의 평가 달력 기준 관측 현황: 첫 관측일, 그 이후 빈 거래일 수 (지시서 §3.1 누락 구간 기록)."""
+    ad = mapping[mapping["adopted"]]
+    rows = []
+    for t in dict.fromkeys(ad["peer_ticker"]):
+        c = closes[t]
+        first = c.first_valid_index()
+        after = c.loc[first:]
+        miss = after.index[after.isna()]
+        rows.append({"peer_ticker": t, "peer_name": ad.loc[ad["peer_ticker"] == t, "peer_name"].iloc[0],
+                     "in_eval20": bool(ad.loc[ad["peer_ticker"] == t, "peer_in_eval20"].iloc[0]),
+                     "first_on_calendar": first.date(), "calendar_days_after_first": len(after),
+                     "missing_days_after_first": len(miss),
+                     "missing_dates": ";".join(str(d.date()) for d in miss[:20])})
+    return pd.DataFrame(rows)
+
+
 def bottleneck(main: dict, cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame]:
     """병목: (1) 그룹별 '그날 AB 가 0 인' 비율과 최대 참여일에 빠진 그룹, (2) 한 그룹을 뺀 16/16 진단 일수.
 
@@ -522,6 +562,8 @@ def run(root: Path) -> dict:
     write_csv(main["intervals"], out / "shock_intervals.csv")
     gbp = global_by_period(main, cfg)
     write_csv(gbp, out / "global_by_period.csv")
+    write_csv(max_participation(main, cfg), out / "max_participation_days.csv")
+    write_csv(peer_missing_days(closes, mapping), out / "peer_missing_days.csv")
     bt, dist = bottleneck(main, cfg)
     write_csv(bt, out / "bottleneck_groups.csv")
     write_csv(dist, out / "participation_distribution.csv")
