@@ -232,3 +232,6 @@ outputs/
 # Notebook checkpoints and editor/OS noise
 .DS_Store
 .hypothesis/
+
+# W4 Peer reference prices (licensed market data)
+data/external/

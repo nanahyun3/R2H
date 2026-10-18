@@ -1,0 +1,67 @@
+eval_ticker,eval_name,exposure_group,peer_ticker,peer_name,peer_in_eval20,tier,same_index,asset_class,country_ccy,fx_hedge,duration_maturity,leverage,data_source,first_obs,selection_reason,eligible,exclusion_reason,adopted,eval_peer_status,quality_grade
+069500,KODEX 200,KOSPI200_동일노출,102110,TIGER 200,True,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+069500,KODEX 200,KOSPI200_동일노출,148020,RISE 200,False,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+069500,KODEX 200,KOSPI200_동일노출,105190,ACE 200,False,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+069500,KODEX 200,KOSPI200_동일노출,152100,PLUS 200,False,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+069500,KODEX 200,KOSPI200_동일노출,069660,KIWOOM 200,False,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+069500,KODEX 200,KOSPI200_동일노출,293180,HANARO 200,False,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+069500,KODEX 200,KOSPI200_동일노출,152870,파워 200,False,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+102110,TIGER 200,KOSPI200_동일노출,069500,KODEX 200,True,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+102110,TIGER 200,KOSPI200_동일노출,148020,RISE 200,False,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+102110,TIGER 200,KOSPI200_동일노출,105190,ACE 200,False,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+102110,TIGER 200,KOSPI200_동일노출,152100,PLUS 200,False,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+102110,TIGER 200,KOSPI200_동일노출,069660,KIWOOM 200,False,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+102110,TIGER 200,KOSPI200_동일노출,293180,HANARO 200,False,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+102110,TIGER 200,KOSPI200_동일노출,152870,파워 200,False,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KOSPI200 동일 지수 1배,True,,True,TIER1,A
+122630,KODEX 레버리지,KOSPI200_동일노출,069500,KODEX 200,True,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"KOSPI200 Core Pair (배율 정규화 비교, 보조)",True,,True,TIER1,A
+122630,KODEX 레버리지,KOSPI200_동일노출,102110,TIGER 200,True,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"KOSPI200 Core Pair (배율 정규화 비교, 보조)",True,,True,TIER1,A
+114800,KODEX 인버스,KOSPI200_동일노출,069500,KODEX 200,True,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"KOSPI200 Core Pair (배율 정규화 비교, 보조)",True,,True,TIER1,A
+114800,KODEX 인버스,KOSPI200_동일노출,102110,TIGER 200,True,1,True,국내주식_대형지수,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"KOSPI200 Core Pair (배율 정규화 비교, 보조)",True,,True,TIER1,A
+229200,KODEX 코스닥150,229200,232080,TIGER 코스닥150,False,1,True,국내주식_코스닥,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,코스닥150 동일 지수 1배,True,,True,TIER1,A
+229200,KODEX 코스닥150,229200,270810,RISE 코스닥150,False,1,True,국내주식_코스닥,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,코스닥150 동일 지수 1배,True,,True,TIER1,A
+229200,KODEX 코스닥150,229200,354500,ACE 코스닥150,False,1,True,국내주식_코스닥,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2020-05-07,코스닥150 동일 지수 1배,False,LATE_LISTING,False,TIER1,A
+229200,KODEX 코스닥150,229200,316670,KIWOOM 코스닥150,False,1,True,국내주식_코스닥,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-22,코스닥150 동일 지수 1배,True,,True,TIER1,A
+229200,KODEX 코스닥150,229200,304770,HANARO 코스닥150,False,1,True,국내주식_코스닥,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,코스닥150 동일 지수 1배,True,,True,TIER1,A
+229200,KODEX 코스닥150,229200,450910,SOL 코스닥150,False,1,True,국내주식_코스닥,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2023-01-31,코스닥150 동일 지수 1배,False,LATE_LISTING,False,TIER1,A
+229200,KODEX 코스닥150,229200,301400,PLUS 코스닥150,False,1,True,국내주식_코스닥,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,코스닥150 동일 지수 1배,True,,True,TIER1,A
+091230,TIGER 반도체,091230,091160,KODEX 반도체,False,1,True,국내주식_업종,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KRX 반도체 동일 지수,True,,True,TIER1,B
+091170,KODEX 은행,091170,091220,TIGER 은행,False,1,True,국내주식_업종,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,KRX 은행 동일 지수,True,,True,TIER1,B
+091180,KODEX 자동차,091180,226490,KODEX 코스피,False,2,False,국내주식_시장전체,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,자동차 업종이 속한 코스피 시장 전체 (업종 대 시장 상대 변동성),True,,True,TIER2,C
+091180,KODEX 자동차,091180,277630,TIGER 코스피,False,2,False,국내주식_시장전체,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,자동차 업종이 속한 코스피 시장 전체 (업종 대 시장 상대 변동성),True,,True,TIER2,C
+305540,TIGER 2차전지테마,305540,305720,KODEX 2차전지산업,False,2,False,국내주식_테마,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"같은 2차전지 산업, 다른 지수 (FnGuide 2차전지산업)",True,,True,TIER2,C
+305540,TIGER 2차전지테마,305540,364980,TIGER 2차전지TOP10,False,2,False,국내주식_테마,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2020-10-07,"같은 2차전지 산업, 다른 지수",False,LATE_LISTING,False,TIER2,C
+305540,TIGER 2차전지테마,305540,117460,KODEX 에너지화학,False,2,False,국내주식_업종,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,2차전지 셀·소재 대형주가 편입된 KRX 에너지화학 업종,True,,True,TIER2,C
+143860,TIGER 헬스케어,143860,266420,KODEX 헬스케어,False,1,True,국내주식_업종,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"KRX 헬스케어 동일 지수 (상품명 기준, 공시 미검증)",True,,True,TIER1,A
+143860,TIGER 헬스케어,143860,253280,RISE 헬스케어,False,1,True,국내주식_업종,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"KRX 헬스케어 동일 지수 (상품명 기준, 공시 미검증)",True,,True,TIER1,A
+143860,TIGER 헬스케어,143860,227540,TIGER 200 헬스케어,False,2,False,국내주식_업종,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"KOSPI200 헬스케어 (다른 지수, 동일 업종)",True,HIGHER_TIER_AVAILABLE,False,TIER1,A
+117680,KODEX 철강,117680,139240,TIGER 200 철강소재,False,2,False,국내주식_업종,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"KOSPI200 철강소재 (다른 지수, 동일 업종)",True,,True,TIER2,C
+117680,KODEX 철강,117680,226490,KODEX 코스피,False,2,False,국내주식_시장전체,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,철강 업종이 속한 코스피 시장 전체,True,,True,TIER2,C
+117680,KODEX 철강,117680,277630,TIGER 코스피,False,2,False,국내주식_시장전체,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,철강 업종이 속한 코스피 시장 전체,True,,True,TIER2,C
+161510,PLUS 고배당주,161510,279530,KODEX 고배당주,False,2,False,국내주식_배당전략,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"국내 배당 전략, 다른 지수",True,,True,TIER2,C
+161510,PLUS 고배당주,161510,210780,TIGER 코스피고배당,False,2,False,국내주식_배당전략,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"국내 배당 전략, 다른 지수",True,,True,TIER2,C
+161510,PLUS 고배당주,161510,266160,RISE 고배당,False,2,False,국내주식_배당전략,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"국내 배당 전략, 다른 지수",True,,True,TIER2,C
+161510,PLUS 고배당주,161510,211900,KODEX 코리아배당성장,False,2,False,국내주식_배당전략,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"국내 배당 전략, 다른 지수",True,,True,TIER2,C
+161510,PLUS 고배당주,161510,211560,TIGER 배당성장,False,2,False,국내주식_배당전략,KR/KRW,해당없음,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"국내 배당 전략, 다른 지수",True,,True,TIER2,C
+133690,TIGER 미국나스닥100,133690,367380,ACE 미국나스닥100,False,1,True,해외주식_미국,US/USD노출,환노출,-,1,FinanceDataReader 0.9.202 DataReader,2020-10-29,"나스닥100 동일 지수, 환노출",False,LATE_LISTING,False,TIER2,C
+133690,TIGER 미국나스닥100,133690,368590,RISE 미국나스닥100,False,1,True,해외주식_미국,US/USD노출,환노출,-,1,FinanceDataReader 0.9.202 DataReader,2020-11-06,"나스닥100 동일 지수, 환노출",False,LATE_LISTING,False,TIER2,C
+133690,TIGER 미국나스닥100,133690,379810,KODEX 미국나스닥100,False,1,True,해외주식_미국,US/USD노출,환노출,-,1,FinanceDataReader 0.9.202 DataReader,2021-04-09,"나스닥100 동일 지수, 환노출",False,LATE_LISTING,False,TIER2,C
+133690,TIGER 미국나스닥100,133690,304940,KODEX 미국나스닥100선물(H),False,2,False,해외주식_미국,US/환헤지,환헤지,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"나스닥100 선물, 환헤지 (환노출 차이)",True,,True,TIER2,C
+133690,TIGER 미국나스닥100,133690,219480,KODEX 미국S&P500선물(H),True,2,False,해외주식_미국,US/환헤지,환헤지,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"미국 대형주 S&P500 선물, 환헤지 (지수·환노출 차이)",True,,True,TIER2,C
+219480,KODEX 미국S&P500선물(H),219480,449180,KODEX 미국S&P500(H),False,1,True,해외주식_미국,US/환헤지,환헤지,-,1,FinanceDataReader 0.9.202 DataReader,2022-12-02,"S&P500 동일 지수, 환헤지 (현물·선물 차이)",False,LATE_LISTING,False,TIER2,C
+219480,KODEX 미국S&P500선물(H),219480,304940,KODEX 미국나스닥100선물(H),False,2,False,해외주식_미국,US/환헤지,환헤지,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"미국 주가지수 선물, 환헤지 (지수 차이)",True,,True,TIER2,C
+219480,KODEX 미국S&P500선물(H),219480,133690,TIGER 미국나스닥100,True,2,False,해외주식_미국,US/USD노출,환노출,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,미국 대형주 (지수·환노출 차이),True,,True,TIER2,C
+219480,KODEX 미국S&P500선물(H),219480,360750,TIGER 미국S&P500,False,2,False,해외주식_미국,US/USD노출,환노출,-,1,FinanceDataReader 0.9.202 DataReader,2020-08-07,"S&P500 동일 지수, 환노출 차이",False,LATE_LISTING,False,TIER2,C
+192090,TIGER 차이나CSI300,192090,283580,KODEX 차이나CSI300,False,1,True,해외주식_중국,CN/CNY노출,환노출,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,CSI300 동일 지수,True,,True,TIER1,A
+192090,TIGER 차이나CSI300,192090,168580,ACE 중국본토CSI300,False,1,True,해외주식_중국,CN/CNY노출,환노출,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,CSI300 동일 지수,True,,True,TIER1,A
+148070,KIWOOM 국고채10년,148070,365780,ACE 국고채10년,False,1,True,국내채권_국고,KR/KRW,해당없음,약 10년,1,FinanceDataReader 0.9.202 DataReader,2020-10-15,국고채10년 동일 지수,False,LATE_LISTING,False,TIER2,C
+148070,KIWOOM 국고채10년,148070,438570,SOL 국고채10년,False,1,True,국내채권_국고,KR/KRW,해당없음,약 10년,1,FinanceDataReader 0.9.202 DataReader,2022-09-06,국고채10년 동일 지수,False,LATE_LISTING,False,TIER2,C
+148070,KIWOOM 국고채10년,148070,302190,TIGER 중장기국채,False,2,False,국내채권_국고,KR/KRW,해당없음,중장기(약 5–10년 혼합),1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"국내 국고채, 듀레이션 짧음",True,,True,TIER2,C
+148070,KIWOOM 국고채10년,148070,114260,KODEX 국고채3년,False,2,False,국내채권_국고,KR/KRW,해당없음,약 3년,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"국내 국고채, 듀레이션 현저히 짧음",True,,True,TIER2,C
+153130,KODEX 단기채권,153130,157450,TIGER 단기통안채,False,2,False,국내채권_단기,KR/KRW,해당없음,1년 이하,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,국내 단기 채권·통안채 (지수 차이),True,,True,TIER2,C
+153130,KODEX 단기채권,153130,196230,RISE 단기통안채,False,2,False,국내채권_단기,KR/KRW,해당없음,1년 이하,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,국내 단기 채권·통안채 (지수 차이),True,,True,TIER2,C
+153130,KODEX 단기채권,153130,190620,ACE 단기통안채,False,2,False,국내채권_단기,KR/KRW,해당없음,1년 이하,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,국내 단기 채권·통안채 (지수 차이),True,,True,TIER2,C
+153130,KODEX 단기채권,153130,214980,KODEX 단기채권PLUS,False,2,False,국내채권_단기,KR/KRW,해당없음,1년 이하,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,국내 단기 채권·통안채 (지수 차이),True,,True,TIER2,C
+132030,KODEX 골드선물(H),132030,319640,TIGER 골드선물(H),False,1,True,원자재_금,글로벌/환헤지,환헤지,선물 롤,1,FinanceDataReader 0.9.202 DataReader,2019-04-09,"S&P GSCI Gold 계열 금 선물, 환헤지 (지수 버전 차이 가능)",True,,True,TIER1,B
+261220,KODEX WTI원유선물(H),261220,130680,TIGER 원유선물Enhanced(H),False,2,False,원자재_원유,글로벌/환헤지,환헤지,선물 롤(Enhanced),1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"WTI 원유 선물, 환헤지 (롤 방식이 다른 지수)",True,,True,TIER2,C
+261220,KODEX WTI원유선물(H),261220,219390,RISE 미국S&P원유생산기업(합성 H),False,2,False,해외주식_에너지,US/환헤지,환헤지,-,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,"원유 생산기업 주식 (원유 가격 민감, 자산 형태 다름 — 약한 Peer)",True,,True,TIER2,C
+261240,KODEX 미국달러선물,261240,138230,KIWOOM 미국달러선물,False,1,True,통화_USDKRW,USD/KRW,해당없음,선물 롤,1,FinanceDataReader 0.9.202 DataReader,2019-01-02,미국달러선물 동일 지수,True,,True,TIER1,B
