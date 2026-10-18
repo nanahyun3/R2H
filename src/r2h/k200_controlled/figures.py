@@ -382,9 +382,43 @@ class Figures12:
         footnote(fig, "점선 = 2020-04-10 (COVID 급락 구간 끝) 로부터 w 거래일 뒤. w252 의 2021-01~04 경보는 COVID 이월, 2021-06~11 경보는 2020 하반기 고잔차 → 2021 저잔차 전환(분산 감소)에 대한 반응이다. 긴 창의 경보는 '최근 w 일 안 어딘가' 의 변화를 말한다.")
         return self._save(fig, "F12_긴창_과거충격_이월", cap)
 
+    # F13 사건 유형별 반응 (X-D8)
+    def f13_shock_type(self, root: Path):
+        df = pd.read_csv(root / "research/k200_cusum_controlled_12/results/event_response_by_shock_type.csv")
+        df = df[df["year"] >= 2021]
+        lab = {"B1": "CoS w60", "E2_w20": "CoS w20", "E2_w120": "CoS w120", "E2_w252": "CoS w252", "E3_raw_rolling_cos": "원수익률 CoS w60",
+               "E3_page_up": "Page 상방", "E3_page_down": "Page 하방", "X1_page_up_sn": "X1 자기정규화 상방", "X1_page_down_sn": "X1 자기정규화 하방",
+               "E7_refit21": "CoS w60 (21일 재학습)", "E8_refit_only": "CoS w60 (V20 재학습)"}
+        df["det"] = df["experiment"].map(lab)
+        df["col"] = df["interval"].str[-3:] + " " + df["type"]
+        piv = df.pivot_table(index="det", columns="col", values="mean_pctile").loc[list(lab.values())]
+        order = sorted(piv.columns, key=lambda c: (c.split(" ", 1)[1], c))
+        piv = piv[order]
+        fig, ax = plt.subplots(1, 2, figsize=(16, 6.5), gridspec_kw={"width_ratios": [2.2, 1]})
+        im = ax[0].imshow(piv.to_numpy(float), cmap=SEQ, vmin=0, vmax=1, aspect="auto")
+        ax[0].set_xticks(range(piv.shape[1]), piv.columns, rotation=35, ha="right", fontsize=8)
+        ax[0].set_yticks(range(piv.shape[0]), piv.index, fontsize=8)
+        for (i, j), v in np.ndenumerate(piv.to_numpy(float)):
+            ax[0].text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=7, color="white" if v > 0.65 else INK)
+        fig.colorbar(im, ax=ax[0], fraction=0.025)
+        ax[0].set_title("사건 구간 안 평균 백분위 (자기 경로 분포 기준) — 2021–2025 사건 7개", loc="left", fontsize=11)
+        g = df.groupby(["det", "type"])["mean_pctile"].mean().unstack().loc[list(lab.values())]
+        y = np.arange(len(g))
+        for k, (t, col) in enumerate((("누적형", CAT[0]), ("단일 충격형", CAT[1]))):
+            ax[1].barh(y + (k - 0.5) * 0.38, g[t], 0.38, color=col, label=t)
+        ax[1].axvline(0.5, color=INK2, ls="--", lw=0.8)
+        ax[1].set_yticks(y, g.index, fontsize=8)
+        ax[1].invert_yaxis()
+        ax[1].legend(fontsize=8, frameon=False)
+        ax[1].set_title("유형별 평균", fontsize=11)
+        style(ax[1])
+        footnote(fig, "0.5 = 평소와 같은 수준. 사건 유형은 11번 바텀업(최대 기여일 몫 ≥30% = 단일 충격형). 사건이 7개뿐이라 서술용 — 판정은 합성 S04·S08 대 S05·S06 비교로 한다.")
+        return self._save(fig, "F13_사건유형별_반응", {"type_means": g.round(3).to_dict()})
+
     def make_all(self) -> dict:
         for fn in (self.f01_timeline, self.f02_b0_b1, self.f03_windows, self.f04_page, self.f05_changepoints,
                    self.f06_placebo, self.f07_svr, self.f08_synthetic, self.f09_ae, self.f10_events, self.f12_carry):
             fn()
         self.f11_refit_break(self.root)
+        self.f13_shock_type(self.root)
         return self.caps

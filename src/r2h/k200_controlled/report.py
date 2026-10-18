@@ -247,6 +247,27 @@ def ae_redundancy(f: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     return pd.DataFrame(rows), corr.reset_index().rename(columns={"index": "feature"})
 
 
+# ── 사건 유형별 반응 (X-D8) ─────────────────────────────────────────
+
+EVENT_EXPS = ("B1", "E2_w20", "E2_w120", "E2_w252", "E3_raw_rolling_cos", "E3_page_up", "E3_page_down",
+              "X1_page_up_sn", "X1_page_down_sn", "E7_refit21", "E8_refit_only")
+
+
+def event_response(ob: O.Observed, ledger: pd.DataFrame) -> pd.DataFrame:
+    """11번 사건 구간마다 탐지기의 자기 분포 백분위 평균 · 최대 T/임계 · α=0.20 경보일 (서술용)."""
+    rows = []
+    for e in EVENT_EXPS:
+        d = ledger[ledger["experiment_id"] == e].set_index("date")
+        pc = d["cusum_raw_T"].rank(pct=True)
+        for r in ob.events.itertuples():
+            seg = slice(r.start, r.end)
+            rows.append({"experiment": e, "interval": r.interval_id, "type": r.shock_type, "year": r.start.year,
+                         "days": int(len(pc[seg])), "mean_pctile": float(pc[seg].mean()),
+                         "max_T_over_crit": float(d["cusum_T_over_critical_a05"][seg].max()),
+                         "alarm_a20_days": int(d["cusum_alarm_a20"][seg].sum())})
+    return pd.DataFrame(rows)
+
+
 # ── 실행 ───────────────────────────────────────────────────────────
 
 
@@ -289,6 +310,7 @@ def run(root: Path, calib_dir: Path, null_dir: Path, results: Path, store: Path 
         "ae_redundancy.csv": red,
         "ae_spearman.csv": corr,
         "events_11.csv": ob.events,
+        "event_response_by_shock_type.csv": event_response(ob, ledger),
     }
     syn = calib_dir / "synthetic_detection.csv"
     if syn.exists():
