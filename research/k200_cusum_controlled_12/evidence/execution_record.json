@@ -1,9 +1,9 @@
 {
   "notebook": "12_KODEX200_CUSUM_연속성_변화점_SVR통제실험.ipynb",
   "status": "PASS",
-  "start_utc": "2026-10-18T21:02:45.856867+00:00",
-  "end_utc": "2026-10-18T21:10:53.641776+00:00",
-  "seconds": 487.78,
+  "start_utc": "2026-10-18T21:32:18.811024+00:00",
+  "end_utc": "2026-10-18T21:40:58.919253+00:00",
+  "seconds": 520.11,
   "returncode": 0,
   "log": "research/k200_cusum_controlled_12/evidence/12_execution.log",
   "python": "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python"

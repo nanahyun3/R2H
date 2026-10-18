@@ -1,4 +1,8 @@
-# 피처 사전 (daily_cusum_features)
+# 피처 사전
+
+저장 위치 `outputs/t21/feature_store_n1/` (Git 제외). 데이터셋 9종: daily_cusum_features(원장) · daily_market_features · daily_svr_predictions · daily_change_point_features · daily_change_point_triggers · daily_reset_events · daily_feature_eligibility · experiment_metrics · synthetic_validation · autoencoder_feature_catalog (+ ae_candidate_wide).
+
+## daily_cusum_features
 
 | 열 | dtype | 뜻 |
 |---|---|---|
@@ -35,5 +39,42 @@
 | `reset_count` | int64 | 누적 외부 초기화 횟수 |
 | `page_state_code` | int64 | 0 일반 · 1 자연 0 복귀 · 2 외부 초기화 · −1 해당 없음 |
 | `source_hash` | str | 원자료 sha256 앞 16자 |
+| `return_abs` | float64 | |r| |
+| `return_sq` | float64 | r^2 |
+| `realized_variance` | float64 | r_t^2 (일 실현분산 대리) |
+| `realized_volatility` | float64 | 직전 20일 표준편차 (t 포함) |
+| `observed_variance_proxy` | float64 | 직전 5일 r^2 평균 (정책 A 입력 프록시와 같은 m=5) |
+| `predicted_volatility` | float64 | sqrt(v̂) |
+| `residual` | float64 | r_t (정책 A 는 평균을 모형화하지 않음) |
+| `standardized_residual` | float64 | e |
+| `standardized_residual_sq` | float64 | e^2 |
+| `cusum_critical_value` | float64 | = cusum_critical_value_a05 |
+| `cusum_T_over_critical` | float64 | = a05 비 |
+| `cusum_normalized_T` | float64 | T / 임계 (α=0.05) |
+| `cusum_test_pvalue` | float64 | = confirmatory_p |
+| `cusum_alarm_flag` | bool | = cusum_alarm_a05 |
+| `cusum_signed_direction` | float64 | 이동 CoS: 창 후반−전반 평균 e^2 부호 · Page 양방향: 우세 쪽 · 단측: 고정 |
+| `segment_id` | int64 | 초기화 구간 번호 |
+| `reset_applied_at` | datetime64[us] | 구간 시작일 (초기화 없으면 NaT, 사유 SERIES_START) |
+| `reset_reason` | str | 초기화 일정 이름 또는 SERIES_START |
+| `change_trigger_type` | str | cp_<규칙> 또는 NOT_APPLICABLE:<사유> |
+| `change_detected_at` | datetime64[ns] | 변화점 확정일 t (효과일 t+1 의 전날) |
+| `change_score` | float64 | 확정일 강도 점수 |
+| `change_score_percentile` | float64 | 확정일 강도의 과거 백분위 |
+| `model_fit_at` | datetime64[ns] | SVR 적합일 (구간 첫날, 이전 날까지 정보) |
+| `model_training_start` | datetime64[ns] | 학습 시작일 |
+| `model_training_end` | datetime64[ns] | 학습 끝일 |
+| `svr_refit_at` | datetime64[ns] | = model_fit_at |
+| `days_since_refit` | int64 | 적합 후 경과 평가일 (−1 = 해당 없음) |
+| `refit_reason` | str | INITIAL_FIT / SCHEDULED / SCHEDULED_ANNUAL / CHANGE_POINT_TRIGGER(_ADAPTIVE) / NOT_APPLICABLE |
+| `svr_C` | float64 | 선택 C |
+| `svr_gamma2` | float64 | 선택 γ² |
+| `svr_eps` | float64 | 선택 ε |
+| `history_truncated` | object | 학습창이 가용 이력보다 길어 전체 사용 |
+| `computation_status` | str | OK / WINDOW_NOT_AVAILABLE / INSUFFICIENT_HISTORY |
+| `model_validity_status` | str | NULL_MODEL_INVALID 또는 NULL_VALID_OR_NOT_APPLICABLE |
+| `feature_eligibility` | str | ELIGIBLE_REALTIME_CONTINUOUS / NOT_ELIGIBLE_MISSING |
+| `missing_reason` | str | 결측 사유 (유효하면 빈 값) |
+| `numerical_precision` | str | float64_cpu_numpy |
 
-AE 후보 wide 표의 열과 결정은 `results/feature_catalog.csv`. 정의 규칙은 `RESEARCH_CONTRACT.md` §5·§9.
+해당 없는 필드는 NA/NaT + `missing_reason`·`change_trigger_type`·`refit_reason` 의 NOT_APPLICABLE 사유. AE 후보 결정은 `results/feature_catalog.csv`, §3.1 필드 포함 검사는 `results/feature_field_coverage.csv` (57/57).

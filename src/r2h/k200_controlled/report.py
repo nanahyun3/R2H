@@ -15,6 +15,7 @@ import pandas as pd
 
 from . import analysis as A
 from . import audit as AU
+from . import featurestore as FS
 from . import calib as K
 from . import core as C
 from . import observed as O
@@ -268,6 +269,37 @@ def event_response(ob: O.Observed, ledger: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+# ── 08 W3 · 11 공통 계산 대조 (G0) ─────────────────────────────────
+
+
+def w3_check(root: Path, ob: O.Observed) -> pd.DataFrame:
+    """08 W3 ``run_pipeline`` 을 069500 하나로 다시 돌려 B0 (연초 초기화) 의 e·v̂·T 와 2021–2025 에서 바이트 비교하고,
+    W3 요약표(`individual_cusum_summary.csv`, 11번도 같은 값을 72/72 재현) 의 069500·A·w60 행과 대조한다."""
+    from r2h.joint_cusum import pipeline as JP
+
+    w3 = JP.load_cfg(root / "configs" / "t15_joint_cusum_w3_v2.json")
+    R = JP.load_returns(w3, root / "data" / "raw")
+    out = JP.run_pipeline(R[["069500"]], w3)
+    ed = ob.m.eval_dates
+    msk = np.asarray(ed.year >= 2021)
+    p = ob.paths["B1"]
+    wi = JP.all_windows(w3).index(60)
+    T0 = ob.raw["B0"]["T"][msk]
+    ref = pd.read_csv(root / "research/joint_cusum_w3/results/08/individual_cusum_summary.csv", dtype={"ticker": str})
+    ref = ref[(ref.ticker == "069500") & (ref.policy == "A") & (ref.w == 60)].iloc[0]
+    return pd.DataFrame([{
+        "check": "B0_vs_W3_run_pipeline_069500_A_w60_2021_2025",
+        "dates_equal": bool(pd.DatetimeIndex(out.eval_dates).equals(ed[msk])),
+        "e_byte_identical": bool(np.array_equal(p.e[msk], out.e[0, 0], equal_nan=True)),
+        "vhat_byte_identical": bool(np.array_equal(p.vhat[msk], out.vhat[0, 0], equal_nan=True)),
+        "T_byte_identical": bool(np.array_equal(T0, out.T[0, 0, wi], equal_nan=True)),
+        "valid_days": int(np.isfinite(T0).sum()), "na_days": int(np.isnan(T0).sum()), "max_T": float(np.nanmax(T0)),
+        "w3_valid_days": int(ref.valid_days), "w3_na_days": int(ref.not_available_days), "w3_max_T": float(ref.max_T),
+        "matches_w3_summary": bool(int(np.isfinite(T0).sum()) == int(ref.valid_days) and int(np.isnan(T0).sum()) == int(ref.not_available_days)
+                                   and abs(float(np.nanmax(T0)) - float(ref.max_T)) < 1e-8),
+    }])
+
+
 # ── 실행 ───────────────────────────────────────────────────────────
 
 
@@ -281,7 +313,7 @@ def run(root: Path, calib_dir: Path, null_dir: Path, results: Path, store: Path 
     invalid = set(validity.loc[validity["outside"], "pipeline"])
     raw_sum = O.raw_summary(ob)
     src = ob.m.raw_sha256[:16]
-    ledger = A.build_ledger(ob, cal, invalid, src)
+    ledger = FS.enrich_ledger(ob, A.build_ledger(ob, cal, invalid, src))
     summ = A.experiment_summary(ob, ledger, raw_sum)
     size = pd.read_csv(calib_dir / "size_holdout.csv")
     size_rows, size_agg = AU.size_decomposition(size, invalid)
@@ -294,6 +326,12 @@ def run(root: Path, calib_dir: Path, null_dir: Path, results: Path, store: Path 
     store = store or root / "outputs" / "t21" / "feature_store_n1"
     store.mkdir(parents=True, exist_ok=True)
     ledger.to_parquet(store / "daily_cusum_features.parquet", index=False, partition_cols=None)
+    syn_df = pd.read_csv(calib_dir / "synthetic_detection.csv", keep_default_na=False, na_values=[""]) if (calib_dir / "synthetic_detection.csv").exists() else None
+    side = FS.side_datasets(ob, ledger, summ, syn_df, None)
+    for name, df in side.items():
+        mixed = {c: "string" for c in df.columns if df[c].dtype == object}  # 숫자·'NA' 가 섞인 열은 문자열로 저장
+        df.astype(mixed).to_parquet(store / f"{name}.parquet", index=False)
+    coverage = FS.field_coverage({"daily_cusum_features": ledger, **side})
     feats.reset_index(names="date").to_parquet(store / "ae_candidate_wide.parquet", index=False)
     written = {}
     tables = {
@@ -301,7 +339,9 @@ def run(root: Path, calib_dir: Path, null_dir: Path, results: Path, store: Path 
         "null_validity.csv": validity,
         "size_holdout.csv": size_rows,
         "size_fail_decomposition.csv": size_agg,
-        "feature_store_audit.csv": led_audit,
+        "feature_store_audit.csv": pd.concat([led_audit, pd.DataFrame([{"check": "required_fields_3_1_present", "value": int(coverage["present"].sum()), "expected": len(coverage), "pass": bool(coverage["present"].all())}])], ignore_index=True),
+        "feature_field_coverage.csv": coverage,
+        "w3_reproduction_check.csv": w3_check(root, ob),
         "change_point_summary.csv": cp_sum,
         "change_point_overlap.csv": cp_jac,
         "svr_training_summary.csv": svr_s,

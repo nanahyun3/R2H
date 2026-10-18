@@ -458,14 +458,14 @@
   "claim": "원장 감사 통과",
   "file": "feature_store_audit.csv",
   "expr": "int(df['pass'].sum())",
-  "expected": 18,
+  "expected": 19,
   "round": 6
  },
  {
   "claim": "원장 감사 항목",
   "file": "feature_store_audit.csv",
   "expr": "len(df)",
-  "expected": 18,
+  "expected": 19,
   "round": 6
  },
  {
@@ -523,5 +523,40 @@
   "expr": "df[(df.experiment=='E3_raw_rolling_cos')&(df.type=='단일 충격형')&(df.year>=2021)].mean_pctile.mean()",
   "expected": 0.6,
   "round": 2
+ },
+ {
+  "claim": "G0 W3 대조 유효일",
+  "file": "w3_reproduction_check.csv",
+  "expr": "int(df.valid_days.iloc[0])",
+  "expected": 930,
+  "round": 6
+ },
+ {
+  "claim": "G0 W3 대조 NA",
+  "file": "w3_reproduction_check.csv",
+  "expr": "int(df.na_days.iloc[0])",
+  "expected": 295,
+  "round": 6
+ },
+ {
+  "claim": "G0 W3 대조 최대 T",
+  "file": "w3_reproduction_check.csv",
+  "expr": "df.max_T.iloc[0]",
+  "expected": 1.301308546,
+  "round": 9
+ },
+ {
+  "claim": "G0 e·v̂·T 바이트 동일",
+  "file": "w3_reproduction_check.csv",
+  "expr": "bool(df.e_byte_identical.iloc[0] and df.vhat_byte_identical.iloc[0] and df.T_byte_identical.iloc[0] and df.matches_w3_summary.iloc[0])",
+  "expected": true,
+  "round": 6
+ },
+ {
+  "claim": "§3.1 필드 포함",
+  "file": "feature_field_coverage.csv",
+  "expr": "int(df.present.sum())",
+  "expected": 57,
+  "round": 6
  }
 ]

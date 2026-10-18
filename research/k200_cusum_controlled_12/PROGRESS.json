@@ -50,7 +50,7 @@
   }
  },
  "gates": {
-  "G0": "PASS (e, vhat, T byte-identical to W3; w60 valid 930 / NA 295 / max_T 1.3013085455)",
+  "G0": "PASS (e, vhat, T byte-identical to W3; w60 valid 930 / NA 295 / max_T 1.3013085455); committed check results/w3_reproduction_check.csv + tests/unit/test_k200_w3_reproduction.py",
   "G1": "PASS (B0==B1 at pos>=59 every year; B1 +295 valid days)",
   "G2": "PASS (annual generalized path == B0, unit test)",
   "G3": "PASS (464 registered: 457 OFAT_OK, 6 INTERACTION, 1 ROOT, 0 CONFOUNDED)",
@@ -60,7 +60,7 @@
   "G7": "PASS (CLAIMS 75/75)",
   "G8": "PASS (651 protected files unchanged, checked in notebook before/after)",
   "G9": "PASS for N1 (alpha 0.129, beta 0.815, nu 7.06 interior); N0 FAILED (alpha=0, beta=0.0008)",
-  "feature_store_audit": "PASS 18/18 (681,999 rows = 463 experiments x 1473 days)"
+  "feature_store_audit": "PASS 19/19; section 3.1 fields 57/57; section 3.2 datasets 9"
  },
  "pilot_costs_seconds": {
   "svr_fit_once": 0.08,
@@ -151,7 +151,8 @@
   ],
   "partial": [
    "G5 size: Wilson 549/1068, common set fluctuation +-1-1.5pp",
-   "observed confirmatory p: NULL_MODEL_INVALID for all SVR pipelines"
+   "observed confirmatory p: NULL_MODEL_INVALID for all SVR pipelines",
+   "synthetic covers 5 SVR pipelines only (win504/756, grace20/60, adaptiveV20 = observed descriptive only)"
   ],
   "not_done": [
    "X1'/X1'' Page variants",

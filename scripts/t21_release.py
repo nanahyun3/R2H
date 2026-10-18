@@ -129,6 +129,7 @@ def main() -> None:
                     "max_abs_spearman": None if r is None else r["max_abs_spearman"], "most_similar": None if r is None else r["most_similar"],
                     "incremental_r2_future_rv20": None if r is None else r["incremental_r2_future_rv20_over_rv20"]})
     w(pd.DataFrame(cat), "feature_catalog.csv")
+    pd.DataFrame(cat).to_parquet(STORE / "autoencoder_feature_catalog.parquet", index=False)  # §3.2 데이터셋
     schema = {"daily_cusum_features": {c: str(t) for c, t in led.dtypes.items()},
               "ae_candidate_wide": {c: str(t) for c, t in wide.dtypes.items()},
               "primary_key": ["ticker", "date", "experiment_id"], "rows": len(led), "experiments": int(led["experiment_id"].nunique()),

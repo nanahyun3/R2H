@@ -17,3 +17,4 @@ null_invalid_rows_confirmatory_p_is_NA,0,0,True
 p_not_calculated_rows_p_is_NA_and_T_kept,0,0,True
 no_p_equal_one_imputation_on_invalid_days,0,0,True
 no_zero_imputation_on_invalid_days,0,0,True
+required_fields_3_1_present,57,57,True

@@ -2,9 +2,9 @@
  "notebook_fresh_kernel": {
   "notebook": "12_KODEX200_CUSUM_연속성_변화점_SVR통제실험.ipynb",
   "status": "PASS",
-  "start_utc": "2026-10-18T21:02:45.856867+00:00",
-  "end_utc": "2026-10-18T21:10:53.641776+00:00",
-  "seconds": 487.78,
+  "start_utc": "2026-10-18T21:32:18.811024+00:00",
+  "end_utc": "2026-10-18T21:40:58.919253+00:00",
+  "seconds": 520.11,
   "returncode": 0,
   "log": "research/k200_cusum_controlled_12/evidence/12_execution.log",
   "python": "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python"
@@ -13,11 +13,11 @@
   "notebook 12 (jupyter execute, fresh kernel) x2",
   "scripts/run_t21_figures.py"
  ],
- "files_compared": 56,
- "byte_identical_runs": 3,
- "G0_w3_reproduction": "B0 e, vhat, T byte-identical to W3 run_pipeline 069500 A (2021-2025)",
+ "files_compared": 58,
+ "byte_identical_runs": "script path vs fresh-kernel notebook after final change (58 files); earlier 3 runs identical before feature-store enrichment",
+ "G0_w3_reproduction": "results/w3_reproduction_check.csv (recomputed in notebook) + tests/unit/test_k200_w3_reproduction.py",
  "mc_inputs": "outputs/t21/mc/n1_null, n1_scen (hashes in results/data_artifact_manifest.csv)",
- "claims": "75/75",
+ "claims": "80/80",
  "results_figures_sha256": {
   "figures/F01_관측_타임라인.png": "18a7500b1d6aac5d4404f02b8cd2e652a65f5ae53e976e4775f77f9171c2cae2",
   "figures/F01_관측_타임라인.svg": "b60cc0863e6ff83e819483f8a1fec3e6e458213c079dbc2010f4b714a9741e3f",

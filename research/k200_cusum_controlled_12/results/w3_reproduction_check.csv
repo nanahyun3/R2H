@@ -1,0 +1,2 @@
+check,dates_equal,e_byte_identical,vhat_byte_identical,T_byte_identical,valid_days,na_days,max_T,w3_valid_days,w3_na_days,w3_max_T,matches_w3_summary
+B0_vs_W3_run_pipeline_069500_A_w60_2021_2025,True,True,True,True,930,295,1.301308546,930,295,1.301308546,True
