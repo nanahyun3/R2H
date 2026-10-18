@@ -1,0 +1,10 @@
+{
+  "study_id": "t21_k200_cusum_controlled_12",
+  "protocol_version": "12-lock-1",
+  "branch": "research/12_k200_cusum_controlled_gpu",
+  "base_commit": "4a3af99",
+  "current_phase": "P00",
+  "checkpoints": {"P00": {"status": "IN_PROGRESS", "commit": null}},
+  "gates": {"G0": "PENDING", "G1": "PENDING", "G2": "PENDING", "G3": "PENDING", "G4": "PENDING", "G5": "PENDING", "G6": "PENDING", "G7": "PENDING", "G8": "PENDING"},
+  "pilot_costs_seconds": {"svr_fit_once": 0.08, "rolling_cusum_1500d_once": 0.003}
+}

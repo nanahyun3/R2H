@@ -1,0 +1,2 @@
+2789e56a5a3d3e9a9a5736bc84bbcf652d900414e7f74b4fe9e84c72203c6256  research/k200_cusum_controlled_12/RESEARCH_CONTRACT.md
+18ab5279bd4ad3d2d6aab93b09e5ce75dc2acaec66e0a2ace5a3f10b826b89f4  configs/t21_k200_cusum_controlled_v1.json
