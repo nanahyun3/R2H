@@ -1,0 +1,50 @@
+{
+  "study_id": "t19_common_volatility_candidates_10",
+  "protocol_version": "10-lock-1",
+  "base_commit": "172cbb3",
+  "design_status": "POST_HOC_EXPLORATORY — 09(W4) 결과를 본 뒤 설계",
+  "w4_dir": "research/peer_relative_shock_w4",
+  "w4_manifest": "research/peer_relative_shock_w4/RELEASE_MANIFEST.json",
+  "w4_inputs": {
+    "group_daily_states": "research/peer_relative_shock_w4/results/group_daily_states.csv",
+    "global_daily_counts": "research/peer_relative_shock_w4/results/global_daily_counts.csv",
+    "global_by_period": "research/peer_relative_shock_w4/results/global_by_period.csv",
+    "max_participation_days": "research/peer_relative_shock_w4/results/max_participation_days.csv",
+    "shock_intervals": "research/peer_relative_shock_w4/results/shock_intervals.csv",
+    "w4_final": "research/peer_relative_shock_w4/results/w4_final.json",
+    "event_case_studies": "research/peer_relative_shock_w4/results/event_case_studies.csv",
+    "bottleneck_groups": "research/peer_relative_shock_w4/results/bottleneck_groups.csv"
+  },
+  "w2_exposure_groups": "research/multihorizon_w2/results/06/exposure_groups.csv",
+  "w2_cross_intervals_group": "research/multihorizon_w2/results/06/cross_intervals_group.csv",
+  "w2_cross_daily_counts": "research/multihorizon_w2/results/06/cross_daily_counts.csv",
+  "w3_joint_episodes": "research/joint_cusum_w3/results/08/joint_episodes.csv",
+  "n_groups": 17,
+  "q_list": [20, 60],
+  "k_grid": [3, 6, 9, 10, 12, 17],
+  "main_candidates": {
+    "C1": {"q": 20, "k": 9, "name": "과반 공통 고변동성"},
+    "C2": {"q": 20, "k": 10, "name": "강한 공통 고변동성"},
+    "C3": {"q": 20, "k": 12, "name": "광범위한 극단적 고변동성"},
+    "C4": {"q": 60, "k": 6, "name": "중기 고변동성"}
+  },
+  "rule_roles": {
+    "q20_k3": "REFERENCE_W2", "q60_k3": "REFERENCE_W2",
+    "q20_k6": "DIAGNOSTIC", "q60_k6": "C4",
+    "q20_k9": "C1", "q60_k9": "HORIZON_CONTROL",
+    "q20_k10": "C2", "q60_k10": "HORIZON_CONTROL",
+    "q20_k12": "C3", "q60_k12": "HORIZON_CONTROL",
+    "q20_k17": "REFERENCE_W4", "q60_k17": "REFERENCE_W4"
+  },
+  "periods": {
+    "REFERENCE_ONLY": [2019, 2019],
+    "PILOT": [2020, 2020],
+    "PRIMARY": [2021, 2025],
+    "PARTIAL_NON_BLIND": [2026, 2026]
+  },
+  "events": {
+    "E1_2022_bond": {"window": ["2022-01-03", "2022-12-29"], "w2_ref": ["2022-09-07", "2022-12-07"], "w4_ref_max": "2022-10-11", "title": "2022년 채권 중심 고변동성"},
+    "E2_2024_08": {"window": ["2024-07-01", "2024-09-30"], "w2_ref": ["2024-08-02", "2024-09-02"], "title": "2024년 8월 다자산 변동성 확대"},
+    "E3_2025_04": {"window": ["2025-03-17", "2025-06-13"], "w2_ref": ["2025-04-07", "2025-05-26"], "title": "2025년 4월 다자산 변동성 확대"}
+  }
+}
