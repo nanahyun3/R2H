@@ -4,7 +4,7 @@
 
 | 비교 | 대상 | 결과 |
 |---|---|---|
-| 경로 A: 노트북 09 새 커널 실행 (`scripts/run_t18_notebook.py`) vs 경로 B: `scripts/run_t18_pipeline.py` | `results/` + `figures/` (PNG·SVG) 89개 | 바이트 동일 |
+| 경로 A: 노트북 09 새 커널 실행 (`scripts/run_t18_notebook.py`) vs 경로 B: `scripts/run_t18_pipeline.py` | `results/` + `figures/` (PNG·SVG) 91개 | 바이트 동일 |
 | 같은 두 경로 | `outputs/t18/` 비공개 일별 표 10개 (gzip mtime 0) | 바이트 동일 |
 | 노트북 재실행 (경로 A 2회차) vs 경로 B | `results/` + `figures/` | 바이트 동일 |
 
