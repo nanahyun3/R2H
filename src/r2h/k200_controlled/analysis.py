@@ -114,14 +114,13 @@ def build_ledger(ob: Observed, cal: dict, invalid_pipelines: set[str], source_ha
         valid = np.isfinite(T)
         since, count = C.days_since_reset(n, ob.resets[eid])
         p = ob.paths.get(pl)
-        if is_page:
-            sig = np.where(a05, "SIGNIFICANT", "NOT_SIGNIFICANT")
-        else:
-            sig = np.where(~valid, "WINDOW_NOT_AVAILABLE", np.where(a05, "SIGNIFICANT", "NOT_SIGNIFICANT"))
+        # 통계량이 없는 날: 자기정규화(_sn)는 과거 이력 부족, 그 밖은 창 미충족 — 비유의로 적지 않는다
+        na_code = "INSUFFICIENT_HISTORY" if row.detector.endswith("_sn") else "WINDOW_NOT_AVAILABLE"
+        sig = np.where(~valid, na_code, np.where(a05, "SIGNIFICANT", "NOT_SIGNIFICANT"))
         if tab is None:
-            pstat = np.where(valid, "P_VALUE_NOT_CALCULATED", "WINDOW_NOT_AVAILABLE")
+            pstat = np.where(valid, "P_VALUE_NOT_CALCULATED", na_code)
         else:
-            pstat = np.where(valid, "OK", "WINDOW_NOT_AVAILABLE")
+            pstat = np.where(valid, "OK", na_code)
         conf_p = np.where(null_ok, adj_p, np.nan)
         df = pd.DataFrame(
             {
