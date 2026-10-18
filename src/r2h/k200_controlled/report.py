@@ -314,7 +314,12 @@ def run(root: Path, calib_dir: Path, null_dir: Path, results: Path, store: Path 
     }
     syn = calib_dir / "synthetic_detection.csv"
     if syn.exists():
-        tables["synthetic_size_power.csv"] = pd.read_csv(syn)
+        from . import synthesis as SY
+
+        det = pd.read_csv(syn, keep_default_na=False, na_values=[""])
+        tables["synthetic_size_power.csv"] = det
+        tables["synthetic_power_verdict.csv"] = SY.power_summary(det)
+        tables["synthetic_effects.csv"] = SY.effects(calib_dir, cfg["seed"])
     for name, df in tables.items():
         write_csv(df, results / name)
         written[name] = sha256(results / name)

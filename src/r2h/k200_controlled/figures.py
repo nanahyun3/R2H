@@ -235,25 +235,102 @@ class Figures12:
         footnote(fig, "E6 학습창 · E7 재적합 빈도 · E8 변화점 재적합 · E9 유예 · E10 적응형. 단절비 > 1 이면 재적합 경계에서 예측분산이 평소보다 크게 뛴다.")
         return self._save(fig, "F07_SVR_정책", {"qlike": al["qlike"].round(4).to_dict(), "jump_ratio": al["refit_jump_ratio"].round(3).to_dict()})
 
-    # F08 합성 검출
+    # F08 합성 검출률 히트맵 (α 두 수준)
     def f08_synthetic(self):
         if "synthetic_size_power.csv" not in self.t:
             return None
         d = self.t["synthetic_size_power.csv"]
-        d = d[(d["alpha"] == 0.05) & (d["reset"] == "none") & (d["calibration"] == "garch_t_N1")]
-        d = d[d["svr"].isin(["B1", "NA"])]
-        d["det"] = d["detector"] + np.where(d["detector"].str.contains("rolling"), "_w" + d["w"].astype(str).str.replace(".0", "", regex=False), "")
-        piv = d[d["scenario"] != "S00_null"].pivot_table(index="det", columns="scenario", values="detection_rate")
-        fig, ax = plt.subplots(figsize=(15, 6.5))
-        im = ax.imshow(piv.to_numpy(float), cmap=SEQ, vmin=0, vmax=1, aspect="auto")
-        ax.set_xticks(range(piv.shape[1]), [c.split("_", 1)[1] for c in piv.columns], rotation=40, ha="right")
-        ax.set_yticks(range(piv.shape[0]), piv.index)
-        for (i, j), v in np.ndenumerate(piv.to_numpy(float)):
-            ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=7, color="white" if v > 0.6 else INK)
-        fig.colorbar(im, ax=ax, fraction=0.02)
-        ax.set_title("합성 검출률 — 변화 후 60일 안 첫 경보, 같은 오경보 부담 α=0.05 (연 블록), B1 잔차 / 원수익률", loc="left", fontsize=12)
-        footnote(fig, "시나리오당 200 경로 (같은 기저 혁신 대응). 관측 자료 판정과 별개다.")
-        return self._save(fig, "F08_합성_검출률", {"max_rate": float(np.nanmax(piv.to_numpy(float))), "n_cells": int(piv.size)})
+        d = d[(d["reset"] == "none") & d["svr"].isin(["B1", "NA"]) & (d["calibration"] == "garch_t_N1")].copy()
+        d["det"] = d["detector"] + np.where(d["detector"].str.contains("rolling"), " w" + d["w"].astype(str), "")
+        order = ["rolling_cos w20", "rolling_cos w30", "rolling_cos w60", "rolling_cos w120", "rolling_cos w252",
+                 "raw_rolling_cos w20", "raw_rolling_cos w60", "raw_rolling_cos w120",
+                 "page_up", "page_down", "page_two", "page_up_sn", "page_down_sn", "page_two_sn"]
+        fig, ax = plt.subplots(1, 2, figsize=(19, 7.5), sharey=True)
+        cap = {}
+        for a, al in zip(ax, (0.05, 0.20)):
+            sub = d[d["alpha"] == al]
+            piv = sub[sub["scenario"] != "S00_null"].pivot_table(index="det", columns="scenario", values="detection_rate")
+            piv = piv.reindex([o for o in order if o in piv.index])
+            lo = sub[sub["scenario"] != "S00_null"].pivot_table(index="det", columns="scenario", values="det_ci_lo").reindex(piv.index)
+            im = a.imshow(piv.to_numpy(float), cmap=SEQ, vmin=0, vmax=0.9, aspect="auto")
+            a.set_xticks(range(piv.shape[1]), [c.split("_", 1)[1] for c in piv.columns], rotation=40, ha="right", fontsize=8)
+            a.set_yticks(range(piv.shape[0]), piv.index, fontsize=8)
+            for (i, j), v in np.ndenumerate(piv.to_numpy(float)):
+                above = lo.to_numpy(float)[i, j] > al
+                a.text(j, i, f"{v:.2f}" + ("*" if above else ""), ha="center", va="center", fontsize=7,
+                       color="white" if v > 0.5 else INK, fontweight="bold" if above else "normal")
+            a.set_title(f"α={al} (연 블록 오경보 확률)", loc="left", fontsize=11)
+            cap[al] = {"n_above_size": int((lo.to_numpy(float) > al).sum()), "max_rate": float(np.nanmax(piv.to_numpy(float)))}
+        fig.colorbar(im, ax=ax, fraction=0.015)
+        fig.suptitle("합성 검출률 — 변화 후 60일 안 첫 경보 · 같은 오경보 부담 · B1 잔차 / 원수익률 · 시나리오당 200 경로", x=0.01, ha="left", fontsize=12)
+        footnote(fig, "* = 검출률 Wilson 95% 하한이 α 를 넘음 (크기와 구별되는 검출력). 나머지는 크기 수준 = LOW_POWER_INCONCLUSIVE. 관측 자료 판정과 별개.")
+        return self._save(fig, "F08_합성_검출률", cap)
+
+    # F14 대응 효과 숲그림
+    def f14_effects(self):
+        if "synthetic_effects.csv" not in self.t:
+            return None
+        e = self.t["synthetic_effects.csv"]
+        e = e[(e["alpha"] == 0.05) & e["scenario"].isin(["S02_var_x2", "S03_var_x3", "S08_one_day_extreme", "S12_var_x0.5", "S11_year_boundary"])]
+        fams = ["E2", "E3", "E1", "E5", "E5_placebo", "SVR", "E8", "X1"]
+        fig, ax = plt.subplots(1, 5, figsize=(22, 10), sharey=True)
+        e = e[e["family"].isin(fams)].copy()
+        e["lab"] = e["family"] + ": " + e["parent"].str.replace("cp:V20_two:0.99:20", "cpV20") + " → " + e["child"].str.replace("cp:V20_two:0.99:20", "cpV20")
+        labs = sorted(e["lab"].unique(), key=lambda x: (fams.index(x.split(":")[0]), x))
+        y = {l: i for i, l in enumerate(labs)}
+        colmap = {"DETECTION_POWER_GAIN": CAT[2], "RESET_TRIGGER_GAIN": CAT[5], "SVR_REFIT_GAIN": CAT[6], "DETECTION_POWER_LOSS": EV_COLOR,
+                  "LOW_POWER_INCONCLUSIVE": MUTED, "NO_EFFECT": INK2}
+        cap = {}
+        for a, sc in zip(ax, ["S02_var_x2", "S03_var_x3", "S12_var_x0.5", "S11_year_boundary", "S08_one_day_extreme"]):
+            sub = e[e["scenario"] == sc]
+            for r in sub.itertuples():
+                a.hlines(y[r.lab], r.ci_lo, r.ci_hi, color=colmap[r.label], lw=2)
+                a.scatter(r.diff, y[r.lab], color=colmap[r.label], s=14, zorder=3)
+            a.axvline(0, color=INK2, lw=0.8)
+            a.set_title(sc.split("_", 1)[1], fontsize=11)
+            style(a)
+            cap[sc] = sub["label"].value_counts().to_dict()
+        ax[0].set_yticks(range(len(labs)), labs, fontsize=6)
+        ax[0].invert_yaxis()
+        handles = [plt.Line2D([], [], color=c, lw=3, label=k) for k, c in colmap.items()]
+        fig.legend(handles=handles, loc="upper center", ncol=6, fontsize=8, frameon=False)
+        footnote(fig, "부모 대비 검출률 차이와 대응 부트스트랩 95% 구간 (같은 200 경로, α=0.05). 하나만 바꾼 비교 (E8 의 svr+reset 은 상호작용).")
+        return self._save(fig, "F14_합성_대응효과", cap)
+
+    # F15 검출 지연 누적 곡선
+    def f15_delay_curves(self, root: Path):
+        import pickle
+
+        f = root / "outputs/t21/calib_n1/synthetic_delays.pkl"
+        if not f.exists():
+            return None
+        dl = pickle.load(open(f, "rb"))
+        dets = [(("B1", "rolling_cos", "60", "none"), "CoS w60", CAT[0]), (("B1", "rolling_cos", "252", "none"), "CoS w252", CAT[6]),
+                (("B1", "page_up", "NA", "none"), "Page 상방", CAT[1]), (("B1", "page_up", "NA", "annual"), "Page 상방 + 연초 초기화", CAT[3]),
+                (("B1", "page_up_sn", "NA", "none"), "X1 자기정규화 Page 상방", CAT[2]), (("B1", "page_down", "NA", "none"), "Page 하방", CAT[4]),
+                (("NA", "raw_rolling_cos", "60", "none"), "원수익률 CoS w60", INK2)]
+        scen = ["S02_var_x2", "S03_var_x3", "S04_short_shock", "S06_gradual", "S08_one_day_extreme", "S09_up_then_down", "S11_year_boundary", "S12_var_x0.5"]
+        fig, ax = plt.subplots(2, 4, figsize=(18, 8.5), sharex=True, sharey=True)
+        cap = {}
+        for a, sc in zip(ax.ravel(), scen):
+            for key, lab, col in dets:
+                d = dl.get((sc, *key, 0.05))
+                if d is None:
+                    continue
+                xs = np.arange(0, 61)
+                a.step(xs, [np.mean((d >= 0) & (d <= x)) for x in xs], where="post", color=col, lw=1.3, label=lab)
+                cap.setdefault(sc, {})[lab] = float(np.mean(d >= 0))
+            a.axhline(0.05, color=EV_COLOR, ls=":", lw=0.8)
+            a.set_title(sc.split("_", 1)[1], fontsize=10)
+            style(a)
+        ax[0, 0].set_ylim(0, 0.9)
+        for a in ax[1]:
+            a.set_xlabel("변화 후 거래일")
+        for a in ax[:, 0]:
+            a.set_ylabel("누적 검출률")
+        ax[0, 0].legend(fontsize=7, frameon=False, loc="upper left")
+        footnote(fig, "α=0.05 같은 오경보 부담에서 변화일 τ 이후 x 일 안에 첫 경보가 난 경로 비율 (200 경로). 빨간 점선 = α. 곡선이 점선 근처에 머물면 크기와 구별되지 않는다.")
+        return self._save(fig, "F15_검출지연_곡선", cap)
 
     # F09 AE 중복성
     def f09_ae(self):
@@ -421,4 +498,6 @@ class Figures12:
             fn()
         self.f11_refit_break(self.root)
         self.f13_shock_type(self.root)
+        self.f14_effects()
+        self.f15_delay_curves(self.root)
         return self.caps

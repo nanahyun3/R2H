@@ -95,6 +95,16 @@
    "win756": 1.7511
   }
  },
+ "F08_합성_검출률": {
+  "0.05": {
+   "max_rate": 0.64,
+   "n_above_size": 7
+  },
+  "0.2": {
+   "max_rate": 0.855,
+   "n_above_size": 5
+  }
+ },
  "F09_AE_피처_중복성": {
   "top_increment": {
    "cos_w252_B1": 0.0521,
@@ -143,6 +153,140 @@
   "252": {
    "alarm_days": 159,
    "last_alarm": "2021-11-19"
+  }
+ },
+ "F13_사건유형별_반응": {
+  "type_means": {
+   "누적형": {
+    "CoS w120": 0.349,
+    "CoS w20": 0.437,
+    "CoS w252": 0.421,
+    "CoS w60": 0.525,
+    "CoS w60 (21일 재학습)": 0.55,
+    "CoS w60 (V20 재학습)": 0.537,
+    "Page 상방": 0.582,
+    "Page 하방": 0.383,
+    "X1 자기정규화 상방": 0.552,
+    "X1 자기정규화 하방": 0.431,
+    "원수익률 CoS w60": 0.658
+   },
+   "단일 충격형": {
+    "CoS w120": 0.667,
+    "CoS w20": 0.564,
+    "CoS w252": 0.379,
+    "CoS w60": 0.562,
+    "CoS w60 (21일 재학습)": 0.551,
+    "CoS w60 (V20 재학습)": 0.579,
+    "Page 상방": 0.261,
+    "Page 하방": 0.651,
+    "X1 자기정규화 상방": 0.815,
+    "X1 자기정규화 하방": 0.421,
+    "원수익률 CoS w60": 0.599
+   }
+  }
+ },
+ "F14_합성_대응효과": {
+  "S02_var_x2": {
+   "DETECTION_POWER_GAIN": 2,
+   "DETECTION_POWER_LOSS": 5,
+   "LOW_POWER_INCONCLUSIVE": 38,
+   "RESET_TRIGGER_GAIN": 1
+  },
+  "S03_var_x3": {
+   "DETECTION_POWER_LOSS": 6,
+   "LOW_POWER_INCONCLUSIVE": 39,
+   "NO_EFFECT": 1
+  },
+  "S08_one_day_extreme": {
+   "DETECTION_POWER_GAIN": 10,
+   "DETECTION_POWER_LOSS": 2,
+   "LOW_POWER_INCONCLUSIVE": 23,
+   "NO_EFFECT": 6,
+   "RESET_TRIGGER_GAIN": 1,
+   "SVR_REFIT_GAIN": 4
+  },
+  "S11_year_boundary": {
+   "DETECTION_POWER_LOSS": 1,
+   "LOW_POWER_INCONCLUSIVE": 45
+  },
+  "S12_var_x0.5": {
+   "DETECTION_POWER_GAIN": 1,
+   "DETECTION_POWER_LOSS": 3,
+   "LOW_POWER_INCONCLUSIVE": 42
+  }
+ },
+ "F15_검출지연_곡선": {
+  "S02_var_x2": {
+   "CoS w252": 0.035,
+   "CoS w60": 0.04,
+   "Page 상방": 0.045,
+   "Page 상방 + 연초 초기화": 0.05,
+   "Page 하방": 0.005,
+   "X1 자기정규화 Page 상방": 0.045,
+   "원수익률 CoS w60": 0.035
+  },
+  "S03_var_x3": {
+   "CoS w252": 0.05,
+   "CoS w60": 0.065,
+   "Page 상방": 0.08,
+   "Page 상방 + 연초 초기화": 0.085,
+   "Page 하방": 0.0,
+   "X1 자기정규화 Page 상방": 0.095,
+   "원수익률 CoS w60": 0.03
+  },
+  "S04_short_shock": {
+   "CoS w252": 0.025,
+   "CoS w60": 0.03,
+   "Page 상방": 0.015,
+   "Page 상방 + 연초 초기화": 0.02,
+   "Page 하방": 0.015,
+   "X1 자기정규화 Page 상방": 0.035,
+   "원수익률 CoS w60": 0.02
+  },
+  "S06_gradual": {
+   "CoS w252": 0.035,
+   "CoS w60": 0.035,
+   "Page 상방": 0.04,
+   "Page 상방 + 연초 초기화": 0.035,
+   "Page 하방": 0.005,
+   "X1 자기정규화 Page 상방": 0.045,
+   "원수익률 CoS w60": 0.05
+  },
+  "S08_one_day_extreme": {
+   "CoS w252": 0.015,
+   "CoS w60": 0.02,
+   "Page 상방": 0.325,
+   "Page 상방 + 연초 초기화": 0.545,
+   "Page 하방": 0.015,
+   "X1 자기정규화 Page 상방": 0.64,
+   "원수익률 CoS w60": 0.0
+  },
+  "S09_up_then_down": {
+   "CoS w252": 0.04,
+   "CoS w60": 0.06,
+   "Page 상방": 0.06,
+   "Page 상방 + 연초 초기화": 0.065,
+   "Page 하방": 0.0,
+   "X1 자기정규화 Page 상방": 0.09,
+   "원수익률 CoS w60": 0.03
+  },
+  "S11_year_boundary": {
+   "CoS w252": 0.035,
+   "CoS w60": 0.02,
+   "Page 상방": 0.035,
+   "Page 상방 + 연초 초기화": 0.02,
+   "Page 하방": 0.005,
+   "X1 자기정규화 Page 상방": 0.06,
+   "원수익률 CoS w60": 0.015
+  },
+  "S12_var_x0.5": {
+   "CoS w252": 0.04,
+   "CoS w60": 0.045,
+   "Page 상방": 0.01,
+   "Page 상방 + 연초 초기화": 0.005,
+   "Page 하방": 0.085,
+   "X1 자기정규화 Page 상방": 0.005,
+   "원수익률 CoS w60": 0.035
   }
  }
 }
