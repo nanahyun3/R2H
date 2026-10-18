@@ -1,0 +1,18 @@
+{
+  "study_id": "t19_common_volatility_candidates_10",
+  "protocol_version": "10-lock-2",
+  "base_config": "configs/t19_common_vol_candidates_v1.json",
+  "design_status": "POST_HOC_EXPLORATORY — 10-lock-1 결과를 본 뒤 설계한 확장",
+  "seed": 20261019,
+  "null": {"method": "circular_shift_per_group", "reps": 2000, "period": "PRIMARY", "q_list": [20, 60],
+           "day_alpha": 0.01, "fw_alpha": 0.05},
+  "asset_class": {"equity_categories": ["broad_market", "sector", "theme", "strategy", "leveraged_inverse"],
+                  "non_equity_categories": ["rates", "money_market", "commodity", "currency"],
+                  "balanced_threshold_from_k": 9},
+  "hysteresis": [{"id": "H1", "q": 20, "k_in": 9, "k_out": 7, "compare": "C1"},
+                 {"id": "H2", "q": 20, "k_in": 10, "k_out": 8, "compare": "C2"}],
+  "intensity": {"q": 20, "min_ref": 252, "A_upper": 0.90, "kospi_core_pair": ["069500", "102110"], "top_peaks": 5},
+  "lead_lag": {"max_lag": 120},
+  "c1_bottomup": {"q": 20, "window": 20},
+  "etf_states": "outputs/t18/daily_etf_states.csv.gz"
+}
