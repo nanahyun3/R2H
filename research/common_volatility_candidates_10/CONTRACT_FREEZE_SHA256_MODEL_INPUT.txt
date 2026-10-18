@@ -1,0 +1,2 @@
+442194c1d6d101348314feb0a349076aab04a7b303388c7e663629f76bfd6764  research/common_volatility_candidates_10/MODEL_INPUT_SPEC.md
+33b6c0c21f82d53ac19851bfa8fb2006ba044b3204a36239dce0c9e02f395ae5  configs/t19_model_input_v1.json

@@ -1,0 +1,16 @@
+{
+  "protocol_version": "10-lock-2-R",
+  "window": 60,
+  "horizon": 5,
+  "event_pre": 40,
+  "event_post": 19,
+  "normal_stride": 5,
+  "start": "2021-01-04",
+  "splits": {"train": ["2021-01-01", "2023-12-31"], "val": ["2024-01-01", "2024-12-31"], "test": ["2025-01-01", "2025-12-31"], "holdout_non_blind": ["2026-01-01", "2026-12-31"]},
+  "features": ["r", "abs_r", "sigma20", "sigma60", "ratio20", "U20", "U60", "peer_L", "peer_UB", "breadth", "intensity", "cusum_R", "cusum_mask"],
+  "task_excluded_features": {"same_day_A20": ["ratio20", "U20"], "same_day_C1": ["breadth"]},
+  "w3_config": "configs/t15_joint_cusum_w3_v2.json",
+  "w3_individual_summary": "research/joint_cusum_w3/results/08/individual_cusum_summary.csv",
+  "single_shock_top1_share": 0.30,
+  "out_private": "outputs/t19"
+}
