@@ -49,6 +49,33 @@ def test_censoring_uses_neighbouring_period_state():
     assert r["right_censored"] == "UNKNOWN"  # 달력 끝
 
 
+def test_year_boundary_is_continuous():
+    """달력 연도가 바뀌어도 거래일이 이어지면 같은 구간 (기간 마스크 안)."""
+    dates = pd.DatetimeIndex(["2021-12-29", "2021-12-30", "2022-01-03", "2022-01-04", "2022-01-05"])
+    (r,) = _iv([0, 1, 1, 1, 0])
+    assert (dates[r["i0"]].year, dates[r["i1"]].year) == (2021, 2022) and r["i1"] - r["i0"] + 1 == 3
+
+
+def test_real_year_crossing_interval(res):
+    """실제 주분석에서 연도를 넘는 구간이 하나의 구간으로 남는다 (q20 k3 2024-12 → 2025-01)."""
+    iv = res["intervals"]
+    x = iv[(iv["period"] == "PRIMARY") & (pd.to_datetime(iv["start"]).dt.year != pd.to_datetime(iv["end"]).dt.year)]
+    assert len(x) >= 1
+    d = res["daily"]
+    for _, r in x.iterrows():
+        assert (d.loc[r["i0"]:r["i1"], r["rule"]] == 1).all()  # 연말·연초 사이에 끊김 없음
+
+
+def test_period_boundary_censoring_real(res):
+    """주분석 마지막 날(2025-12-30)에 이어지는 구간은 2026-01-02 상태로 우측 검열된다."""
+    iv = res["intervals"]
+    x = iv[(iv["period"] == "PRIMARY") & (iv["exit_reason"] == "PERIOD_END")]
+    d = res["daily"].set_index("date")
+    for _, r in x.iterrows():
+        nxt = d.loc["2026-01-02", r["rule"]]
+        assert r["right_censored"] == (True if nxt == 1 else (False if nxt == 0 else "UNKNOWN"))
+
+
 def test_period_mask_must_be_contiguous():
     with pytest.raises(ValueError):
         _iv([1, 1, 1], [True, False, True])

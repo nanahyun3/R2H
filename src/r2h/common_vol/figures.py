@@ -134,7 +134,7 @@ class Figures10:
             ax.set_xlim(PRIMARY[0], PRIMARY[1])
         _years(axes[1])
         fig.suptitle("G02 · 같은 날 A 참여 그룹 수와 후보 구간 (C1 ⊇ C2 ⊇ C3 는 q=20, C4 는 q=60)", fontsize=12)
-        footnote(fig, "음영 = 조건 충족 연속 거래일 (갭 병합·최소 길이 없음). 짙을수록 엄격한 k. 17/17 선은 q20 최대 12, q60 최대 6 이라 어디에도 닿지 않는다.")
+        footnote(fig, f"음영 = 조건 충족 연속 거래일 (갭 병합·최소 길이 없음). 짙을수록 엄격한 k. 주분석 관측 최대 N_A: q20 {int(p['n_A_q20'].max())} · q60 {int(p['n_A_q60'].max())} (17/17 미도달).")
         fig.tight_layout(rect=(0, 0.03, 1, 0.96))
         return self._save(fig, "G02_count_and_candidate_intervals", cap)
 
@@ -185,7 +185,8 @@ class Figures10:
         for i, r in enumerate(rl["rule"]):
             ax.text(mdates.date2num(PRIMARY[1]) + 8, i, f"{int(self.sm.loc[r, 'candidate_days'])}일 / {int(self.sm.loc[r, 'n_intervals'])}구간", fontsize=7, va="center", color=INK2)
         fig.suptitle("G04 · 12개 규칙의 일별 후보 상태 — 같은 q 안에서 위(완화) → 아래(엄격)로 포함관계", fontsize=12)
-        footnote(fig, "파랑 = 1 (N_A ≥ k), 회색 = 0. 주분석에는 NA 가 없다. q=60 은 k≥9 에서 0일 (관측 최대 6).")
+        zero = [r for r in rl["rule"] if self.sm.loc[r, "candidate_days"] == 0]
+        footnote(fig, f"파랑 = 1 (N_A ≥ k), 회색 = 0. 주분석 NA {int(p[list(rl['rule'])].isna().sum().sum())}칸. 0일 규칙: {', '.join(zero)} (관측 최대 q20 {int(p['n_A_q20'].max())} · q60 {int(p['n_A_q60'].max())}).")
         fig.tight_layout(rect=(0, 0.04, 0.93, 0.94))
         return self._save(fig, "G04_rule_ribbons", {r: int(self.sm.loc[r, "candidate_days"]) for r in rl["rule"]})
 
@@ -249,7 +250,8 @@ class Figures10:
             ax.set_title(f"{t} — 주 후보 (가로선 = 중앙값)", loc="left", fontsize=9.5)
             style(ax)
         fig.suptitle("G06 · 임계값 k 효과(위, 같은 q) 와 기간 q 효과(위, 같은 k) · 주 후보의 구간 특성(아래)", fontsize=12)
-        footnote(fig, "q=60 의 관측 최대 N_A 가 6 이므로 k≥9 의 q60 막대는 0 이다 (0 도 유효 결과, 임계값을 바꾸지 않음). C4(k=6) 는 C1(k=9) 보다 완화된 기준이라 C1 vs C4 차이를 q 효과로만 읽지 않는다.")
+        q60max = int(self._prim()["n_A_q60"].max())
+        footnote(fig, f"q=60 의 관측 최대 N_A 가 {q60max} 이므로 k>{q60max} 의 q60 막대는 0 이다 (0 도 유효 결과, 임계값을 바꾸지 않음). C4(k=6) 는 C1(k=9) 보다 완화된 기준이라 C1 vs C4 차이를 q 효과로만 읽지 않는다.")
         fig.tight_layout(rect=(0, 0.04, 1, 0.95))
         return self._save(fig, "G06_k_and_q_effects", {})
 
@@ -273,7 +275,8 @@ class Figures10:
                 ax.text(b, a, f"{v:.2f}", ha="center", va="center", fontsize=7.5, color="white" if v > 0.55 else INK)
         fig.colorbar(im, ax=ax, shrink=0.8, label="날짜 Jaccard")
         fig.suptitle("G07 · 후보 규칙 간 주분석 날짜 집합 Jaccard (0일 규칙 제외)", fontsize=12)
-        footnote(fig, "q20 과 q60 은 k=6 에서 Jaccard 0 — 같은 날짜를 하나도 공유하지 않는다. 같은 q 안의 값은 포함관계 때문에 |엄격| / |완화| 와 같다.")
+        hz = self.r["horizon"].set_index("k")
+        footnote(fig, f"k=6 에서 q20 {int(hz.loc[6, 'q20_days'])}일 · q60 {int(hz.loc[6, 'q60_days'])}일 중 공유 날짜 {int(hz.loc[6, 'both_days'])}일 (Jaccard {hz.loc[6, 'jaccard']:.2f}). 같은 q 안의 값은 포함관계 때문에 |엄격| / |완화| 와 같다.")
         fig.tight_layout(rect=(0, 0.04, 1, 0.95))
         return self._save(fig, "G07_rule_jaccard", {"C1_C2": round(float(m.loc["q20_k9", "q20_k10"]), 4), "C1_C4": round(float(m.loc["q20_k9", "q60_k6"]), 4)})
 
@@ -298,7 +301,9 @@ class Figures10:
         fig.suptitle("G08 · q=20 에서 k 를 올릴 때 구간이 소멸·축소·분할되는 모습 (k=6 진단 → C1 → C2 → C3)", fontsize=12)
         k = self.r["split_kids"]
         rel = k[(k.q == 20) & (k.k_loose.isin(ks))].groupby(["k_loose", "relation"]).size().to_dict()
-        footnote(fig, "2024-08 C1 구간(20일)은 C2 에서 3개로, 2025-04 C1 구간(17일)은 2개로 쪼개진다. 날짜 집합은 포함관계지만 구간 수는 C1 3 → C2 5 로 늘어난다. 관계 집계: " + ", ".join(f"k{a}→ {b} {v}" for (a, b), v in rel.items()))
+        sp = k[(k.q == 20) & (k.k_loose == 9) & (k.n_children >= 2)]
+        txt = " · ".join(f"C1 {a}~{b} ({d}일) → C2 {n}조각" for a, b, d, n in zip(sp["start"], sp["end"], sp["loose_days"], sp["n_children"]))
+        footnote(fig, f"{txt}. 날짜 집합은 포함관계지만 구간 수는 C1 {cap[9]} → C2 {cap[10]}. 관계 집계: " + ", ".join(f"k{a}→ {b} {v}" for (a, b), v in rel.items()))
         fig.tight_layout(rect=(0, 0.06, 1, 0.94))
         return self._save(fig, "G08_split_and_vanish", cap)
 
@@ -374,7 +379,7 @@ class Figures10:
         axes[0].invert_yaxis()
         axes[0].legend(fontsize=7, loc="lower right")
         fig.suptitle("G12 · 후보일에 어떤 그룹이 고변동성이었나 — 그룹별 참여 비율 (막대) vs 평소 비율 (세로 눈금)", fontsize=12)
-        footnote(fig, "막대 1.0 = 그 후보의 모든 후보일에 A. 평소 비율은 정의상 약 0.10 근처(90분위)지만 확장형 기준이라 그룹마다 다르다. 채권(148070·153130)은 2022 구간에만, 주식 그룹은 2024·2025 구간에 집중된다.")
+        footnote(fig, f"막대 1.0 = 그 후보의 모든 후보일에 A. 평소 비율은 90분위 기준이라 0.10 근처지만 확장형 기준이라 그룹마다 다르다. C1 후보일 중 국고채10년·단기채권 참여 비율 {cap['C1']['148070']:.2f}·{cap['C1']['153130']:.2f}.")
         fig.tight_layout(rect=(0, 0.04, 1, 0.95))
         return self._save(fig, "G12_group_participation", cap)
 
@@ -466,7 +471,9 @@ class Figures10:
         handles = [Patch(color=CAND_COLOR[c], alpha=0.4, label=c) for c in CAND_ORDER]
         fig.legend(handles=handles, loc="upper center", ncol=4, fontsize=8, bbox_to_anchor=(0.5, 0.955))
         fig.suptitle(f"G16 · 2020 파일럿 (q20 17/17 {cap[2020]['k17_q20']}일) 과 2026 부분 연도 — 주분석과 섞지 않는다", fontsize=12)
-        footnote(fig, "음영 = 같은 규칙의 해당 기간 구간. 2026 은 2026-10-02 까지 관측이라 마지막 구간은 우측 검열(UNKNOWN). 두 기간 모두 후보 정의의 성능 검증 근거가 아니다.")
+        c26 = self.iv[(self.iv["period"] == "PARTIAL_NON_BLIND") & self.iv["candidate"].isin(CAND_ORDER)]
+        cen = c26[(c26["left_censored"] != False) | (c26["right_censored"] != False)]["interval_id"].tolist()  # noqa: E712
+        footnote(fig, f"음영 = 같은 규칙의 해당 기간 구간. 2026 은 2026-10-02 까지 관측. 2026 주 후보 구간 중 검열 구간: {', '.join(cen) if cen else '없음'}. 두 기간 모두 후보 정의의 성능 검증 근거가 아니다.")
         fig.tight_layout(rect=(0, 0.04, 1, 0.93))
         return self._save(fig, "G16_pilot2020_and_2026", cap)
 

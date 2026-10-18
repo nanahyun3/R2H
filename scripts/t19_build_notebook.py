@@ -468,7 +468,7 @@ display(PT.pivot(index="label", columns="candidate", values="share_on_candidate_
 - C1 후보일 39일 동안 반도체(091230)·2차전지(305540)는 100%, KOSPI200·나스닥100 은 95%, 코스닥150 은 92% 참여했다. **C1 의 공통성은 주식 그룹이 이끈다**.
 - 국고채10년·단기채권은 C1 후보일의 5% (2022-10 의 2일)에만 참여한다. 채권 고변동성은 C1 정의에서 거의 드러나지 않는다.
 - C4 는 구성이 다르다. 2022-11 (채권·달러·미국 주식) 과 2024-10~11 (국내 주식·중국) 두 묶음이 번갈아 나온다.
-- 함의: k 를 '17개 중 몇 개' 로만 정하면 그룹의 경제적 성격(주식 9–10개 vs 채권·원자재·통화 6–7개)이 섞인다. 주식 그룹이 많은 구성에서는 주식 충격이 과반 기준을 쉽게 넘는다. 이것은 정의의 한계로 남는다.
+- 함의: 17개 그룹 중 **주식 계열이 12개**(국내 9 · 해외 3)이고, 채권 2 · 원자재 2 · 통화 1 의 **비주식은 5개**뿐이다 (W2 `exposure_groups.csv` 범주 기준). 주식 충격만으로도 과반(9/17) 기준을 넘을 수 있다. 반대로 비주식 5개가 모두 켜져도 k=9 에 닿지 않는다. '17개 중 k 개' 기준은 주식 충격에 유리하며, 이것은 정의의 한계로 남는다.
 """),
         # ── 16 ──
         md("## 16. B 및 AB 를 이용한 보조 해석"),
@@ -507,9 +507,9 @@ display(IV[(IV["period"] != "PRIMARY") & IV["candidate"].isin(["C1", "C2", "C3",
 |---|---|---|---|
 | 변동성 | `mean(r²)` (평균 0, ddof 0), q 3–120 | SVR–GARCH 잔차 CUSUM, 검정창 w | 표본표준편차 연환산 σ, q 20·60 |
 | 고변동 판정 | 과거 분위 (HIGH_LEVEL·EXPANSION 채널) | 공동 CUSUM 통계량 | 과거 분위 0.90 (09 의 A) |
-| KOSPI200 | 구성원 하나라도 (OR) | 대표 6종 중 069500 | Core Pair 둘 다 (AND) |
+| KOSPI200 | 구성원 하나라도 (OR) | 대표 6종(069500·229200·148070·153130·261220·133690) 중 069500 하나 | Core Pair 둘 다 (AND) |
 | 공통성 | 여러 q 중 3개 이상 겹친 ETF 의 그룹 수 | 공동 통계 유의성 | 같은 날 A 그룹 수 ≥ k |
-| 결론 지위 | 탐색적 | `LOW_POWER_INCONCLUSIVE` | 사후 탐색 후보 |
+| 결론 지위 | 탐색적 | `LOW_POWER_INCONCLUSIVE` + `NULL_MODEL_INVALID` (유의 공동 구간 0) | 사후 탐색 후보 |
 
 - C1 의 세 구간은 모두 W2 HIGH_LEVEL·EXPANSION 구간과 겹친다. 다만 경계는 다르다. 예를 들어 2025-04 의 W2 HIGH_LEVEL 은 04-07~05-26 (13그룹), C1 은 04-10~05-07 이다. W2 경계를 복사하지 않았으므로 다른 것이 정상이다.
 - W3 공동 에피소드와 겹치는 주 후보 구간은 2025-04 의 C1·C2·C3 뿐이다 (W3 는 귀무모형 부적합으로 탐색적이다). 10번은 W3 의 검출력 문제를 해결하지 않는다. 10번은 검정이 아니라 상태 정의다.
@@ -593,10 +593,10 @@ A(자기 과거 대비 고변동성)는 시장 공통 현상이고, B(Peer 대�
 - 외부 사건 이름은 맥락일 뿐이다. 이 데이터로 원인을 검증하지 않았다.
 - 원문 지시서가 일부(PART VI 중간~PART XII 검증 1–9) 잘려 있었다. E2·E3 는 목차와 09 사건 창으로 재구성했다.
 
-**검증 (이 노트북에서 assert)**
+**검증 (이 노트북 또는 pytest `tests/unit/test_common_vol_10.py` 에서 assert)**
 - 09 승계: 매니페스트 지문(예외 1건 명시), N_A·n_eval 전 행, 기간별 최대·17/17·NA.
-- 같은 q 의 날짜 포함관계, 같은 날짜의 구간 중복 없음, 후보일 수 = 구간 지속일 합, 구간 최대 = 일별 원자료.
-- NA ≠ 0, 기간 분리(2020·2021–2025·2026), 연도 경계 연속(구간 생성은 기간 내부 연속 블록).
+- 같은 q 의 날짜 포함관계, 같은 날짜의 구간 중복 없음, 후보일 수 = 구간 지속일 합, 구간 최대 = 일별 원자료, 참여 그룹 명단 길이 = 집계 수 (ever + 없음 = 17) — `pipeline.check_intervals`.
+- NA ≠ 0 (합성 테스트), 기간 분리(2020·2021–2025·2026), 연도 경계 연속 (합성 테스트 + 실제 2024-12→2025-01 구간), 주분석 끝 구간의 우측 검열 = 2026-01-02 상태 (pytest).
 - C3·C4 날짜 집합 = 09 `max_participation_days` 의 최대 도달일 (교차 앵커).
 - W4 17/17 AB 0개 유지, 09 노트북·W4 results 지문 작업 전후 동일.
 
@@ -678,6 +678,8 @@ CLAIMS = [  # (주장, 관측, 기대)
     ("W3 겹침 후보 구간", tuple(R["w2w3"][R["w2w3"]["w3_joint_episode_overlap_n"] > 0]["interval_id"]), ("q20_k9_PRI_003", "q20_k10_PRI_004", "q20_k12_PRI_001")),  # 본문 §18 대조
     ("C1 구간 W2 겹침", bool((R["w2w3"][R["w2w3"].candidate == "C1"]["w2_overlap_n"] > 0).all()), True),  # 본문 §18 대조
     ("W4 판정 유지", VER["w4_verdict"], "VALID_ZERO_INTERVALS"),  # 09 판정
+    ("그룹 범주: 주식·비주식", (int(EG.drop_duplicates("exposure_group")["category"].isin(["broad_market", "sector", "theme", "strategy", "leveraged_inverse"]).sum()), int(EG.drop_duplicates("exposure_group")["category"].isin(["rates", "money_market", "commodity", "currency"]).sum())), (12, 5)),  # 본문 §15 대조
+    ("2026 주 후보 검열 구간", int(((IV.period == "PARTIAL_NON_BLIND") & IV.candidate.isin(["C1", "C2", "C3", "C4"]) & ((IV.left_censored != False) | (IV.right_censored != False))).sum()), 0),  # 그림 G16 각주 대조  # noqa: E712
 ]  # 끝
 bad = {k: (o, x) for k, o, x in CLAIMS if o != x}  # 불일치 주장
 print(f"CLAIMS {len(CLAIMS) - len(bad)}/{len(CLAIMS)} 일치")  # 결과

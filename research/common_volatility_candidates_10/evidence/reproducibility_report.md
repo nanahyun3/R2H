@@ -7,5 +7,5 @@
 | 09 노트북·W4 `results/` | 10번 실행 전후 SHA256 | 동일 (노트북 마지막 셀 assert) |
 
 - 환경: R2H `.venv` (Python 3.12.3 · numpy 2.5.4 · pandas 3.0.6 · scipy 1.18.1 · matplotlib 3.11.2), BLAS 스레드 1, `PYTHONNOUSERSITE=1`.
-- 노트북 CLAIMS 56/56 일치. pytest 전체 239 통과 (신규 `tests/unit/test_common_vol_10.py` 15개 포함).
+- 노트북 CLAIMS 58/58 일치. pytest 전체 242 통과 (신규 `tests/unit/test_common_vol_10.py` 18개 포함).
 - 실행 기록: `evidence/execution_record.json`, 로그 `evidence/10_execution.log`.

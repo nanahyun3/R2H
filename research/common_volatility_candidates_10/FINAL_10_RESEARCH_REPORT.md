@@ -1,6 +1,6 @@
 # 10번 최종 연구보고 — ETF 20종 공통 고변동성 급변 후보 구간 비교 (`10-lock-1`)
 
-- 노트북: `notebooks/10_ETF20종_공통고변동성_급변후보구간비교.ipynb` (새 커널 PASS, CLAIMS 56/56)
+- 노트북: `notebooks/10_ETF20종_공통고변동성_급변후보구간비교.ipynb` (새 커널 PASS, CLAIMS 58/58)
 - 계약: `CANDIDATE_RESEARCH_CONTRACT.md` (`1ab42bd`, 개정 1 `3b183f8`). 후보 구간을 계산하기 전에 커밋했다.
 - 설계 지위: **사후 탐색 연구.** 09번(W4) 결과를 본 뒤 설계했고, C3·C4 의 k 는 09번의 관측 최대값과 같다.
 - 09번 판정 `VALID_ZERO_INTERVALS` (17/17 ∧ A ∧ B) 는 바꾸지 않는다.
@@ -61,7 +61,7 @@
 2. **q 효과**: 같은 k=6 에서 q20 65일과 q60 14일은 **하루도 겹치지 않는다**. k=3 에서도 Jaccard 는 0.17 이다. q20 은 충격 시점의 동시 고변동성을, q60 은 충격 뒤 누적된 고변동성을 본다. q60 정점(2022-11-21, 2024-10-24)은 q20 정점보다 6주~2.5개월 늦다.
 3. **C1 vs C4 는 q 효과만이 아니다**: k 가 9 와 6 으로 다르다. 같은 k=9 에서 q60 은 0일이다.
 4. **사건 성격**: 2024-08 은 국내 주식 10개 그룹(채권·원자재·통화 0), 2025-04 는 해외 주식·금·원유·달러까지 퍼진 12개 그룹, 2022 는 채권·달러의 긴 띠 위에 주식이 짧게 겹친 국면이다. 2022 는 C1 로는 2일, C4 로는 6일만 잡힌다.
-5. **그룹 구성 편향**: C1 후보일 동안 반도체·2차전지 100%, KOSPI200·나스닥100 95%, 코스닥150 92% 가 참여했다. 채권은 5% 다. 17개 중 주식 계열이 많아 '17개 중 k 개' 기준은 주식 충격에 유리하다.
+5. **그룹 구성 편향**: C1 후보일 동안 반도체·2차전지 100%, KOSPI200·나스닥100 95%, 코스닥150 92% 가 참여했다. 채권은 5% 다. 17개 그룹 중 주식 계열이 12개(국내 9 · 해외 3)이고 비주식은 5개(채권 2 · 원자재 2 · 통화 1)뿐이다. 따라서 비주식이 모두 켜져도 k=9 에 닿지 않고, '17개 중 k 개' 기준은 주식 충격에 유리하다.
 6. **B·AB**: C1 후보일의 평균 N_B 는 2.18 (비후보일 1.65) 이다. C3 후보일은 1.00 으로 비후보일(1.67)보다 낮다. 가장 넓은 공통 고변동성 때 Peer 도 함께 흔들려 상대 괴리가 줄어든다. B 를 진입 조건으로 쓰면 공통 구간이 사라지는 이유다.
 
 ## 6. 2020 파일럿 · 2026 (주분석과 분리)
@@ -98,4 +98,4 @@
 - 결과 CSV 17개: `results/` (`daily`·`intervals`·`summary`·`summary_pilot`·`summary_2026`·`yearly`·`jaccard`·`split_links`·`split_kids`·`horizon`·`participation`·`b_ab`·`events`·`event_days`·`w2w3`·`integrity`·`w4_inheritance_check`) + `figure_captions.json`
 - 그림 16종 (PNG 320dpi + SVG): `figures/` — `FIGURE_CATALOG.md`
 - 재현: `evidence/` (실행 기록·로그·재현성 보고), `RELEASE_MANIFEST.json`
-- 코드: `src/r2h/common_vol/`, `scripts/run_t19_pipeline.py`, `scripts/t19_build_notebook.py`, `scripts/run_t19_notebook.py`, 테스트 `tests/unit/test_common_vol_10.py` (15)
+- 코드: `src/r2h/common_vol/`, `scripts/run_t19_pipeline.py`, `scripts/t19_build_notebook.py`, `scripts/run_t19_notebook.py`, 테스트 `tests/unit/test_common_vol_10.py` (18)

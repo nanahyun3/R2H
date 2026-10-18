@@ -175,6 +175,11 @@ def check_intervals(iv: pd.DataFrame, daily: pd.DataFrame, cfg: dict, rl: pd.Dat
                 seg = daily.loc[y["i0"]:y["i1"], f"n_A_q{r['q']}"]
                 assert int(seg.max()) == y["max_n_A"] and int(seg.min()) >= r["k"]
                 assert y["n_groups_always"] <= y["max_n_A"] <= y["n_groups_ever"]
+                # 참여 그룹 명단의 길이 = 집계 수 (최대 첫날 명단 = N_A 최대, ever·매일·없음 명단 = 각 개수, ever+없음 = 17)
+                n_of = lambda t: len(t.split("|")) if isinstance(t, str) and t else 0  # noqa: E731
+                assert n_of(y["groups_at_max_first_day"]) == y["max_n_A"] and n_of(y["groups_ever"]) == y["n_groups_ever"]
+                assert n_of(y["groups_always"]) == y["n_groups_always"] and n_of(y["groups_never"]) == y["n_groups_never"]
+                assert y["n_groups_ever"] + y["n_groups_never"] == cfg["n_groups"]
             rows.append({"rule": r["rule"], "period": per, "candidate_days": days, "n_intervals": len(x),
                          "na_days": int(d[r["rule"]].isna().sum())})
     # 같은 q: k 가 커지면 날짜 집합이 줄어드는 포함관계 (전체 달력)
