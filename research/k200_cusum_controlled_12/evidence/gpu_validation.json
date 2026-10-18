@@ -1,0 +1,680 @@
+{
+  "generated_utc": "2026-10-18T15:39:37+00:00",
+  "quick": false,
+  "seed": 20261019,
+  "env": {
+    "python": "3.12.3",
+    "torch": "2.12.1+cu130",
+    "numpy": "2.4.6",
+    "device": "cuda",
+    "gpu_name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+    "free_gib_start": 10.767578125,
+    "total_gib": 11.94000244140625,
+    "budget_gib": 6.0
+  },
+  "equivalence": {
+    "rolling": [
+      {
+        "data": "t5",
+        "w": 20,
+        "R": 200,
+        "n": 1473,
+        "float64": {
+          "max_abs_err": 2.220446049250313e-15,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.149539398152605,
+          "flips_at_q95": 0,
+          "n_finite": 290800
+        },
+        "float32": {
+          "max_abs_err": 7.941526374288799e-07,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.149539398152605,
+          "flips_at_q95": 0,
+          "n_finite": 290800
+        }
+      },
+      {
+        "data": "t5",
+        "w": 60,
+        "R": 200,
+        "n": 1473,
+        "float64": {
+          "max_abs_err": 3.9968028886505635e-15,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.2079956409938166,
+          "flips_at_q95": 0,
+          "n_finite": 282800
+        },
+        "float32": {
+          "max_abs_err": 1.0032062288667376e-06,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.2079956409938166,
+          "flips_at_q95": 0,
+          "n_finite": 282800
+        }
+      },
+      {
+        "data": "t5",
+        "w": 252,
+        "R": 200,
+        "n": 1473,
+        "float64": {
+          "max_abs_err": 9.547918011776346e-15,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.2500311775082764,
+          "flips_at_q95": 0,
+          "n_finite": 244400
+        },
+        "float32": {
+          "max_abs_err": 2.04752192339841e-06,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.2500311775082764,
+          "flips_at_q95": 1,
+          "n_finite": 244400
+        }
+      },
+      {
+        "data": "normal",
+        "w": 20,
+        "R": 200,
+        "n": 1473,
+        "float64": {
+          "max_abs_err": 2.7755575615628914e-15,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.1810512163395448,
+          "flips_at_q95": 0,
+          "n_finite": 290800
+        },
+        "float32": {
+          "max_abs_err": 9.293645419905516e-07,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.1810512163395448,
+          "flips_at_q95": 0,
+          "n_finite": 290800
+        }
+      },
+      {
+        "data": "normal",
+        "w": 60,
+        "R": 200,
+        "n": 1473,
+        "float64": {
+          "max_abs_err": 4.6629367034256575e-15,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.2538891615115038,
+          "flips_at_q95": 0,
+          "n_finite": 282800
+        },
+        "float32": {
+          "max_abs_err": 1.1394313251811283e-06,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.2538891615115038,
+          "flips_at_q95": 0,
+          "n_finite": 282800
+        }
+      },
+      {
+        "data": "normal",
+        "w": 252,
+        "R": 200,
+        "n": 1473,
+        "float64": {
+          "max_abs_err": 1.3322676295501878e-14,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.2987495617534042,
+          "flips_at_q95": 0,
+          "n_finite": 244400
+        },
+        "float32": {
+          "max_abs_err": 2.168782386235968e-06,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.2987495617534042,
+          "flips_at_q95": 0,
+          "n_finite": 244400
+        }
+      },
+      {
+        "data": "t5_nan",
+        "w": 20,
+        "R": 200,
+        "n": 1473,
+        "float64": {
+          "max_abs_err": 2.3314683517128287e-15,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.1414592493902378,
+          "flips_at_q95": 0,
+          "n_finite": 281701
+        },
+        "float32": {
+          "max_abs_err": 8.78115340663399e-07,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.1414592493902378,
+          "flips_at_q95": 1,
+          "n_finite": 281701
+        }
+      },
+      {
+        "data": "t5_nan",
+        "w": 60,
+        "R": 200,
+        "n": 1473,
+        "float64": {
+          "max_abs_err": 3.774758283725532e-15,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.2045733878204383,
+          "flips_at_q95": 0,
+          "n_finite": 279161
+        },
+        "float32": {
+          "max_abs_err": 1.0349589956160088e-06,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.2045733878204383,
+          "flips_at_q95": 1,
+          "n_finite": 279161
+        }
+      },
+      {
+        "data": "t5_nan",
+        "w": 252,
+        "R": 200,
+        "n": 1473,
+        "float64": {
+          "max_abs_err": 1.1102230246251565e-14,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.2703867873354253,
+          "flips_at_q95": 0,
+          "n_finite": 241447
+        },
+        "float32": {
+          "max_abs_err": 1.689891092171436e-06,
+          "nan_mismatch": 0,
+          "crit_q95_cpu": 1.2703867873354253,
+          "flips_at_q95": 0,
+          "n_finite": 241447
+        }
+      }
+    ],
+    "rolling_segmented": {
+      "data": "t5_nan",
+      "w": 60,
+      "resets": [
+        400,
+        900
+      ],
+      "float64": {
+        "max_abs_err": 3.774758283725532e-15,
+        "nan_mismatch": 0,
+        "crit_q95_cpu": 1.2036918571546913,
+        "flips_at_q95": 0,
+        "n_finite": 255857
+      }
+    },
+    "page": [
+      {
+        "data": "t5",
+        "reset_mask": false,
+        "lam": 2.0,
+        "K": 64,
+        "R": 200,
+        "n": 1473,
+        "inc_bit_equal": true,
+        "n_alarms_cpu": 306204,
+        "float64_exact": true,
+        "float64_flips": 0,
+        "float32_flips": 0
+      },
+      {
+        "data": "t5_nan",
+        "reset_mask": true,
+        "lam": 2.0,
+        "K": 64,
+        "R": 200,
+        "n": 1473,
+        "inc_bit_equal": true,
+        "n_alarms_cpu": 269119,
+        "float64_exact": true,
+        "float64_flips": 0,
+        "float32_flips": 0
+      }
+    ],
+    "block_hits": [
+      {
+        "data": "t5",
+        "float64_exact": true
+      },
+      {
+        "data": "t5_nan",
+        "float64_exact": true
+      }
+    ],
+    "block_max": {
+      "exact": true
+    }
+  },
+  "oom_retry": {
+    "equal": true,
+    "chunk": 50,
+    "oom_retries": 2
+  },
+  "bench_rolling": [
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 2.4424906541753444e-15,
+      "w": 20,
+      "R": 128,
+      "cpu_s": 0.09724774000096659,
+      "gpu_s": 0.012557147998450091,
+      "speedup": 7.744412983980895,
+      "cpu_ms_per_path": 0.7597479687575515,
+      "gpu_ms_per_path": 0.09810271873789134,
+      "gpu_peak_mib": 151.6220703125,
+      "chunk": 128,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 22,
+        "mem_used_mib": 1318,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 2.220446049250313e-15,
+      "w": 20,
+      "R": 256,
+      "cpu_s": 0.2395153779998509,
+      "gpu_s": 0.025060951000341447,
+      "speedup": 9.557314006024257,
+      "cpu_ms_per_path": 0.9356069453119176,
+      "gpu_ms_per_path": 0.09789433984508378,
+      "gpu_peak_mib": 302.564453125,
+      "chunk": 256,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 49,
+        "mem_used_mib": 1332,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 2.4424906541753444e-15,
+      "w": 20,
+      "R": 512,
+      "cpu_s": 0.4088538809992315,
+      "gpu_s": 0.04807142199933878,
+      "speedup": 8.50513390273446,
+      "cpu_ms_per_path": 0.798542736326624,
+      "gpu_ms_per_path": 0.09388949609245856,
+      "gpu_peak_mib": 607.1875,
+      "chunk": 512,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 69,
+        "mem_used_mib": 1332,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 3.1086244689504383e-15,
+      "w": 20,
+      "R": 1024,
+      "cpu_s": 0.8170469489996321,
+      "gpu_s": 0.09316731500075548,
+      "speedup": 8.769673667133231,
+      "cpu_ms_per_path": 0.7978974111324533,
+      "gpu_ms_per_path": 0.09098370605542527,
+      "gpu_peak_mib": 1215.1171875,
+      "chunk": 1024,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 66,
+        "mem_used_mib": 1332,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 3.1086244689504383e-15,
+      "w": 20,
+      "R": 1500,
+      "cpu_s": 1.4543320419998054,
+      "gpu_s": 0.12348322300022119,
+      "speedup": 11.777567888693676,
+      "cpu_ms_per_path": 0.9695546946665369,
+      "gpu_ms_per_path": 0.08232214866681413,
+      "gpu_peak_mib": 1772.96728515625,
+      "chunk": 1500,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 37,
+        "mem_used_mib": 1361,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 4.107825191113079e-15,
+      "w": 60,
+      "R": 128,
+      "cpu_s": 0.30029665300025954,
+      "gpu_s": 0.017748021999068442,
+      "speedup": 16.920006805041233,
+      "cpu_ms_per_path": 2.3460676015645276,
+      "gpu_ms_per_path": 0.1386564218677222,
+      "gpu_peak_mib": 430.2529296875,
+      "chunk": 128,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 39,
+        "mem_used_mib": 1361,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 4.440892098500626e-15,
+      "w": 60,
+      "R": 256,
+      "cpu_s": 0.48953339000036067,
+      "gpu_s": 0.034585852999953204,
+      "speedup": 14.154151120720458,
+      "cpu_ms_per_path": 1.9122398046889089,
+      "gpu_ms_per_path": 0.1351009882810672,
+      "gpu_peak_mib": 861.990234375,
+      "chunk": 256,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 38,
+        "mem_used_mib": 1361,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 4.440892098500626e-15,
+      "w": 60,
+      "R": 512,
+      "cpu_s": 1.2546740830002818,
+      "gpu_s": 0.06536653300099715,
+      "speedup": 19.19444133561653,
+      "cpu_ms_per_path": 2.4505353183599254,
+      "gpu_ms_per_path": 0.12766900976757256,
+      "gpu_peak_mib": 1724.5546875,
+      "chunk": 512,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 92,
+        "mem_used_mib": 1361,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 4.218847493575595e-15,
+      "w": 60,
+      "R": 1024,
+      "cpu_s": 1.8984111549998488,
+      "gpu_s": 0.138083750000078,
+      "speedup": 13.748258973259174,
+      "cpu_ms_per_path": 1.8539171435545398,
+      "gpu_ms_per_path": 0.13484741210945117,
+      "gpu_peak_mib": 3443.0078125,
+      "chunk": 1024,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 89,
+        "mem_used_mib": 1307,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 4.218847493575595e-15,
+      "w": 60,
+      "R": 1500,
+      "cpu_s": 2.837973838000835,
+      "gpu_s": 0.20216792400060513,
+      "speedup": 14.037705793488488,
+      "cpu_ms_per_path": 1.8919825586672232,
+      "gpu_ms_per_path": 0.13477861600040342,
+      "gpu_peak_mib": 3460.3896484375,
+      "chunk": 1026,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 85,
+        "mem_used_mib": 1189,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 1.1435297153639112e-14,
+      "w": 252,
+      "R": 128,
+      "cpu_s": 0.7608352080005716,
+      "gpu_s": 0.03991336000035517,
+      "speedup": 19.062168857590574,
+      "cpu_ms_per_path": 5.9440250625044655,
+      "gpu_ms_per_path": 0.31182312500277476,
+      "gpu_peak_mib": 1547.056640625,
+      "chunk": 128,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 82,
+        "mem_used_mib": 1189,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 1.1435297153639112e-14,
+      "w": 252,
+      "R": 256,
+      "cpu_s": 1.6666864800008625,
+      "gpu_s": 0.08061306499985221,
+      "speedup": 20.675140934089505,
+      "cpu_ms_per_path": 6.510494062503369,
+      "gpu_ms_per_path": 0.3148947851556727,
+      "gpu_peak_mib": 3096.52734375,
+      "chunk": 256,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 97,
+        "mem_used_mib": 1189,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 1.2101430968414206e-14,
+      "w": 252,
+      "R": 512,
+      "cpu_s": 4.309165456999835,
+      "gpu_s": 0.16036452200023632,
+      "speedup": 26.871064767015522,
+      "cpu_ms_per_path": 8.416338783202804,
+      "gpu_ms_per_path": 0.31321195703171156,
+      "gpu_peak_mib": 3412.27685546875,
+      "chunk": 282,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 97,
+        "mem_used_mib": 1242,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 1.4654943925052066e-14,
+      "w": 252,
+      "R": 1024,
+      "cpu_s": 6.669446042000345,
+      "gpu_s": 0.26880335100031516,
+      "speedup": 24.8116179250776,
+      "cpu_ms_per_path": 6.513130900390962,
+      "gpu_ms_per_path": 0.2625032724612453,
+      "gpu_peak_mib": 3430.02783203125,
+      "chunk": 282,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 81,
+        "mem_used_mib": 1315,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "float64_flips": 0,
+      "float64_nan_mismatch": 0,
+      "float64_max_abs_err": 1.2212453270876722e-14,
+      "w": 252,
+      "R": 1500,
+      "cpu_s": 10.89689418099988,
+      "gpu_s": 0.3872534380006982,
+      "speedup": 28.13892172851473,
+      "cpu_ms_per_path": 7.264596120666586,
+      "gpu_ms_per_path": 0.25816895866713213,
+      "gpu_peak_mib": 3445.00146484375,
+      "chunk": 282,
+      "oom_retries": 0,
+      "smi_after": {
+        "util_pct": 66,
+        "mem_used_mib": 1123,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    }
+  ],
+  "bench_page": [
+    {
+      "R": 1000,
+      "K": 1,
+      "n": 1473,
+      "cpu_loop_s": 0.030956199998399825,
+      "cpu_tiled_s": 0.035564674999477575,
+      "gpu_grid_s": 0.12433328900078777,
+      "gpu_block_s": 0.12204227199981688,
+      "speedup_grid": 0.2489775686558383,
+      "speedup_block": 0.2536514560991316,
+      "gpu_peak_mib": 38.04833984375,
+      "float64_exact": true,
+      "smi_after": {
+        "util_pct": 31,
+        "mem_used_mib": 1123,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "R": 1000,
+      "K": 64,
+      "n": 1473,
+      "cpu_loop_s": 1.531352269999843,
+      "cpu_tiled_s": 3.3142054790005204,
+      "gpu_grid_s": 0.2211547110000538,
+      "gpu_block_s": 0.13651678599853767,
+      "speedup_grid": 6.924348403319659,
+      "speedup_block": 11.217318506284249,
+      "gpu_peak_mib": 207.24072265625,
+      "float64_exact": true,
+      "smi_after": {
+        "util_pct": 28,
+        "mem_used_mib": 1190,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    },
+    {
+      "R": 1000,
+      "K": 256,
+      "n": 1473,
+      "cpu_loop_s": 6.39887949200056,
+      "cpu_tiled_s": null,
+      "gpu_grid_s": 0.44040239499918243,
+      "gpu_block_s": 0.1528663030003372,
+      "speedup_grid": 14.529620103479317,
+      "speedup_block": 41.85931998359668,
+      "gpu_peak_mib": 748.89013671875,
+      "float64_exact": true,
+      "smi_after": {
+        "util_pct": 7,
+        "mem_used_mib": 1264,
+        "mem_total_mib": 12227,
+        "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+      }
+    }
+  ],
+  "contention": {
+    "smi_start": {
+      "util_pct": 2,
+      "mem_used_mib": 1355,
+      "mem_total_mib": 12227,
+      "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+    },
+    "load_start": {
+      "uptime": "00:38:10 up  2:24,  1 user,  load average: 1.51, 1.83, 1.55",
+      "mc_procs": []
+    },
+    "smi_end": {
+      "util_pct": 1,
+      "mem_used_mib": 1264,
+      "mem_total_mib": 12227,
+      "name": "NVIDIA GeForce RTX 5070 Ti Laptop GPU"
+    },
+    "load_end": {
+      "uptime": "00:39:37 up  2:26,  1 user,  load average: 1.92, 1.87, 1.58",
+      "mc_procs": []
+    },
+    "smi_during": {
+      "samples": 143,
+      "util_max": 100,
+      "util_median": 1.0,
+      "mem_used_mib_max": 5493
+    }
+  },
+  "verdict": {
+    "float64": "GPU_FLOAT64_EQUIVALENT",
+    "float32": "NUMERICAL_DISAGREEMENT",
+    "float32_total_flips": 3
+  },
+  "max_vram_mib": 3460.3896484375,
+  "recommendation": [
+    "이동창 CoS 대량 경로 (귀무 MC 임계값·블록 최대): GPU float64 사용 — 속도비 7.7×–28.1×",
+    "Page h 격자 K=1: 블록집계 속도비 0.3× / 격자 0.2× → CPU 사용",
+    "Page h 격자 K=64: 블록집계 속도비 11.2× / 격자 6.9× → GPU",
+    "Page h 격자 K=256: 블록집계 속도비 41.9× / 격자 14.5× → GPU",
+    "Page h 이분 탐색 (`calibrate_page_h`) 은 K 후보 격자 `page_block_hits` 한 번으로 바꾸면 GPU 이득이 크다 (단 K≥64)",
+    "float32 는 사용 금지 (경보 뒤집힘 관측)",
+    "Page·블록 집계는 CPU 와 비트 일치, 이동창 T 는 비트 일치가 아님 (최대 절대오차 ~1e-14) — 임계값과 T 는 같은 backend 에서 계산할 것",
+    "GPU 는 동시에 한 작업만 — 다른 세션과 겹치면 예산 min(6 GB, 여유−2 GB) 가 줄어 chunk 가 작아진다"
+  ]
+}

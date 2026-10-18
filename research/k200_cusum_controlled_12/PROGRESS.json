@@ -1,10 +1,52 @@
 {
-  "study_id": "t21_k200_cusum_controlled_12",
-  "protocol_version": "12-lock-1",
-  "branch": "research/12_k200_cusum_controlled_gpu",
-  "base_commit": "4a3af99",
-  "current_phase": "P00",
-  "checkpoints": {"P00": {"status": "IN_PROGRESS", "commit": null}},
-  "gates": {"G0": "PENDING", "G1": "PENDING", "G2": "PENDING", "G3": "PENDING", "G4": "PENDING", "G5": "PENDING", "G6": "PENDING", "G7": "PENDING", "G8": "PENDING"},
-  "pilot_costs_seconds": {"svr_fit_once": 0.08, "rolling_cusum_1500d_once": 0.003}
+ "study_id": "t21_k200_cusum_controlled_12",
+ "protocol_version": "12-lock-1",
+ "branch": "research/12_k200_cusum_controlled_gpu",
+ "base_commit": "4a3af99",
+ "current_phase": "P03",
+ "checkpoints": {
+  "P00": {
+   "status": "DONE",
+   "commit": "cc48c35"
+  },
+  "P01": {
+   "status": "DONE",
+   "commit": null,
+   "note": "raw sha256 match; 2020 trainable (245 history, inner 172/73)"
+  },
+  "P02": {
+   "status": "DONE",
+   "commit": null,
+   "note": "B0/B1 residual path byte-identical to W3 run_pipeline 069500 A"
+  }
+ },
+ "gates": {
+  "G0": "PASS (e, vhat, T byte-identical to W3; w60 valid 930 / NA 295 / max_T 1.3013085455)",
+  "G1": "PASS (B0==B1 at pos>=59 every year; B1 +295 valid days)",
+  "G2": "PENDING",
+  "G3": "PENDING",
+  "G4": "PASS float64 (0 alarm flips; rolling max abs err 1.5e-14); float32 NUMERICAL_DISAGREEMENT",
+  "G5": "PENDING",
+  "G6": "PENDING",
+  "G7": "PENDING",
+  "G8": "PENDING"
+ },
+ "pilot_costs_seconds": {
+  "svr_fit_once": 0.08,
+  "rolling_cusum_1500d_once": 0.003,
+  "svr_fit_mean_real_10pipelines": 0.285,
+  "changepoints_all_rules_1718d": 1.47,
+  "mc_path_null_10pipelines_14workers": 47.2,
+  "mc_path_scenario_5pipelines_14workers": 44.7
+ },
+ "mc": {
+  "chain": "outputs/t21/run_mc_chain.sh",
+  "null": "1000 cal + 500 holdout, 10 pipelines",
+  "scenarios": "13 x 200, 5 pipelines",
+  "estimated_hours": 3.7,
+  "progress_files": [
+   "outputs/t21/mc/main_null/progress.json",
+   "outputs/t21/mc/main_scen/progress.json"
+  ]
+ }
 }
