@@ -1,0 +1,2 @@
+fee5d96e9af0ea376523741da6b940741b17521bf6f99f4f9446ba701fc2a8e0  research/etf_shock_bottomup_11/ANALYSIS_CONTRACT.md
+b9b322cbdfae94a4f1a3b6c9cf0517f73c2d35cf67990bbed147ede43a13beb2  configs/t20_etf_shock_bottomup_v1.json

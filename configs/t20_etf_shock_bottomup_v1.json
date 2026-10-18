@@ -1,0 +1,26 @@
+{
+  "study_id": "t20_etf_shock_bottomup_11",
+  "protocol_version": "11-lock-1",
+  "base_commit": "20f19fb",
+  "design_status": "DESCRIPTIVE_EXPLORATORY — 09 ETF A 구간 개수를 일부 본 뒤 설계",
+  "tickers": ["069500", "229200", "148070", "153130", "133690", "261220"],
+  "stage_labels": {"069500": "S1 기준 (KOSPI200)", "229200": "S1 코스닥 확장", "148070": "S2 국채10년 확장", "153130": "S3 단기채 확장", "133690": "S4 미국 나스닥 확장", "261220": "S5 원유 확장"},
+  "q_main": 20,
+  "q_companion": 60,
+  "A_upper": 0.90,
+  "min_ref": 252,
+  "inputs": {
+    "etf_states": "outputs/t18/daily_etf_states.csv.gz",
+    "closes": "outputs/t18/closes_aligned.csv.gz",
+    "raw_dir": "data/raw",
+    "w3_config": "configs/t15_joint_cusum_w3_v2.json",
+    "w3_individual_summary": "research/joint_cusum_w3/results/08/individual_cusum_summary.csv",
+    "c10_daily": "research/common_volatility_candidates_10/results/daily.csv"
+  },
+  "cusum_figure_cells": [["A", 20], ["A", 60]],
+  "cusum_table_policies": ["A", "B", "base"],
+  "cusum_table_windows": [20, 30, 60, 120],
+  "single_shock_top1_share": 0.30,
+  "context_days": 20,
+  "periods": {"REFERENCE_ONLY": [2019, 2019], "PILOT": [2020, 2020], "PRIMARY": [2021, 2025], "PARTIAL_NON_BLIND": [2026, 2026]}
+}
