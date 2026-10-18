@@ -124,3 +124,20 @@ def test_trailing_window_truncation_flag() -> None:
     assert p.fits[0]["history_truncated"] and p.fits[0]["n_history"] == es
     q = C.svr_path(m, C.SVRPolicy())
     assert np.array_equal(p.e, q.e, equal_nan=True)  # 이력이 창보다 짧으면 확장형과 같다
+
+
+def test_mask_crossing_equals_segmented() -> None:
+    from r2h.k200_controlled.calib import mask_crossing
+
+    rng = _rng(7)
+    E = rng.standard_normal((4, 300))
+    E[1, 40] = np.nan
+    resets = [[50, 120], [], [1, 299], [59, 60, 200]]
+    M = np.zeros(E.shape, bool)
+    for i, rs in enumerate(resets):
+        M[i, rs] = True
+    for w in (20, 60):
+        full = np.stack([rolling_cusum(E[i], w) for i in range(4)])
+        got = mask_crossing(full, M, w)
+        for i, rs in enumerate(resets):
+            assert np.array_equal(got[i], C.rolling_segmented(E[i], w, rs), equal_nan=True)

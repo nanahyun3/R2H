@@ -122,3 +122,16 @@ def all_change_detection(alarm: np.ndarray, taus: list[list[int]], horizon: int)
 
 def parse_taus(meta: pd.DataFrame) -> list[list[int]]:
     return [[int(x) for x in str(s).split(";") if x not in ("", "nan")] for s in meta["taus_rel"]]
+
+
+def mask_crossing(T: np.ndarray, reset_mask: np.ndarray, w: int) -> np.ndarray:
+    """경로별 초기화: 창 (t−w+1, t] 안에 초기화 위치가 있으면 NaN. 창이 초기화일에서 시작하는 것은 허용.
+
+    분할 계산(``core.rolling_segmented``)과 같다 — 초기화를 넘지 않는 창은 내용이 같기 때문이다.
+    """
+    T = np.array(T, float, copy=True)
+    c = np.cumsum(reset_mask, axis=1)
+    lag = np.zeros_like(c)
+    lag[:, w - 1 :] = c[:, : c.shape[1] - w + 1]
+    T[(c - lag) > 0] = np.nan
+    return T

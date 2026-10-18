@@ -60,6 +60,18 @@ def run_path(args: tuple) -> dict:
     }
 
 
+def regen_returns(args: tuple) -> np.ndarray:
+    """``run_path`` 와 같은 시드로 수익률만 다시 만든다 (원수익률 대체 통계량용, SVR 불필요). 평가 구간만 반환."""
+    set_name, rep, scen, seed, g, dates, es, lo, hi, byears = args
+    base = SETS[set_name]["rep0"]
+    eps = S.base_innovations(g, len(dates), rep_rng(seed, base, rep, 0))
+    trng = rep_rng(seed, base, rep, 1)
+    tau = S.draw_tau(trng, dates, lo, hi)
+    tau_b = S.boundary_tau(trng, dates, byears)
+    ch = S.make_change(scen, len(dates), tau, tau_b, float(np.sqrt(g.uncond_var)))
+    return S.synth_returns(g, eps, ch)[es:]
+
+
 def save_results(results: list[dict], out: Path) -> None:
     """(집합, 시나리오, 파이프라인) 별 e 배열 (rep 오름차순) · 트리거 parquet · 메타."""
     out.mkdir(parents=True, exist_ok=True)
