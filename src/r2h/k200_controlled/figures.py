@@ -45,6 +45,7 @@ class Figures12:
         self.f = res["feats"]
         self.out = root / "research/k200_cusum_controlled_12/figures"
         self.caps: dict[str, dict] = {}
+        self.root = root
 
     def _save(self, fig, name, cap):
         save(fig, self.out, name)
@@ -303,8 +304,87 @@ class Figures12:
         footnote(fig, "11번 069500 q20 구간 중 가장 긴 세 구간 ±60 거래일. 잔차 CoS 와 원수익률 CoS 의 반응을 같은 오경보 부담(α=0.05)에서 비교.")
         return self._save(fig, "F10_사건_확대", cap)
 
+    # F11 재적합 경계 단절 (X-D6)
+    def f11_refit_break(self, root: Path):
+        br = pd.read_csv(root / "research/k200_cusum_controlled_12/results/refit_boundary_breaks.csv")
+        al = pd.read_csv(root / "research/k200_cusum_controlled_12/results/refit_synced_reset_alarms.csv")
+        fig = plt.figure(figsize=(16, 9))
+        gs = fig.add_gridspec(2, 3, height_ratios=[1.1, 1])
+        a0 = fig.add_subplot(gs[0, :])
+        for pl, col in (("B1", CAT[0]), ("refitV20_g20", CAT[1]), ("refitV20_g60", CAT[3])):
+            e2 = pd.Series(self.ob.paths[pl].e ** 2, index=self.ed).rolling(20, min_periods=10).mean()
+            a0.plot(self.ed, e2, color=col, lw=1.1, label=f"{pl} 20일 평균 e^2")
+            for s_ in self.ob.paths[pl].refit_pos[1:]:
+                a0.axvline(self.ed[s_], color=col, lw=0.6, ls=":")
+        a0.axhline(1, color=INK2, ls="--", lw=0.8)
+        a0.set_yscale("log")
+        _plainlog(a0)
+        a0.set_xlim(pd.Timestamp("2020-01-01"), pd.Timestamp("2021-06-30"))
+        a0.legend(fontsize=8, frameon=False, loc="upper right")
+        a0.set_title("X-D6 재적합 경계 단절 — 2020 하반기 ε=1.0 적합이 분산을 과대추정 → 2021-01-04 새 적합에서 e^2 척도 점프", loc="left", fontsize=11)
+        self._events(a0)
+        style(a0)
+        a1 = fig.add_subplot(gs[1, 0:2])
+        b = br.copy()
+        b["label"] = b["pipeline"] + " " + b["refit_date"]
+        b = b[(b["refit_date"] < "2021-02-01") & b["pipeline"].isin(["B1", "refit63", "refitV20_g0", "refitV20_g20", "refitV20_g60", "adaptiveV20"])]
+        a1.barh(b["label"], b["log2_ratio"], color=np.where(b["log2_ratio"] > 0, CAT[1], CAT[0]))
+        a1.axvline(0, color=INK2)
+        a1.set_xlabel("log2(재적합 후 40일 e^2 / 전 40일 e^2)")
+        a1.tick_params(axis="y", labelsize=7)
+        a1.invert_yaxis()
+        style(a1)
+        a2 = fig.add_subplot(gs[1, 2])
+        sub = al[al["pipeline"].isin(["B1", "refitV20_g0", "refitV20_g20", "refitV20_g60"])]
+        piv = sub.pivot(index="pipeline", columns="variant", values="alarm_days_2021_JanFeb")
+        x = np.arange(len(piv))
+        a2.bar(x - 0.2, piv["no_reset"], 0.4, color=CAT[1], label="초기화 없음")
+        a2.bar(x + 0.2, piv["refit_synced_reset"], 0.4, color=CAT[2], label="재적합일 동기 초기화")
+        a2.set_xticks(x, piv.index, rotation=20, fontsize=8)
+        a2.set_title("2021-01~02 경보일 (α=0.05)", fontsize=10)
+        a2.legend(fontsize=8, frameon=False)
+        style(a2)
+        footnote(fig, "유예(E9) 정책의 2021 초 경보는 두 모형 잔차가 한 60일 창에 섞여 생긴 구현 기원 경보다 (시장 변화 아님). 재적합일에 창을 끊으면 사라지지만 커버리지가 줄어든다.")
+        g20 = br[(br.pipeline == "refitV20_g20") & (br.refit_date == "2021-01-04")].iloc[0]
+        return self._save(fig, "F11_재적합경계_단절", {"g20_log2_ratio_2021": float(g20.log2_ratio),
+                                                       "g20_pre_mean_e2": float(g20.pre_mean_e2),
+                                                       "alarms_JanFeb": piv.to_dict()})
+
+    # F12 긴 창 이월 (X-D7)
+    def f12_carry(self):
+        fig, ax = plt.subplots(2, 1, figsize=(14, 7.5), sharex=True, gridspec_kw={"height_ratios": [1, 1.3]})
+        r = self.ob.m.r[self.ob.m.eval_start :]
+        ax[0].bar(self.ed, r, color=np.where(r >= 0, CAT[0], CAT[1]), width=1.5)
+        ax[0].set_ylabel("일 수익률 (%)")
+        ax[0].set_title("X-D7 연도 관통 긴 창의 과거 충격 이월 — 2020 COVID 가 w 일 동안 창에 남는다", loc="left", fontsize=11)
+        cap = {}
+        for w, col in ((60, CAT[0]), (120, CAT[3]), (252, CAT[6])):
+            eid = "B1" if w == 60 else f"E2_w{w}"
+            T, c = self.ob.raw[eid]["T"], self._crit(eid)
+            ax[1].plot(self.ed, T / c, color=col, lw=1.1, label=f"w={w}")
+            al = np.nan_to_num(T, nan=-np.inf) >= c
+            last = self.ed[al][-1] if al.any() else None
+            cap[w] = {"last_alarm": str(last.date()) if last is not None else None, "alarm_days": int(al.sum())}
+        ax[1].axhline(1, color=EV_COLOR, ls="--", lw=0.9)
+        covid = (pd.Timestamp("2020-02-20"), pd.Timestamp("2020-04-10"))
+        for a in ax:
+            a.axvspan(*covid, color=EV_COLOR, alpha=0.15, lw=0)
+            style(a)
+        for w, col in ((120, CAT[3]), (252, CAT[6])):
+            i = int(np.searchsorted(self.ed, covid[1]))
+            if i + w < len(self.ed):
+                ax[1].axvline(self.ed[i + w], color=col, ls=":", lw=1)
+                ax[1].text(self.ed[i + w], ax[1].get_ylim()[1] * 0.95, f"COVID 끝+{w}일", color=col, fontsize=8, ha="center")
+        ax[1].set_ylabel("T / 임계 (α=0.05)")
+        ax[1].legend(fontsize=8, frameon=False)
+        ax[1].set_xlim(pd.Timestamp("2020-01-01"), pd.Timestamp("2022-03-31"))
+        _years(ax[1])
+        footnote(fig, "점선 = 2020-04-10 (COVID 급락 구간 끝) 로부터 w 거래일 뒤. w252 의 2021-01~04 경보는 COVID 이월, 2021-06~11 경보는 2020 하반기 고잔차 → 2021 저잔차 전환(분산 감소)에 대한 반응이다. 긴 창의 경보는 '최근 w 일 안 어딘가' 의 변화를 말한다.")
+        return self._save(fig, "F12_긴창_과거충격_이월", cap)
+
     def make_all(self) -> dict:
         for fn in (self.f01_timeline, self.f02_b0_b1, self.f03_windows, self.f04_page, self.f05_changepoints,
-                   self.f06_placebo, self.f07_svr, self.f08_synthetic, self.f09_ae, self.f10_events):
+                   self.f06_placebo, self.f07_svr, self.f08_synthetic, self.f09_ae, self.f10_events, self.f12_carry):
             fn()
+        self.f11_refit_break(self.root)
         return self.caps

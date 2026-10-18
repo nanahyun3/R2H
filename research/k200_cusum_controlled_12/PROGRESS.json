@@ -3,7 +3,7 @@
  "protocol_version": "12-lock-2",
  "branch": "research/12_k200_cusum_controlled_gpu",
  "base_commit": "4a3af99",
- "current_phase": "P07 (N1 MC running) / P03-P06 observed code ready",
+ "current_phase": "P07 synthetic MC (n1_scen) running; P03-P06 observed DONE under N1",
  "checkpoints": {
   "P00": {
    "status": "DONE",
@@ -23,14 +23,15 @@
  "gates": {
   "G0": "PASS (e, vhat, T byte-identical to W3; w60 valid 930 / NA 295 / max_T 1.3013085455)",
   "G1": "PASS (B0==B1 at pos>=59 every year; B1 +295 valid days)",
-  "G2": "PENDING",
-  "G3": "PENDING",
+  "G2": "PASS (annual generalized path == B0, unit test)",
+  "G3": "PASS (464 registered: 457 OFAT_OK, 6 INTERACTION, 1 ROOT, 0 CONFOUNDED)",
   "G4": "PASS float64 (0 alarm flips; rolling max abs err 1.5e-14); float32 NUMERICAL_DISAGREEMENT",
-  "G5": "PENDING (N1); N0 record: 963/1068 Wilson-OK, cluster CI audit running",
+  "G5": "PARTIAL — holdout 549/1068 Wilson-OK; deviations are a common set-to-set fluctuation (role swap reverses sign: w60 6.0%->4.2%); report size error +-1-1.5pp",
   "G6": "PENDING",
   "G7": "PENDING",
-  "G8": "PENDING",
-  "G9": "PASS for N1 (alpha 0.129, beta 0.815, nu 7.06 interior); N0 FAILED (alpha=0, beta=0.0008)"
+  "G8": "PENDING final check",
+  "G9": "PASS for N1 (alpha 0.129, beta 0.815, nu 7.06 interior); N0 FAILED (alpha=0, beta=0.0008)",
+  "feature_store_audit": "PASS 18/18 (681,999 rows = 463 experiments x 1473 days)"
  },
  "pilot_costs_seconds": {
   "svr_fit_once": 0.08,
@@ -59,7 +60,7 @@
    ]
   },
   "N1_garch_t_2019_2020": {
-   "status": "RUNNING",
+   "status": "NULL_DONE (1500/1500, 0 failed); SCEN_RUNNING",
    "chain": "outputs/t21/run_mc_chain_n1.sh",
    "progress": [
     "outputs/t21/mc/n1_null/progress.json",
@@ -67,5 +68,30 @@
    ],
    "estimated_hours": 3.6
   }
+ },
+ "experiments": {
+  "registered": 464,
+  "observed_computed": 464,
+  "observed_descriptive_only_due_to_null_invalid": true,
+  "synthetic_pending": "13 scenarios x 200 paths x 5 pipelines x 51 detector configs",
+  "exploratory_extensions": [
+   "X1 selfnorm Page",
+   "X3 raw CoS",
+   "X4 dlog vhat",
+   "X-D5 size uncertainty",
+   "X-D6 refit-boundary break",
+   "X-D7 long-window carry"
+  ]
+ },
+ "key_observed_results_N1": {
+  "B1_w60_alarm_days_a05": {
+   "2020": 43,
+   "2021_2025": 0
+  },
+  "B0_vs_B1": "identical T where both valid; B1 +295 valid days (COVERAGE_GAIN only)",
+  "w252_2021_alarms": "63 COVID carry (Jan-Apr) + 96 residual-scale decrease 2020H2->2021 (Jun-Nov)",
+  "E9_grace_2021JanFeb_alarms": "27/26 days = refit-boundary artifact (log2 e2 jump +2.2); refit-synced reset removes them",
+  "null_validity": "all SVR pipelines NULL_MODEL_INVALID (2020 LB/ARCH, 2021 kurtosis) -> confirmatory p NA, observed = descriptive",
+  "E11": "holdout size at alpha .05: asymptotic 0.10, normal MC 0.012, iid presample 0.016, block presample 0.195 vs GARCH-t N1 ~0.06"
  }
 }

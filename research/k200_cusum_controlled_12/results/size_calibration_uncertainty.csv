@@ -1,0 +1,7 @@
+detector,svr,alpha,crit_cal,holdout_rate,calib_uncert_q025,calib_uncert_q975,consistent_with_calib_noise,swap_crit_from_hold,swap_rate_on_cal
+rolling_cos_w20,B1,0.05,1.51262031,0.058,0.0532,0.06463,False,1.522118954,0.0442
+rolling_cos_w20,B1,0.2,1.384159494,0.2156,0.202,0.2224,False,1.392498473,0.1868
+rolling_cos_w60,B1,0.05,1.427085708,0.06,0.0508,0.0712,False,1.457940261,0.0422
+rolling_cos_w60,B1,0.2,1.224086862,0.206,0.196,0.2152,True,1.229104112,0.193
+rolling_cos_w252,B1,0.05,1.516591661,0.064,0.0532,0.07221,False,1.644419141,0.0386
+rolling_cos_w252,B1,0.2,1.159621914,0.2248,0.21257,0.2376,False,1.186686718,0.1762
