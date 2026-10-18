@@ -1,0 +1,23 @@
+{
+  "verdict": {
+    "verdict": "VALID_ZERO_INTERVALS",
+    "primary_days": 1225,
+    "primary_evaluable_days": 1225,
+    "primary_evaluable_share": 1.0,
+    "primary_final_true_days": 0
+  },
+  "n_intervals": 0,
+  "sensitivity_verdicts": {
+    "MAIN": "VALID_ZERO_INTERVALS",
+    "FIXED_504": "VALID_ZERO_INTERVALS",
+    "A_095": "VALID_ZERO_INTERVALS",
+    "B_2.5": "VALID_ZERO_INTERVALS",
+    "K200_FOUR": "VALID_ZERO_INTERVALS"
+  },
+  "calendar": [
+    "2019-01-02",
+    "2026-10-02",
+    1903
+  ],
+  "n_peer_tickers": 38
+}
