@@ -374,6 +374,40 @@ def event_cases(main: dict, w2ref: pd.DataFrame, uni: pd.DataFrame, cfg: dict) -
     return pd.DataFrame(rows)
 
 
+def kospi_aux_table(main: dict, cfg: dict) -> pd.DataFrame:
+    """§7.1 레버리지·인버스 보조 진단: 배율 정규화 σ 대 Core Pair 중앙값 비율, A·B 일치도, 4종 상대 변동성 범위."""
+    e = main["etf"].assign(period=_period(main["etf"]["date"], cfg))
+    e = e[e["period"] == "PRIMARY"]
+    c1, c2 = cfg["kospi200_core_pair"]
+    rows = []
+    for q in cfg["q_main"]:
+        x = {t: e[(e["ticker"] == t) & (e["q"] == q)].reset_index(drop=True) for t in [c1, c2, *cfg["kospi200_aux"]]}
+        core = main["core"][q].assign(date=main["etf"]["date"].unique())
+        core = core[_period(core["date"], cfg) == "PRIMARY"].reset_index(drop=True)
+        core_a = and3(x[c1]["A"].to_numpy(), x[c2]["A"].to_numpy())
+        adj = np.column_stack([x[t]["sigma_adj"].to_numpy() for t in x])
+        rng = adj.max(axis=1) / adj.min(axis=1)
+        for t in cfg["kospi200_aux"]:
+            a, b = x[t]["A"].to_numpy(), x[t]["B"].to_numpy()
+            ok_a = np.isfinite(a) & np.isfinite(core_a)
+            ok_b = np.isfinite(b) & np.isfinite(core["B"].to_numpy())
+            cb = core["B"].to_numpy()
+            ia, ua = ((a == 1) & (core_a == 1) & ok_a).sum(), (((a == 1) | (core_a == 1)) & ok_a).sum()
+            ib, ub = ((b == 1) & (cb == 1) & ok_b).sum(), (((b == 1) | (cb == 1)) & ok_b).sum()
+            ratio = np.exp(x[t]["L"])
+            rows.append({"q": q, "ticker": t, "multiplier": cfg["multiplier"][t],
+                         "adj_ratio_to_core_median": float(np.nanmedian(ratio)),
+                         "adj_ratio_p05": float(np.nanquantile(ratio, 0.05)), "adj_ratio_p95": float(np.nanquantile(ratio, 0.95)),
+                         "A_days": int((a == 1).sum()), "core_A_days": int((core_a == 1).sum()),
+                         "A_agreement": float((a[ok_a] == core_a[ok_a]).mean()), "A_jaccard": ia / ua if ua else np.nan,
+                         "B_days": int((b == 1).sum()), "core_B_days": int((cb == 1).sum()),
+                         "B_UP_days": int((x[t]["B_UP"] == 1).sum()), "B_DOWN_days": int((x[t]["B_DOWN"] == 1).sum()),
+                         "B_agreement": float((b[ok_b] == cb[ok_b]).mean()), "B_jaccard": ib / ub if ub else np.nan,
+                         "four_range_median": float(np.nanmedian(rng)), "four_range_p95": float(np.nanquantile(rng, 0.95)),
+                         "four_range_max": float(np.nanmax(rng))})
+    return pd.DataFrame(rows)
+
+
 def threshold_proximity(main: dict, cfg: dict, band: float = 0.01) -> pd.DataFrame:
     e = main["etf"].assign(period=_period(main["etf"]["date"], cfg))
     e = e[e["period"] == "PRIMARY"]
@@ -460,7 +494,12 @@ def run(root: Path) -> dict:
     gstate = main["groups"].assign(date=lambda d: pd.to_datetime(d["date"]).dt.date)
     write_csv(gstate, out / "group_daily_states.csv")
     write_csv(daily_counts(main, cfg), out / "global_daily_counts.csv")
-    write_csv(main["final"].assign(date=lambda d: pd.to_datetime(d["date"]).dt.date), out / "final_daily_labels.csv")
+    fl = main["final"].copy()
+    # t 종가로 계산한 라벨은 다음 거래일 장 시작부터만 쓸 수 있다 (마지막 날은 다음 거래일 미상)
+    fl["available_from"] = list(pd.to_datetime(fl["date"]).dt.date.astype(str).iloc[1:]) + ["NEXT_TRADING_DAY_UNKNOWN"]
+    fl["date"] = pd.to_datetime(fl["date"]).dt.date
+    write_csv(fl, out / "final_daily_labels.csv")
+    write_csv(kospi_aux_table(main, cfg), out / "kospi200_aux_diagnostics.csv")
     write_csv(main["intervals"], out / "shock_intervals.csv")
     bt, dist = bottleneck(main, cfg)
     write_csv(bt, out / "bottleneck_groups.csv")
@@ -471,7 +510,11 @@ def run(root: Path) -> dict:
     write_csv(compare_w2_w3(root, main, w2ref, cfg), out / "comparison_w2_w3.csv")
     write_csv(sens, out / "sensitivity_summary.csv")
     write_csv(threshold_proximity(main, cfg), out / "threshold_proximity.csv")
-    final = {"verdict": main["verdict"], "n_intervals": len(main["intervals"]),
+    gp = main["global"][_period(main["global"]["date"], cfg) == "PRIMARY"]
+    full = {f"q{q}": {"days": int((gp["q"] == q).sum()),
+                      "all17_A_and_B_non_NA_days": int(((gp["q"] == q) & (gp["n_eval_A"] == 17) & (gp["n_eval_B"] == 17)).sum())}
+            for q in cfg["q_main"]}
+    final = {"verdict": main["verdict"], "primary_fully_evaluable": full, "n_intervals": len(main["intervals"]),
              "sensitivity_verdicts": dict(zip(sens["variant"], sens["verdict"])),
              "calendar": [str(dates[0].date()), str(dates[-1].date()), len(dates)],
              "n_peer_tickers": len(tickers) - len(eval_set)}

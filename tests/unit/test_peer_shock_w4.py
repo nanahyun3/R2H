@@ -246,3 +246,14 @@ def test_peer_mapping_script_uses_no_price_statistics():
     src = (ROOT / "scripts/t18_freeze_peer_mapping.py").read_text(encoding="utf-8")
     for bad in ("corr", "std(", "Close", "read_csv", "volatility"):
         assert bad not in src, bad
+
+
+def test_label_available_next_trading_day():
+    """t 종가로 만든 라벨은 t 장 시작 신호로 쓰지 않는다: available_from = 다음 거래일."""
+    f = ROOT / "research/peer_relative_shock_w4/results/final_daily_labels.csv"
+    if not f.exists():
+        pytest.skip("파이프라인 결과 없음")
+    d = pd.read_csv(f, dtype=str)
+    assert (d["available_from"].iloc[:-1].to_numpy() == d["date"].iloc[1:].to_numpy()).all()
+    assert (d["available_from"].iloc[:-1] > d["date"].iloc[:-1]).all()
+    assert d["available_from"].iloc[-1] == "NEXT_TRADING_DAY_UNKNOWN"

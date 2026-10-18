@@ -6,6 +6,16 @@
     "primary_evaluable_share": 1.0,
     "primary_final_true_days": 0
   },
+  "primary_fully_evaluable": {
+    "q20": {
+      "days": 1225,
+      "all17_A_and_B_non_NA_days": 1225
+    },
+    "q60": {
+      "days": 1225,
+      "all17_A_and_B_non_NA_days": 1225
+    }
+  },
   "n_intervals": 0,
   "sensitivity_verdicts": {
     "MAIN": "VALID_ZERO_INTERVALS",
