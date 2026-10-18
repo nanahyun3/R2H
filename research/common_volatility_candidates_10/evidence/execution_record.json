@@ -1,0 +1,10 @@
+{
+  "notebook": "10_ETF20종_공통고변동성_급변후보구간비교.ipynb",
+  "status": "PASS",
+  "start_utc": "2026-10-18T13:27:06.054629+00:00",
+  "end_utc": "2026-10-18T13:27:25.246525+00:00",
+  "seconds": 19.19,
+  "returncode": 0,
+  "log": "research/common_volatility_candidates_10/evidence/10_execution.log",
+  "python": "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1018/R2H_W4_Peer_Shock/../../1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python"
+}
