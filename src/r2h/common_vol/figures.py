@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import matplotlib
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import numpy as np
@@ -494,4 +495,213 @@ class Figures10:
         self.g14_b_ab()
         self.g15_yearly()
         self.g16_pilot_2026()
+        return self.caps
+
+
+# ── 10-lock-2 그림 G17–G22 ─────────────────────────────────────────────────
+class Figures10L2(Figures10):
+    """lock-2 확장 그림. lock-1 그림 생성기를 상속하고 lock2.run() 결과를 받는다."""
+
+    def __init__(self, res: dict, x2: dict, root: Path):
+        super().__init__(res, root)
+        self.x2 = x2
+
+    def g17_null(self):
+        nt, ks = self.x2["null"], self.x2["kstar"].set_index("q")
+        fig, axes = plt.subplots(1, 2, figsize=(15, 5.4))
+        cap = {}
+        for ax, q in zip(axes, (20, 60)):
+            x = nt[(nt["q"] == q) & (nt["k"] >= 1)]
+            ax.bar(x["k"] - 0.2, x["obs_days"].clip(lower=0.05), width=0.38, color=CAT[0] if q == 20 else CAT[2], label="관측 일수 (N_A ≥ k)")
+            ax.bar(x["k"] + 0.2, x["expected_days_null"].clip(lower=0.05), width=0.38, color="#c9c8c2", label="우연 기대 일수 (원형 이동 귀무)")
+            ax.set_yscale("log")
+            ax.set_ylim(0.05, 2000)
+            ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:g}"))
+            ax2 = ax.twinx()
+            ax2.plot(x["k"], x["p_fw_null"], color=INK, marker="o", ms=4, lw=1.4, label="P(5년 중 하루라도 N_A ≥ k | 우연)")
+            ax2.axhline(0.05, color=CAT[7], ls="--", lw=1)
+            ax2.set_ylim(0, 1.05)
+            ax2.set_ylabel("기간 최대 확률", fontsize=8)
+            kf, kd = int(ks.loc[q, "k_star_fw"]), int(ks.loc[q, "k_star_day"])
+            ax.axvline(kf, color=CAT[7], lw=1.5)
+            ax.text(kf + 0.1, 900, f"k*_fw = {kf}", color=CAT[7], fontsize=9)
+            for c, v in self.main.items():
+                if v["q"] == q:
+                    pf = float(x.set_index("k").loc[v["k"], "p_fw_null"])
+                    ax2.annotate(f"{c} (k={v['k']}) P={pf:.4f}" if pf < 0.001 and pf > 0 else f"{c} (k={v['k']}) P={pf:.3f}", (v["k"], pf), xytext={"C1": (10, 70), "C2": (10, 48), "C3": (10, 26), "C4": (10, 26)}[c], textcoords="offset points", fontsize=8.5, color=INK,
+                                 arrowprops={"arrowstyle": "-", "color": MUTED})
+                    cap[c] = round(pf, 4)
+            ax.set_xticks(range(1, 18))
+            ax.set_xlabel("최소 동시 참여 그룹 수 k")
+            ax.set_title(f"q={q} — 관측 최대 {int(ks.loc[q, 'obs_max'])}, k*_day = {kd}, k*_fw = {kf}", loc="left", fontsize=10)
+            h1, l1 = ax.get_legend_handles_labels()
+            h2, l2 = ax2.get_legend_handles_labels()
+            ax.legend(h1 + h2, l1 + l2, fontsize=7.5, loc="upper right")
+            style(ax)
+            cap[f"q{q}"] = {"k_star_fw": kf, "k_star_day": kd}
+        fig.suptitle("G17 · 우연이었다면? — 그룹별 급변 시계열을 독립 원형 이동한 귀무와 관측 비교 (2,000회)", fontsize=12)
+        footnote(fig, "귀무는 각 그룹의 급변 빈도·지속을 보존하고 그룹 간 동시성만 없앤다. k*_fw = 5년 중 하루라도 N_A ≥ k 일 우연 확률이 5% 미만이 되는 최소 k.")
+        fig.tight_layout(rect=(0, 0.04, 1, 0.94))
+        return self._save(fig, "G17_null_kstar", cap)
+
+    def g18_balance(self):
+        two = self.x2["balance_2d"]
+        b = self.x2["balance"]
+        fig, axes = plt.subplots(1, 2, figsize=(15, 5.6), gridspec_kw={"width_ratios": [1, 1.6]})
+        ax = axes[0]
+        m = two.pivot(index="n_eq", columns="n_non", values="days").reindex(index=range(0, 13), columns=range(0, 6)).fillna(0).to_numpy()
+        im = ax.imshow(np.log10(m + 1), cmap=SEQ, origin="lower", aspect="auto")
+        for i in range(m.shape[0]):
+            for j in range(m.shape[1]):
+                if m[i, j]:
+                    ax.text(j, i, int(m[i, j]), ha="center", va="center", fontsize=7.5, color="white" if m[i, j] > 60 else INK)
+        thr = b.attrs["thr"]
+        jj = np.linspace(-0.5, 5.5, 50)
+        ax.plot(jj, (2 * thr - jj / 5) * 12, color=CAT[7], lw=1.2, ls="--")
+        ax.set_xlabel("비주식 그룹 중 급변 (0–5)")
+        ax.set_ylabel("주식 그룹 중 급변 (0–12)")
+        ax.set_ylim(-0.5, 12.5)
+        ax.set_title("주분석 일수 (색 = log) · 빨간 점선 = 균형 폭 W = 9/17", loc="left", fontsize=9.5)
+        p = b[b["period"] == "PRIMARY"]
+        ax = axes[1]
+        ax.plot(p["date"], p["n_eq"] / 12, color=CAT[0], lw=0.9, label="주식 비율 n_eq/12")
+        ax.plot(p["date"], p["n_non"] / 5, color=CAT[2], lw=0.9, label="비주식 비율 n_non/5")
+        ax.axhline(thr, color=CAT[7], ls="--", lw=1)
+        self._shade(ax, "C1", alpha=0.2)
+        ax.set_ylim(0, 1.02)
+        ax.legend(fontsize=8, loc="upper left")
+        _years(ax)
+        style(ax)
+        ax.set_title("시간축 — 회색 음영 = C1 구간", loc="left", fontsize=9.5)
+        c1 = self.d[(self.d["period"] == "PRIMARY") & (self.d["q20_k9"] == 1)].index
+        cap = {"c1_days_by_n_non": b.loc[c1].groupby("n_non").size().to_dict(), "wb": [f"{a}~{e}" for a, e in zip(self.x2["wb_intervals"]["start"], self.x2["wb_intervals"]["end"])]}
+        fig.suptitle("G18 · 자산군 균형 — 주식 12 그룹 · 비주식 5 그룹의 동시 급변", fontsize=12)
+        footnote(fig, f"C1 후보일의 비주식 급변 그룹 수 분포: {cap['c1_days_by_n_non']}. 균형 규칙 WB 구간: {', '.join(cap['wb'])}.")
+        fig.tight_layout(rect=(0, 0.05, 1, 0.94))
+        return self._save(fig, "G18_asset_class_balance", cap)
+
+    def g19_hysteresis(self):
+        p = self._prim()
+        hy, wb = self.x2["hysteresis"], self.x2["wb_intervals"]
+        rows = [("C1 (≥9)", "q20_k9", None), ("H1 (9 진입·7 유지)", None, "H1"), ("C2 (≥10)", "q20_k10", None), ("H2 (10 진입·8 유지)", None, "H2"), ("WB (자산군 균형)", None, "WB")]
+        fig, axes = plt.subplots(1, 4, figsize=(17, 4.6), gridspec_kw={"width_ratios": [1.8, 1, 1, 1]})
+        wins = [(PRIMARY[0], PRIMARY[1]), (pd.Timestamp("2022-09-26"), pd.Timestamp("2022-11-04")), (pd.Timestamp("2024-07-20"), pd.Timestamp("2024-09-15")), (pd.Timestamp("2025-03-25"), pd.Timestamp("2025-05-20"))]
+        for ax, (s0, e0) in zip(axes, wins):
+            for i, (lab, rule, hid) in enumerate(rows):
+                if rule:
+                    iv = self.iv[(self.iv["rule"] == rule) & (self.iv["period"] == "PRIMARY")][["start", "end"]]
+                else:
+                    src = wb if hid == "WB" else hy[hy["rule"] == hid]
+                    iv = src[["start", "end"]]
+                for a, b in zip(iv["start"], iv["end"]):
+                    a, b = pd.Timestamp(a), pd.Timestamp(b) + pd.Timedelta(days=1)
+                    ax.barh(i, (b - a).days, left=a, height=0.55, color=[CAT[0], CAT[4], CAT[1], CAT[3], CAT[2]][i], edgecolor="white", lw=0.6)
+            ax.set_yticks(range(len(rows)))
+            ax.set_yticklabels([r[0] for r in rows] if ax is axes[0] else [], fontsize=8.5)
+            ax.invert_yaxis()
+            ax.set_xlim(s0, e0)
+            if ax is axes[0]:
+                _years(ax)
+            else:
+                _months(ax, "%m-%d")
+                ax.xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=0, interval=2))
+            style(ax)
+        axes[1].set_title("2022-10 확대", fontsize=9.5)
+        axes[2].set_title("2024-08 확대", fontsize=9.5)
+        axes[3].set_title("2025-04 확대", fontsize=9.5)
+        cap = {r: len(hy[hy["rule"] == r]) for r in ("H1", "H2")} | {"WB": len(wb)}
+        fig.suptitle(f"G19 · 이력 규칙은 조각을 잇는다 — H1 {cap['H1']}구간 (C1 과 같음) · H2 {cap['H2']}구간 (C2 5구간을 이음) · WB {cap['WB']}구간 (2024-08 사라짐)", fontsize=11.5)
+        footnote(fig, "이력(히스테리시스) = 진입 문턱보다 낮은 유지 문턱. 이탈 k = 진입 k - 2 로 사전 고정. WB = (주식 비율 + 비주식 비율)/2 ≥ 9/17.")
+        fig.tight_layout(rect=(0, 0.05, 1, 0.92))
+        return self._save(fig, "G19_hysteresis_balance_intervals", cap)
+
+    def g20_intensity(self):
+        it = self.x2["intensity"]
+        it = it[it["period"] == "PRIMARY"]
+        con = self.x2["contrib"].loc[it.index]
+        from r2h.common_vol.lock2 import class_split
+        eq, ne = class_split(self.st, self.x2["cfg2"])
+        eg = self.st["eg"].drop_duplicates("exposure_group").set_index("exposure_group")
+        groups = self.st["groups"]
+        cls = {"주식": [groups[i] for i in eq]}
+        for c, nm in (("rates", "채권"), ("money_market", "채권"), ("commodity", "원자재"), ("currency", "통화")):
+            cls.setdefault(nm, [])
+            cls[nm] += [g for g in groups if eg.loc[g, "category"] == c]
+        fig, axes = plt.subplots(2, 1, figsize=(15, 8), sharex=True, gridspec_kw={"height_ratios": [1.6, 1]})
+        ax = axes[0]
+        stack = [con[cls[k]].sum(axis=1).to_numpy() for k in ("주식", "채권", "원자재", "통화")]
+        ax.stackplot(it["date"], *stack, colors=[CAT[0], CAT[2], CAT[3], CAT[6]], labels=["주식 12", "채권 2", "원자재 2", "통화 1"], alpha=0.9)
+        self._shade(ax, "C1", alpha=0.15)
+        pk = self.x2["intensity_peaks"]
+        for _, r in pk.iterrows():
+            note = " ← 원자료 이상치 후보 (153130)" if "153130" in r["top3"].split(";")[0] and r["I"] > 5 else ""
+            ax.annotate(f"{r['date']} I={r['I']:.2f}{note}", (pd.Timestamp(r["date"]), r["I"]), xytext=(6, 4), textcoords="offset points", fontsize=8, color=INK)
+        ax.set_ylabel("공통 급변 강도 I = Σ max(σ/경계 - 1, 0)")
+        ax.legend(fontsize=8, loc="upper left", ncol=4)
+        style(ax)
+        ax = axes[1]
+        ax.plot(it["date"], it["n_A_q20"], color=INK2, lw=0.8, drawstyle="steps-post")
+        ax.axhline(9, color=CAT[0], ls="--", lw=1)
+        ax.set_ylabel("N_A (q20)")
+        self._shade(ax, "C1", alpha=0.15)
+        style(ax)
+        _years(ax)
+        cap = {"rho": round(self.x2["rho_I_NA"], 3)}
+        fig.suptitle(f"G20 · 연속 강도 지수 — 같은 날 급변 그룹 수와 순위상관 {cap['rho']:.2f}, 하지만 '어느 자산이 얼마나' 를 보여 준다", fontsize=12)
+        footnote(fig, "그룹별 초과 강도를 자산군으로 쌓았다. KOSPI200 그룹은 Core Pair 의 σ/경계 중 작은 값. 상위 정점 5개는 20거래일 이상 떨어진 날만 골랐다 (표시 규칙).")
+        fig.tight_layout(rect=(0, 0.04, 1, 0.95))
+        return self._save(fig, "G20_intensity_index", cap)
+
+    def g21_leadlag(self):
+        ll = self.x2["lead_lag"]
+        i = int(ll["corr"].idxmax())
+        fig, ax = plt.subplots(figsize=(11, 4.4))
+        ax.plot(ll["lag"], ll["corr"], color=CAT[0], lw=2)
+        ax.scatter([ll.loc[i, "lag"]], [ll.loc[i, "corr"]], color=CAT[7], s=50, zorder=3)
+        ax.annotate(f"최대 {ll.loc[i, 'corr']:.2f} @ {int(ll.loc[i, 'lag'])}거래일", (ll.loc[i, "lag"], ll.loc[i, "corr"]), xytext=(10, 8), textcoords="offset points", fontsize=9.5)
+        ax.axhline(0, color=MUTED, lw=0.6)
+        ax.set_xlabel("시차 L (거래일) — q60 을 L 만큼 뒤로")
+        ax.set_ylabel("corr(N_A20(t), N_A60(t+L))")
+        style(ax)
+        fig.suptitle(f"G21 · 20일 공통성은 약 {int(ll.loc[i, 'lag'])}거래일 뒤 60일 공통성으로 이어진다 (시차 0 상관 {ll.loc[0, 'corr']:.2f})", fontsize=12)
+        fig.tight_layout(rect=(0, 0, 1, 0.92))
+        return self._save(fig, "G21_q20_q60_lead_lag", {"lag": int(ll.loc[i, "lag"]), "corr": round(float(ll.loc[i, "corr"]), 3)})
+
+    def g22_c1_bottomup(self):
+        c1 = self._civ("C1").reset_index(drop=True)
+        ent, ext = self.x2["c1_entry"], self.x2["c1_exit"]
+        a = self.st["mats"][20]["A"]
+        fig, axes = plt.subplots(1, len(c1), figsize=(17, 6.5))
+        cap = {}
+        for ax, (_, r) in zip(axes, c1.iterrows()):
+            s, e = int(r["i0"]), int(r["i1"])
+            lo, hi = s - 25, e + 10
+            dts = self.st["dates"][lo:hi + 1]
+            gi = [self.groups.index(g) for g in ent[ent["interval_id"] == r["interval_id"]].sort_values("entry_date")["group"]]
+            mat = a[lo:hi + 1][:, gi].T
+            _img(ax, mat, dts, [self.lab[j] for j in gi], fs=7.5)
+            ax.axvline(mdates.date2num(self.st["dates"][s]), color=CAT[7], lw=1)
+            ax.axvline(mdates.date2num(self.st["dates"][e] + pd.Timedelta(days=1)), color=CAT[7], lw=1)
+            x = ext[ext["interval_id"] == r["interval_id"]]
+            for _, z in x.iterrows():
+                j = gi.index(self.groups.index(z["group"]))
+                ax.scatter([mdates.date2num(pd.Timestamp(z["exit_date"]))], [j], marker="<" if z["window_exit"] else "x", s=34,
+                           color=CAT[3] if z["window_exit"] else INK, zorder=4)
+            ax.xaxis.set_major_locator(mdates.WeekdayLocator(byweekday=0, interval=2))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter("%m-%d"))
+            nwx = int(x["window_exit"].sum())
+            ax.set_title(f"{r['start']}~{r['end']} · 창 이탈 {nwx}/{len(x)}", fontsize=9.5)
+            cap[r["interval_id"]] = {"exit_groups": len(x), "window_exit": nwx}
+        fig.suptitle("G22 · C1 구간 바텀업 — 그룹이 급변에 들어온 순서 (위 = 먼저) 와 빠진 이유 (◀ 창 이탈 · × 그 밖)", fontsize=12)
+        footnote(fig, "빨간 세로선 = C1 시작·종료 다음 날. ◀ = 그 그룹의 20일 창 최대 기여일이 정확히 20거래일 전 — 큰 하루가 창에서 빠져 급변이 끝났다.")
+        fig.tight_layout(rect=(0, 0.04, 1, 0.94))
+        return self._save(fig, "G22_c1_bottomup", cap)
+
+    def make_all_l2(self) -> dict:
+        self.g17_null()
+        self.g18_balance()
+        self.g19_hysteresis()
+        self.g20_intensity()
+        self.g21_leadlag()
+        self.g22_c1_bottomup()
         return self.caps

@@ -166,3 +166,37 @@ def test_2026_and_2020_not_in_primary(res):
     pil = res["summary_pilot"].set_index("rule")
     w4 = pd.read_csv(ROOT / res["cfg"]["w4_inputs"]["global_by_period"]).set_index(["period", "q"])
     assert pil.loc["q20_k17", "candidate_days"] == w4.loc[("PILOT", 20), "days17_A"]
+
+
+# ── 10-lock-2 ─────────────────────────────────────────────────────────────
+from r2h.common_vol import lock2 as L2  # noqa: E402
+
+
+def test_circular_null_preserves_marginals_and_kstar():
+    rng = np.random.default_rng(1)
+    a = (rng.random((300, 5)) < 0.2).astype(int)
+    pd_, pf = L2.circular_null(a, 200, np.random.default_rng(2))
+    assert pd_[0] == pytest.approx(1.0) and pf[0] == pytest.approx(1.0)
+    assert np.all(np.diff(pd_) <= 1e-12) and np.all(np.diff(pf) <= 1e-12)  # k 에 대해 단조 감소
+    assert pd_[1:].sum() == pytest.approx(a.sum() / 300, rel=1e-9)  # Σ_k P(N≥k) = E[N] = 그룹 평균 합 (원형 이동은 주변 분포 보존)
+    assert L2.kstar(np.array([1, 0.5, 0.04, 0.0]), 0.05) == 2 and L2.kstar(np.array([1, 1.0]), 0.05) == -1
+
+
+def test_hysteresis_rule():
+    n = np.array([0, 9, 8, 7, 6, 9, 10, 8, 0])
+    v = np.ones(n.size, bool)
+    assert L2.hysteresis(n, v, 9, 7, np.ones(n.size, bool)) == [(1, 3), (5, 7)]
+    v[2] = False  # NA 는 끊는 경계
+    assert L2.hysteresis(n, v, 9, 7, np.ones(n.size, bool)) == [(1, 1), (5, 7)]
+
+
+def test_lock2_freeze_and_anchors(res):
+    for line in (ROOT / P.OUT_DIR / "CONTRACT_FREEZE_SHA256_LOCK2.txt").read_text().splitlines():
+        d, name = line.split(maxsplit=1)
+        assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == d, name
+    x = L2.run(ROOT, res)
+    ks = x["kstar"].set_index("q")
+    assert int(ks.loc[20, "k_star_fw"]) == 9 and int(ks.loc[60, "obs_max"]) < int(ks.loc[60, "k_star_fw"])
+    h1 = x["hysteresis"].query("rule == 'H1'")
+    c1 = res["intervals"].query("rule == 'q20_k9' and period == 'PRIMARY'")
+    assert list(h1["i0"]) == list(c1["i0"]) and list(h1["i1"]) == list(c1["i1"])  # C1 내부에 N_A 7–8 하락 없음

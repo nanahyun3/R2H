@@ -18,17 +18,17 @@ def sha(p: Path) -> str:
 
 def main() -> None:
     files = sorted(p for p in BASE.rglob("*") if p.is_file() and p.name != "RELEASE_MANIFEST.json")
-    files += [ROOT / "configs/t19_common_vol_candidates_v1.json"]
+    files += [ROOT / "configs/t19_common_vol_candidates_v1.json", ROOT / "configs/t19_common_vol_candidates_v2.json"]
     files += sorted((ROOT / "src/r2h/common_vol").glob("*.py"))
-    files += [ROOT / f"scripts/{n}" for n in ("t19_build_notebook.py", "run_t19_notebook.py", "run_t19_pipeline.py", "t19_release_manifest.py")]
+    files += [ROOT / f"scripts/{n}" for n in ("t19_build_notebook.py", "run_t19_notebook.py", "run_t19_pipeline.py", "t19_release_manifest.py", "t19_infographics_light.py")]
     files += [ROOT / "tests/unit/test_common_vol_10.py"]
     head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip()
     man = {
         "study_id": "t19_common_volatility_candidates_10",
-        "protocol_version": "10-lock-1",
+        "protocol_version": "10-lock-2",
         "design_status": "POST_HOC_EXPLORATORY",
         "base_commit": "172cbb3",
-        "contract_commits": ["1ab42bd", "3b183f8"],
+        "contract_commits": ["1ab42bd", "3b183f8", "1dceefa"],
         "parent_commit": head,
         "w4_verdict_unchanged": "VALID_ZERO_INTERVALS",
         "notebook": {"path": str(NB.relative_to(ROOT)), "sha256": sha(NB)},
