@@ -33,3 +33,12 @@
 | G22_c1_bottomup | D6 | C1 구간 그룹 진입 순서·종료 원인 (창 이탈) |
 | infographics/IG10_1_definitions_vs_chance | 발표 | 정의 비교 + 우연 기준선 (Pretendard 밝은 판) |
 | infographics/IG10_2_c1_three_intervals | 발표 | 같은 C1, 다른 자산 — 세 구간 해부 |
+
+## PART R (모델 입력)
+
+| 그림 | 내용 |
+|---|---|
+| G23_etf_interval_swimlane | ETF 20종 A20 급변 구간 2021–2026, C1 테두리, 구간·일수 |
+| G24_model_input_examples | D2 사건 정렬 창 예시 2개 (KOSPI200 2024-08 단일 충격 · 국고채 2022-09 누적) — 13 × 60 z 점수 |
+| G25_dataset_balance | D1 양성 비율·분할별 창 수 |
+| infographics/IG10_3_labels_to_model_input | 20종 급변 지도 + 창 하나 + 데이터셋 3종 + 분할·누수 방지 |

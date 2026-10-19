@@ -118,3 +118,29 @@ lock-1 결과를 본 뒤 정의를 단단하게 하는 여섯 분석을 **계산
 **v2 권장 (승인 전):** 주 정의 C1 (k*_fw 와 일치) · 다자산만 원하면 WB · 조각남이 문제면 이력 형태 · 60일은 C1 뒤 33거래일 누적 라벨로만 · C4 단독 사용은 권하지 않음. 다음은 상관을 보존하는 귀무(자산군 블록 이동)와 독립 정답 기반 평가(별도 계약).
 
 산출 추가: `results/lock2_*.csv` 11개 · 그림 G17–G22 · 인포그래픽 `infographics/IG10_1_definitions_vs_chance` · `IG10_2_c1_three_intervals` (밝은 판, Pretendard) · 코드 `src/r2h/common_vol/lock2.py`, `scripts/t19_infographics_light.py`. 노트북 새 커널 PASS, CLAIMS 72/72.
+
+---
+
+# PART R — 결과: 급변 구간 라벨과 CNN·오토인코더 입력 (명세 `87fd0b2`, 생성 전 고정)
+
+## 라벨
+- **ETF 단위 A20** (주 라벨): 20종 전수 338구간, 2021–2025 주분석 216구간. `results/model_intervals_etf.csv` 에 시작·끝·`available_from`(다음 거래일)·`end_known_at`·최대 σ·경계 배율·유형(단일 충격/누적)·창 이탈 종료·C1 겹침·구간 수익률·낙폭·CUSUM 최대가 있다.
+- **시장 단위** C1(전 기간 10구간, 주분석 3)·H2(2)·WB(3): `results/model_intervals_market.csv`, 구간마다 20종의 A20 일수.
+
+| 주분석 대표 | 구간 · 일수 | C1 겹친 날 |
+|---|---|---|
+| KOSPI200 4종 (069500·102110·122630·114800) | 7·95 · 7·95 · 8·96 · 7·97 | 37 |
+| 단기채권 153130 | 21 · 269 | 2 |
+| 국고채10년 148070 | 19 · 261 | 2 |
+| 2차전지 305540 | 15 · 197 | 39 |
+| 반도체 091230 | 19 · 192 | 39 |
+
+## 입력
+- 창 60거래일 × 13 피처: r · |r| · σ20 · σ60 · σ20/경계 · U20 · U60 · Peer L · Peer U_B · 급변 폭(N_A/17) · 강도 I · CUSUM T/임계 · CUSUM 존재. 정규화는 train(2021–23) 날짜 값만.
+- **D1 슬라이딩** 28,180창 — 주 과제 `y_next5_A20` (다음 5거래일 안 급변), 양성 train 11.5% · val 14.1% · test 16.5% · holdout 2026 57.6%. embargo 300창.
+- **D2 사건 정렬** 267창 (급변 시작 = 41번째 칸) — 유형 분류·해석.
+- **D3 정상 창** 3,184창 — 오토인코더 학습용 (창 + 다음 5일 급변 없음).
+- C1 예측은 train 양성 120창(0.8%)뿐 → ETF 단위 A20 을 주 라벨로, C1 은 평가 부분집합으로 권장.
+- 누수 주의: ratio20·U20 → A20, breadth → C1 을 직접 결정 (같은 날 탐지 과제에서 제외). KOSPI200 4종은 중복 표본.
+- 텐서 `outputs/t19/model_windows_D{1,2,3}.npz` (Git 제외, `scripts/run_t19_pipeline.py` 로 재생성) · 색인 `results/model_dataset_index_D*.csv` · `model_feature_manifest.json` · `normalization.json` · `model_class_balance.csv`.
+- 그림 G23 (20종 급변 지도) · G24 (입력 예시) · G25 (분할·양성 비율) · 인포그래픽 IG10_3.

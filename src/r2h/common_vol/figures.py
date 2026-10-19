@@ -16,7 +16,7 @@ import pandas as pd
 from matplotlib.colors import ListedColormap
 from matplotlib.patches import Patch
 
-from r2h.multihorizon.figures import CAT, INK, INK2, MUTED, SEQ, footnote, save, style
+from r2h.multihorizon.figures import CAT, DIV, INK, INK2, MUTED, SEQ, footnote, save, style
 from r2h.peer_shock.figures import NA_COLOR, setup_font
 
 PRIMARY = (pd.Timestamp("2021-01-04"), pd.Timestamp("2025-12-30"))
@@ -704,4 +704,105 @@ class Figures10L2(Figures10):
         self.g20_intensity()
         self.g21_leadlag()
         self.g22_c1_bottomup()
+        return self.caps
+
+
+# ── PART R 그림 G23–G25 ────────────────────────────────────────────────────
+class Figures10R(Figures10L2):
+    """PART R (모델 입력) 그림. model_input.run() 결과 y 를 받는다."""
+
+    def __init__(self, res: dict, x2: dict, y: dict, root: Path):
+        super().__init__(res, x2, root)
+        self.y = y
+
+    def g23_etf_swimlane(self):
+        feats = self.y["feats"]
+        eiv = self.y["etf_intervals"]
+        tickers = list(feats)
+        dates = next(iter(feats.values())).index
+        m = (dates >= pd.Timestamp("2021-01-04"))
+        dts = dates[m]
+        mat = np.vstack([feats[t]["A20"].to_numpy(float)[m] for t in tickers])
+        fig, ax = plt.subplots(figsize=(16, 8.2))
+        _img(ax, mat, dts, [f"{t} {feats[t].attrs.get('name', '')}".strip() for t in tickers], fs=8)
+        nm = dict(zip(eiv["ticker"], eiv["name"]))
+        ax.set_yticklabels([f"{t} {nm.get(t, '')}" for t in tickers], fontsize=8)
+        for _, r in self.iv[(self.iv["rule"] == "q20_k9") & (self.iv["start"].astype(str) >= "2021-01-04")].iterrows():
+            ax.axvspan(pd.Timestamp(r["start"]), pd.Timestamp(r["end"]) + pd.Timedelta(days=1), facecolor="none", edgecolor=CAT[7], lw=1.2, zorder=4)
+        ax.axvline(pd.Timestamp("2026-01-01"), color=INK, lw=1, ls="--")
+        ax.text(pd.Timestamp("2026-01-08"), -0.8, "2026 (비맹검 부분 연도)", fontsize=8.5, color=INK2)
+        p = eiv[eiv["period"] == "PRIMARY"]
+        cnt = p.groupby("ticker").agg(n=("interval_id", "size"), d=("duration", "sum"))
+        for i, t in enumerate(tickers):
+            ax.text(mdates.date2num(dts[-1]) + 15, i, f"{int(cnt.loc[t, 'n'])}구간 · {int(cnt.loc[t, 'd'])}일", fontsize=7.5, va="center", color=INK2)
+        _years(ax)
+        fig.suptitle(f"G23 · ETF 20종의 급변 구간 (A20) — 2021–2025 주분석 {len(p)}구간 · 빨간 테두리 = 시장 공통 C1", fontsize=12)
+        footnote(fig, "파랑 = 그 ETF 의 20일 σ 가 자기 과거 90분위 경계를 넘은 날. 오른쪽 숫자 = 2021–2025 시작 구간 수·일수. 전체 표: results/model_intervals_etf.csv (시작·끝·available_from·유형·C1 겹침).")
+        fig.tight_layout(rect=(0, 0.03, 0.93, 0.95))
+        return self._save(fig, "G23_etf_interval_swimlane", {"n_primary": len(p), "n_all": len(eiv)})
+
+    def g24_input_examples(self):
+        idx, X, M = self.y["datasets"]["D2"]
+        fn = self.y["cfg"]["features"]
+        picks = [("069500", "2024-08-05"), ("148070", "2022-09-22")]
+        fig, axes = plt.subplots(2, 1, figsize=(15, 9.5))
+        cap = {}
+        for ax, (t, s) in zip(axes, picks):
+            k = idx.index[(idx["ticker"] == t) & (idx["event_start"].astype(str) == s)][0]
+            Z = np.where(M[k], np.nan, X[k]).T
+            cm = DIV.copy()
+            cm.set_bad(NA_COLOR)
+            im = ax.imshow(np.ma.masked_invalid(Z), aspect="auto", cmap=cm, vmin=-3, vmax=3, interpolation="nearest")
+            ax.set_yticks(range(len(fn)))
+            ax.set_yticklabels(fn, fontsize=8)
+            on = int(idx.loc[k, "onset_index"])
+            ax.axvline(on - 0.5, color=INK, lw=1.5)
+            ax.text(on, -0.9, "급변 시작 (41번째 칸)", fontsize=8.5)
+            ax.set_xticks([0, on, 59])
+            ax.set_xticklabels([str(idx.loc[k, "window_start"]), str(idx.loc[k, "event_start"]), str(idx.loc[k, "window_end"])], fontsize=8)
+            ax.set_title(f"{t} · 사건 {idx.loc[k, 'interval_id']} ({idx.loc[k, 'duration']}일, {idx.loc[k, 'shock_type']}) — 60일 × 13 피처 (train 기준 z 점수, 회색 = 결측)", loc="left", fontsize=10)
+            cap[t] = str(idx.loc[k, "interval_id"])
+        fig.colorbar(im, ax=axes, shrink=0.6, label="z 점수 (ETF·피처별 train 평균·표준편차)")
+        fig.suptitle("G24 · 모델 입력 예시 (D2 사건 정렬 창) — CNN 은 이 13 × 60 행렬 하나를 표본 하나로 받는다", fontsize=12)
+        footnote(fig, "ratio20·U20 은 A20 을 직접 결정하므로 '같은 날 A20 탐지' 과제에서는 빼야 한다. 주 과제(다음 5일 안 급변 예측, D1)에서는 쓸 수 있다. cusum_R 은 6종·2021–2025 만 값이 있다.")
+        return self._save(fig, "G24_model_input_examples", cap)
+
+    def g25_dataset_balance(self):
+        cb = self.y["class_balance"]
+        d1 = cb[(cb["dataset"] == "D1") & cb["label"].isin(["y_next5_A20", "y_next5_C1"])]
+        sp = ["train", "val", "test", "holdout_non_blind"]
+        fig, axes = plt.subplots(1, 2, figsize=(14, 4.8))
+        ax = axes[0]
+        for j, (lab, col) in enumerate((("y_next5_A20", CAT[0]), ("y_next5_C1", CAT[7]))):
+            v = [float(d1[(d1["split"] == s) & (d1["label"] == lab)]["rate"].iloc[0]) for s in sp]
+            xs = np.arange(len(sp)) + (j - 0.5) * 0.38
+            ax.bar(xs, v, width=0.36, color=col, label=lab)
+            for xx, vv in zip(xs, v):
+                ax.text(xx, vv, f"{vv:.1%}", ha="center", va="bottom", fontsize=8)
+        ax.set_xticks(range(len(sp)))
+        ax.set_xticklabels(["train\n2021–23", "val\n2024", "test\n2025", "holdout\n2026 (비맹검)"], fontsize=8.5)
+        ax.set_ylabel("양성 비율")
+        ax.legend(fontsize=8)
+        ax.set_title("D1 슬라이딩 창의 양성 비율 (embargo 제외)", loc="left", fontsize=10)
+        style(ax)
+        ax = axes[1]
+        for j, (name, col) in enumerate((("D1", CAT[0]), ("D2", CAT[1]), ("D3", CAT[2]))):
+            g = cb[cb["dataset"] == name]
+            v = [int(g[g["split"] == s]["n"].max()) if (g["split"] == s).any() else 0 for s in sp]
+            xs = np.arange(len(sp)) + (j - 1) * 0.27
+            ax.bar(xs, v, width=0.26, color=col, label={"D1": "D1 슬라이딩 (CNN 예측)", "D2": "D2 사건 정렬 (분류·설명)", "D3": "D3 정상 창 (오토인코더)"}[name])
+        ax.set_yscale("log")
+        ax.set_xticks(range(len(sp)))
+        ax.set_xticklabels(["train", "val", "test", "holdout"], fontsize=8.5)
+        ax.legend(fontsize=8)
+        ax.set_title("분할별 창 수 (로그)", loc="left", fontsize=10)
+        style(ax)
+        fig.suptitle("G25 · 데이터셋 분할과 클래스 균형 — 2026 은 급변이 절반 이상인 이례적 해라 따로 보고", fontsize=12)
+        fig.tight_layout(rect=(0, 0, 1, 0.92))
+        return self._save(fig, "G25_dataset_balance", d1.to_dict("records"))
+
+    def make_all_r(self) -> dict:
+        self.g23_etf_swimlane()
+        self.g24_input_examples()
+        self.g25_dataset_balance()
         return self.caps

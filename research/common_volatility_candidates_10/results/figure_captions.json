@@ -445,5 +445,79 @@
    "exit_groups": 5,
    "window_exit": 4
   }
- }
+ },
+ "G23_etf_interval_swimlane": {
+  "n_all": 338,
+  "n_primary": 216
+ },
+ "G24_model_input_examples": {
+  "069500": "069500_A20_007",
+  "148070": "148070_A20_013"
+ },
+ "G25_dataset_balance": [
+  {
+   "dataset": "D1",
+   "label": "y_next5_A20",
+   "n": 14680,
+   "positives": 1686.0,
+   "rate": 0.11485013623978202,
+   "split": "train"
+  },
+  {
+   "dataset": "D1",
+   "label": "y_next5_C1",
+   "n": 14680,
+   "positives": 120.0,
+   "rate": 0.008174386920980926,
+   "split": "train"
+  },
+  {
+   "dataset": "D1",
+   "label": "y_next5_A20",
+   "n": 4780,
+   "positives": 674.0,
+   "rate": 0.1410041841004184,
+   "split": "val"
+  },
+  {
+   "dataset": "D1",
+   "label": "y_next5_C1",
+   "n": 4780,
+   "positives": 480.0,
+   "rate": 0.100418410041841,
+   "split": "val"
+  },
+  {
+   "dataset": "D1",
+   "label": "y_next5_A20",
+   "n": 4740,
+   "positives": 784.0,
+   "rate": 0.16540084388185655,
+   "split": "test"
+  },
+  {
+   "dataset": "D1",
+   "label": "y_next5_C1",
+   "n": 4740,
+   "positives": 420.0,
+   "rate": 0.08860759493670886,
+   "split": "test"
+  },
+  {
+   "dataset": "D1",
+   "label": "y_next5_A20",
+   "n": 3580,
+   "positives": 2063.0,
+   "rate": 0.5762569832402235,
+   "split": "holdout_non_blind"
+  },
+  {
+   "dataset": "D1",
+   "label": "y_next5_C1",
+   "n": 3580,
+   "positives": 2480.0,
+   "rate": 0.6927374301675978,
+   "split": "holdout_non_blind"
+  }
+ ]
 }

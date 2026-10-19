@@ -29,6 +29,7 @@ from matplotlib.colors import ListedColormap  # noqa: E402
 from matplotlib.patches import FancyBboxPatch  # noqa: E402
 
 from r2h.common_vol import lock2 as L  # noqa: E402
+from r2h.common_vol import model_input as MI  # noqa: E402
 from r2h.common_vol import pipeline as P  # noqa: E402
 
 OUT = ROOT / "research/common_volatility_candidates_10/infographics"
@@ -249,11 +250,122 @@ def ig2(R, X):
     return {"n": len(c1)}
 
 
+def ig3(R, X, Y):
+    feats, eiv = Y["feats"], Y["etf_intervals"]
+    st = R["states"]
+    eg = st["eg"].set_index("ticker")
+    m = {"broad_market": "주식", "sector": "주식", "theme": "주식", "strategy": "주식", "leveraged_inverse": "주식",
+         "rates": "채권", "money_market": "채권", "commodity": "원자재", "currency": "통화"}
+    tickers = list(feats)
+    dates = next(iter(feats.values())).index
+    msk = dates >= pd.Timestamp("2021-01-04")
+    dts = dates[msk]
+    fig = plt.figure(figsize=(20, 11.25))
+    fig.text(0.035, 0.937, "ETF 별 급변 구간이 곧 모델의 정답이다", fontsize=31, weight=800)
+    fig.text(0.035, 0.900, "급변(A20) = 그 ETF 의 20일 변동성이 자기 과거 90분위 경계를 넘은 날 · 20종 · 2021–2025 주분석 + 2026 (비맹검) · 입력 = 60일 × 13 피처 창", fontsize=12.5, color=MUTED)
+    ep = eiv[eiv["period"] == "PRIMARY"]
+    tiles = [(f"{len(ep)}", "급변 구간 (20종, 2021–25)", INK), (f"{Y['manifest']['datasets']['D1']['n']:,}", "D1 슬라이딩 창", BLUE),
+             (f"{Y['manifest']['datasets']['D2']['n']}", "D2 사건 정렬 창", AMBER), (f"{Y['manifest']['datasets']['D3']['n']:,}", "D3 정상 창 (오토인코더)", GREEN)]
+    for k, (v, lab, c) in enumerate(tiles):
+        x = 0.615 + k * 0.092
+        fig.text(x, 0.928, v, fontsize=23, weight=800, color=c)
+        fig.text(x, 0.903, lab, fontsize=9.4, color=MUTED)
+    # 왼쪽: 20종 급변 지도
+    card(fig, 0.025, 0.06, 0.575, 0.82)
+    ax = fig.add_axes([0.16, 0.125, 0.385, 0.715])
+    edges = mdates.date2num(list(dts) + [dts[-1] + pd.Timedelta(days=1)])
+    for i, t in enumerate(tickers):
+        a = feats[t]["A20"].to_numpy(float)[msk]
+        col = CLS_COL[m[eg.loc[t, "category"]]]
+        on = np.flatnonzero(a == 1)
+        runs, j = [], 0
+        while j < len(on):
+            k = j
+            while k + 1 < len(on) and on[k + 1] == on[k] + 1:
+                k += 1
+            runs.append((on[j], on[k]))
+            j = k + 1
+        for a0, a1 in runs:
+            alpha = 0.45 if dts[a0].year == 2026 else 1.0
+            ax.add_patch(matplotlib.patches.Rectangle((edges[a0], i + 0.12), edges[a1 + 1] - edges[a0], 0.76, color=col, alpha=alpha, lw=0))
+    for _, r in R["intervals"][(R["intervals"]["rule"] == "q20_k9") & (R["intervals"]["start"].astype(str) >= "2021-01-04")].iterrows():
+        ax.axvspan(pd.Timestamp(r["start"]), pd.Timestamp(r["end"]) + pd.Timedelta(days=1), color=RED, alpha=0.10, lw=0)
+    ax.axvline(pd.Timestamp("2026-01-01"), color=INK, lw=1, ls=(0, (4, 3)))
+    ax.text(pd.Timestamp("2026-01-10"), -0.4, "2026 비맹검", fontsize=9, color=MUTED, va="bottom")
+    ax.set_ylim(len(tickers), 0)
+    ax.set_xlim(edges[0], edges[-1])
+    nm = dict(zip(eiv["ticker"], eiv["name"]))
+    ax.set_yticks(np.arange(len(tickers)) + 0.5)
+    ax.set_yticklabels([f"{nm[t]}" for t in tickers], fontsize=9)
+    cnt = ep.groupby("ticker")["duration"].agg(["size", "sum"])
+    for i, t in enumerate(tickers):
+        ax.text(1.01, 1 - (i + 0.5) / len(tickers), f"{int(cnt.loc[t, 'size'])} · {int(cnt.loc[t, 'sum'])}일", transform=ax.transAxes, fontsize=8.5, color=INK2, va="center")
+    ax.xaxis.set_major_locator(mdates.YearLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    ax.tick_params(length=0, labelsize=10)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    fig.text(0.045, 0.855, "20종 ETF 의 급변 구간 — 색 = 자산군 · 빨간 띠 = 시장 공통 C1 · 오른쪽 = 구간 · 일수 (2021–25)", fontsize=11, weight=700, color=INK2)
+    for k, (c, col) in enumerate(CLS_COL.items()):
+        fig.text(0.045 + k * 0.06, 0.072, "■ " + c, fontsize=10, color=col, weight=700)
+    # 오른쪽 위: 창 하나
+    card(fig, 0.615, 0.53, 0.36, 0.35)
+    fig.text(0.63, 0.845, "창 하나 = 60일 × 13 피처", fontsize=14, weight=800)
+    idx, Xd, Md = Y["datasets"]["D2"]
+    kk = idx.index[(idx["ticker"] == "069500") & (idx["event_start"].astype(str) == "2024-08-05")][0]
+    axh = fig.add_axes([0.765, 0.565, 0.195, 0.255])
+    Z = np.where(Md[kk], np.nan, Xd[kk]).T
+    cmap = matplotlib.colors.LinearSegmentedColormap.from_list("d", ["#2563eb", "#f4f3ee", "#e5484d"])
+    cmap.set_bad("#d9d7d0")
+    axh.imshow(np.ma.masked_invalid(Z), aspect="auto", cmap=cmap, vmin=-3, vmax=3, interpolation="nearest")
+    axh.axvline(39.5, color=INK, lw=1.4)
+    axh.set_yticks(range(13))
+    axh.set_yticklabels(Y["cfg"]["features"], fontsize=8)
+    axh.set_xticks([0, 40, 59])
+    axh.set_xticklabels(["−40일", "급변 시작", "+19일"], fontsize=8.5)
+    axh.tick_params(length=0)
+    for sp in axh.spines.values():
+        sp.set_visible(False)
+    fig.text(0.63, 0.80, "예: KOSPI200\n2024-08-05 사건", fontsize=9.5, color=MUTED)
+    groups = [("가격", "r · |r|"), ("변동성", "σ20 · σ60 · 경계 비율 · 분위"), ("상대", "Peer 비율 · 분위"), ("시장", "급변 폭 · 강도"), ("모형", "CUSUM T/임계 · 존재")]
+    for i, (g, d) in enumerate(groups):
+        fig.text(0.63, 0.735 - i * 0.034, g, fontsize=9.5, weight=700, color=INK)
+        fig.text(0.63, 0.72 - i * 0.034, d, fontsize=8, color=MUTED)
+    # 오른쪽 가운데: 데이터셋 3종
+    card(fig, 0.615, 0.30, 0.36, 0.215)
+    ds = [("D1 슬라이딩", "다음 5거래일 안 급변 예측 (CNN)", BLUE, Y["manifest"]["datasets"]["D1"]["n"]),
+          ("D2 사건 정렬", "급변 시작을 41번째 칸에 맞춤 · 유형 분류·해석", AMBER, Y["manifest"]["datasets"]["D2"]["n"]),
+          ("D3 정상 창", "급변 없는 창만 · 오토인코더 학습 → 재구성 오차", GREEN, Y["manifest"]["datasets"]["D3"]["n"])]
+    for i, (a, b, c, n) in enumerate(ds):
+        y = 0.47 - i * 0.058
+        fig.text(0.63, y, "●", fontsize=13, color=c)
+        fig.text(0.645, y, f"{a}  {n:,}창", fontsize=11.5, weight=700)
+        fig.text(0.645, y - 0.022, b, fontsize=9.3, color=MUTED)
+    # 오른쪽 아래: 분할·누수
+    card(fig, 0.615, 0.06, 0.36, 0.225)
+    fig.text(0.63, 0.255, "분할과 누수 방지", fontsize=14, weight=800)
+    cb = Y["class_balance"].query("dataset == 'D1' and label == 'y_next5_A20'").set_index("split")
+    spans = [("train", "2021–23", 0.0, 3.0, "#cfd8f5"), ("val", "2024", 3.0, 1.0, "#f6dfb5"), ("test", "2025", 4.0, 1.0, "#cdebdc"), ("holdout_non_blind", "2026", 5.0, 0.75, "#ece9e2")]
+    axs = fig.add_axes([0.63, 0.165, 0.33, 0.05])
+    for k, lab, x0, w, col in spans:
+        axs.barh(0, w, left=x0, color=col, height=0.9)
+        axs.text(x0 + w / 2, 0, f"{lab}\n양성 {cb.loc[k, 'rate']:.0%}", ha="center", va="center", fontsize=8.6)
+    axs.set_xlim(0, 5.75)
+    axs.axis("off")
+    rules = ["정규화 = train 날짜 값만 · 분할 경계 앞 5일 embargo", "t 종가 값은 t+1 부터 사용 · 경계 σ·분위는 엄밀 과거", "ratio20·U20 (→A20) · breadth (→C1) 는 같은 날 탐지에 넣지 않음"]
+    for i, r_ in enumerate(rules):
+        fig.text(0.63, 0.135 - i * 0.022, "— " + r_, fontsize=9, color=INK2)
+    fig.text(0.975, 0.025, "R2H · 10 PART R · MODEL_INPUT_SPEC.md (데이터셋 생성 전 고정) · 텐서 outputs/t19 (Git 제외)", fontsize=8.5, color=MUTED, ha="right")
+    save(fig, "IG10_3_labels_to_model_input")
+    return {"n": len(ep)}
+
+
 def main():
     theme()
     R = P.run(ROOT)
     X = L.run(ROOT, R)
-    print(ig1(R, X), ig2(R, X))
+    Y = MI.run(ROOT, R, X)
+    print(ig1(R, X), ig2(R, X), ig3(R, X, Y))
 
 
 if __name__ == "__main__":

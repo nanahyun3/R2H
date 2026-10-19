@@ -21,7 +21,7 @@ def main() -> None:
     files += [ROOT / "configs/t19_common_vol_candidates_v1.json", ROOT / "configs/t19_common_vol_candidates_v2.json"]
     files += sorted((ROOT / "src/r2h/common_vol").glob("*.py"))
     files += [ROOT / f"scripts/{n}" for n in ("t19_build_notebook.py", "run_t19_notebook.py", "run_t19_pipeline.py", "t19_release_manifest.py", "t19_infographics_light.py")]
-    files += [ROOT / "tests/unit/test_common_vol_10.py"]
+    files += [ROOT / "tests/unit/test_common_vol_10.py", ROOT / "configs/t19_model_input_v1.json"]
     head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip()
     man = {
         "study_id": "t19_common_volatility_candidates_10",

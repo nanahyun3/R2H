@@ -200,3 +200,53 @@ def test_lock2_freeze_and_anchors(res):
     h1 = x["hysteresis"].query("rule == 'H1'")
     c1 = res["intervals"].query("rule == 'q20_k9' and period == 'PRIMARY'")
     assert list(h1["i0"]) == list(c1["i0"]) and list(h1["i1"]) == list(c1["i1"])  # C1 내부에 N_A 7–8 하락 없음
+
+
+# ── PART R 모델 입력 ──────────────────────────────────────────────────────
+from r2h.common_vol import model_input as MI  # noqa: E402
+
+
+@pytest.fixture(scope="module")
+def mi(res):
+    return MI.run(ROOT, res, L2.run(ROOT, res))
+
+
+def test_model_spec_freeze():
+    for line in (ROOT / P.OUT_DIR / "CONTRACT_FREEZE_SHA256_MODEL_INPUT.txt").read_text().splitlines():
+        d, name = line.split(maxsplit=1)
+        assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == d, name
+
+
+def test_etf_intervals_match_a20(mi):
+    for t, f in mi["feats"].items():
+        x = mi["etf_intervals"][mi["etf_intervals"]["ticker"] == t]
+        assert int(x["duration"].sum()) == int((f["A20"] == 1).sum())
+        for _, r in x.iterrows():
+            assert (f["A20"].iloc[r["i0"]:r["i1"] + 1] == 1).all()
+            assert str(r["available_from"]) > str(r["start"])  # 다음 거래일부터 사용
+
+
+def test_windows_alignment_and_labels(mi):
+    idx, X, M = mi["datasets"]["D1"]
+    assert X.shape == (len(idx), 60, 13) and M.shape == X.shape
+    f = mi["feats"]["069500"]
+    j = idx.index[(idx["ticker"] == "069500") & (idx["end_date"].astype(str) == "2024-08-05")][0]
+    n = mi["datasets"]["norm"]["069500"]["r"]
+    assert X[j, -1, 0] == pytest.approx((f.loc["2024-08-05", "r"] - n["mean"]) / n["std"], abs=1e-4)
+    k = int(np.flatnonzero(f.index == pd.Timestamp("2024-08-02"))[0])  # 2024-08-05 직전 거래일
+    jj = idx.index[(idx["ticker"] == "069500") & (idx["end_date"].astype(str) == "2024-08-02")][0]
+    assert idx.loc[jj, "y_next5_A20"] == float((f["A20"].iloc[k + 1:k + 6] == 1).any())
+
+
+def test_normal_windows_have_no_shock(mi):
+    idx = mi["datasets"]["D3"][0]
+    for _, r in idx.sample(50, random_state=0).iterrows():
+        a = mi["feats"][r["ticker"]]["A20"]
+        e = int(np.flatnonzero(a.index == pd.Timestamp(r["end_date"]))[0])
+        assert (a.iloc[e - 59:e + 6] == 0).all()
+
+
+def test_embargo_and_splits(mi):
+    idx = mi["datasets"]["D1"][0]
+    assert int(idx["embargo"].sum()) == 20 * 5 * 3  # 20종 × 지평 5일 × 경계 3개
+    assert set(idx["split"]) == {"train", "val", "test", "holdout_non_blind"}

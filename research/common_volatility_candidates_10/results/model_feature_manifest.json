@@ -1,0 +1,103 @@
+{
+ "spec": "research/common_volatility_candidates_10/MODEL_INPUT_SPEC.md",
+ "window": 60,
+ "horizon": 5,
+ "features": [
+  "r",
+  "abs_r",
+  "sigma20",
+  "sigma60",
+  "ratio20",
+  "U20",
+  "U60",
+  "peer_L",
+  "peer_UB",
+  "breadth",
+  "intensity",
+  "cusum_R",
+  "cusum_mask"
+ ],
+ "task_excluded_features": {
+  "same_day_A20": [
+   "ratio20",
+   "U20"
+  ],
+  "same_day_C1": [
+   "breadth"
+  ]
+ },
+ "splits": {
+  "train": [
+   "2021-01-01",
+   "2023-12-31"
+  ],
+  "val": [
+   "2024-01-01",
+   "2024-12-31"
+  ],
+  "test": [
+   "2025-01-01",
+   "2025-12-31"
+  ],
+  "holdout_non_blind": [
+   "2026-01-01",
+   "2026-12-31"
+  ]
+ },
+ "datasets": {
+  "D1": {
+   "n": 28180,
+   "X_shape": [
+    28180,
+    60,
+    13
+   ],
+   "index": "results/model_dataset_index_D1.csv",
+   "tensor": "outputs/t19/model_windows_D1.npz"
+  },
+  "D2": {
+   "n": 267,
+   "X_shape": [
+    267,
+    60,
+    13
+   ],
+   "index": "results/model_dataset_index_D2.csv",
+   "tensor": "outputs/t19/model_windows_D2.npz"
+  },
+  "D3": {
+   "n": 3184,
+   "X_shape": [
+    3184,
+    60,
+    13
+   ],
+   "index": "results/model_dataset_index_D3.csv",
+   "tensor": "outputs/t19/model_windows_D3.npz"
+  }
+ },
+ "tickers": [
+  "069500",
+  "102110",
+  "229200",
+  "122630",
+  "114800",
+  "091230",
+  "091170",
+  "091180",
+  "305540",
+  "143860",
+  "117680",
+  "161510",
+  "219480",
+  "133690",
+  "192090",
+  "148070",
+  "153130",
+  "132030",
+  "261220",
+  "261240"
+ ],
+ "normalization": "results/normalization.json (train 날짜 값만, cusum_mask 제외)",
+ "nan_policy": "정규화 후 NaN → 0, nan_mask 로 위치 보존"
+}

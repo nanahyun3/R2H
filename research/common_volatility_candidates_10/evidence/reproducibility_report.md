@@ -19,3 +19,12 @@
 | 09·W4 results | 실행 전후 | 동일 |
 
 CLAIMS 72/72 (lock-1 58 + lock-2 14). pytest 245 통과 (`tests/unit/test_common_vol_10.py` 21개).
+
+## PART R (모델 입력)
+
+| 비교 | 대상 | 결과 |
+|---|---|---|
+| 노트북 10 (PART R 포함) 새 커널 2회 vs `run_t19_pipeline.py` + 인포그래픽 | `results/` CSV 34 + JSON + 그림 25 PNG·25 SVG + 인포그래픽 3 PNG·3 SVG (92개) | 바이트 동일 (3회) |
+| lock-1 CSV 17 · lock-2 CSV 11 | 커밋 `20f19fb` · `78d136d` 대비 | 변경 없음 |
+
+CLAIMS 84/84. pytest 250 통과. 텐서 `outputs/t19/*.npz` 는 Git 제외 (색인·정규화 통계로 재현).

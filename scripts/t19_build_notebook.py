@@ -101,7 +101,8 @@ pd.set_option("display.max_colwidth", 140)  # 그룹 명단이 잘리지 않게
 
 from r2h.common_vol import pipeline as P  # 10번 계산 (09 파이프라인은 호출하지 않는다)
 from r2h.common_vol import lock2 as L  # 10-lock-2 확장 계산
-from r2h.common_vol.figures import Figures10L2  # 10번 그림 (lock-1 G01–G16 + lock-2 G17–G22)
+from r2h.common_vol import model_input as MI  # PART R 모델 입력 (라벨·피처·창)
+from r2h.common_vol.figures import Figures10R  # 10번 그림 (lock-1 G01–G16 · lock-2 G17–G22 · PART R G23–G25)
 
 assert Path(sys.modules["r2h"].__file__).resolve().is_relative_to((ROOT / "src").resolve())  # 다른 트리의 r2h 금지
 BASE = ROOT / "research/common_volatility_candidates_10"  # 10번 산출물 폴더
@@ -125,7 +126,7 @@ def sha(p):  # 파일 SHA256
 
 
 # 10번 계약·설정 동결 지문 (결과를 보고 규칙을 바꾸지 않았음을 확인).
-for line in (BASE / "CONTRACT_FREEZE_SHA256.txt").read_text().splitlines() + (BASE / "CONTRACT_FREEZE_SHA256_LOCK2.txt").read_text().splitlines():  # lock-1·lock-2 동결 기록
+for line in (BASE / "CONTRACT_FREEZE_SHA256.txt").read_text().splitlines() + (BASE / "CONTRACT_FREEZE_SHA256_LOCK2.txt").read_text().splitlines() + (BASE / "CONTRACT_FREEZE_SHA256_MODEL_INPUT.txt").read_text().splitlines():  # lock-1·lock-2·PART R 동결 기록
     digest, name = line.split(maxsplit=1)  # 해시·경로
     assert sha(ROOT / name) == digest, f"동결 파일 변경: {name}"  # 변경되면 중단
 # 이전 연구(노트북 00–08, W1–W3, T12) 보호 파일 불변 확인.
@@ -144,7 +145,8 @@ RUN = r"""
 R = P.run(ROOT)  # 09 의 그룹 A 상태만 읽는다 (W4 results/figures 는 쓰지 않는다)
 CFG, VER = R["cfg"], R["verify"]  # 설정과 승계 검증 결과
 X = L.run(ROOT, R)  # 10-lock-2: 우연 기준선·자산군 균형·이력·강도 지수·시차·C1 바텀업
-FG = Figures10L2(R, X, ROOT)  # 그림 생성기 (lock-1·lock-2 같은 결과 객체)
+Y = MI.run(ROOT, R, X)  # PART R: ETF·시장 급변 구간표, 13 피처, D1·D2·D3 창 (텐서는 outputs/t19, Git 제외)
+FG = Figures10R(R, X, Y, ROOT)  # 그림 생성기 (lock-1·lock-2·PART R 같은 결과 객체)
 CAP = {}  # 그림별 캡션 수치
 D, IV, SM = R["daily"], R["intervals"], R["summary"]  # 일별 표·구간표·후보 요약
 PRI = D[D["period"] == "PRIMARY"]  # 주분석 2021–2025
@@ -181,6 +183,8 @@ def book() -> nbformat.NotebookNode:
 | 2024-08 의 20일 지속은 무엇인가 | **하루(08-05)가 20일 창에 머문 기간.** 빠진 7개 그룹 모두 그 하루가 창에서 빠진 날 빠졌다 | §D6 |
 | 하루 미달로 쪼개지는 문제는 | 이력 규칙(10 진입·8 유지)이 C2 의 5조각을 2구간으로 잇는다 | §D3 |
 | 20일과 60일은 왜 겹치지 않나 | 60일 공통성은 20일 공통성보다 **약 33거래일 늦다** (상관 0.38 → 0.57) | §D5 |
+| ETF 마다 급변 구간은 어디인가 | 20종 전수 338구간 (2021–2025 주분석 216). 시작·끝·사용 가능일·유형·C1 겹침을 표로 제공 | §R2 |
+| CNN·오토인코더에는 무엇을 넣나 | 60일 × 13 피처 창. D1 슬라이딩 28,180 (다음 5일 급변 예측), D2 사건 정렬 267, D3 정상 창 3,184 (오토인코더). train 2021–23 · val 2024 · test 2025 · holdout 2026 | §R4–R6 |
 """),
         md("## 0. 실행 환경·동결 지문"),
         code(SETUP),
@@ -509,6 +513,123 @@ display(X["c1_exit"])  # 종료 원인
 - **2025-04**: KOSPI200·미국 주식 2종·중국·달러가 04-07 에 먼저 들어오고, 국내 업종·원유가 04-10 에 합류해 C1 이 시작됐다. 종료일(05-08)에 빠진 5개 그룹 중 4개가 04-07 의 창 이탈이다.
 - 결론: C1 의 **시작은 사건의 확산 순서**를, **끝은 상당 부분 20일 창의 기계적 종료**를 반영한다. 구간을 CNN 표본으로 자를 때 끝 부분 며칠은 '충격 후 잔향' 일 수 있다.
 """),
+        # ── PART R (결과 · 모델 입력) ──
+        md(r"""
+# PART R · 결과 — 급변 구간 라벨과 CNN·오토인코더 입력
+
+이 장이 이 노트북의 **인계 결과물**이다. 정의별로 각 ETF 에서 급변 구간이 언제 시작해 언제 끝났는지, 그리고 그 구간을 CNN·오토인코더에 넣기 위한 창·피처·라벨·분할을 정리한다. 명세는 데이터셋을 만들기 전에 `MODEL_INPUT_SPEC.md` 로 고정했다 (`87fd0b2`). 모델 성능은 여기서 평가하지 않는다.
+"""),
+        md(r"""
+## R1. 라벨 — 어떤 정의로 무엇을 급변이라 부르나
+
+| 라벨 | 단위 | 정의 | 구간 수 (2021–2025) |
+|---|---|---|---|
+| `A20` | **ETF** | 그 ETF 의 20일 σ 가 자기 과거 90분위 경계를 넘은 날의 연속 (09 의 ETF 단위 A) | 20종 216구간 |
+| `C1` | 시장 | 17개 노출 그룹 중 같은 날 9개 이상 A — 우연 기준 k*_fw = 9 | 3구간 |
+| `H2` | 시장 | 10 진입 · 8 유지 이력 구간 | 2구간 |
+| `WB` | 시장 | 자산군 균형 폭 ≥ 9/17 | 3구간 |
+
+- 모델의 표본은 **(ETF, 날짜)** 이므로 주 라벨은 ETF 단위 `A20` 이다. 시장 라벨(C1·H2·WB)은 같은 날짜의 모든 ETF 에 공통으로 붙는 보조 라벨이다.
+- **사용 가능 시점**: t 종가로 만든 값은 t+1 거래일부터 쓸 수 있다 (`available_from`). 구간이 끝났다는 사실은 끝 다음 날(`end_known_at`)에야 안다.
+"""),
+        md("## R2. ETF 20종의 급변 구간 — 시작·끝·지속·스케일"),
+        code(r"""
+# ETF 별 요약 (2021–2025 시작 구간) 과 전체 구간표 (results/model_intervals_etf.csv).
+EIV = Y["etf_intervals"]  # 20종 전 기간 구간
+EIP = EIV[EIV["period"] == "PRIMARY"]  # 주분석 시작 구간
+SUMR = EIP.groupby(["ticker", "name"]).agg(구간=("interval_id", "size"), 일수=("duration", "sum"), 최장=("duration", "max"), 단일충격=("shock_type", lambda z: int((z == "단일 충격형").sum())), 창이탈종료=("window_exit_end", "sum"), C1겹친일=("C1_overlap_days", "sum"), 최대배율=("peak_ratio20", "max"))  # ETF 별 요약
+display(SUMR.round(2))  # 요약 표
+print("전체", len(EIV), "구간 · 주분석", len(EIP), "구간 · 2026", int((EIV["period"] == "PARTIAL_NON_BLIND").sum()), "구간 · 2020 파일럿", int((EIV["period"] == "PILOT").sum()), "구간")  # 규모
+"""),
+        code(r"""
+# 주분석 구간 전수 — 모델 라벨의 원본. 시작(start)·끝(end)·사용 가능일(available_from)·끝을 아는 날(end_known_at).
+display(EIP[["ticker", "name", "interval_id", "start", "end", "duration", "available_from", "end_known_at", "peak_date", "peak_sigma20", "peak_ratio20", "shock_type", "top1_date", "top1_r", "window_exit_end", "C1_overlap_days", "max_breadth_17", "ret_interval_pct", "max_drawdown_pct", "cusum_max_R"]].round(2))  # 216행
+"""),
+        fig("g23_etf_swimlane", "G23_etf_interval_swimlane"),
+        md(r"""
+**해석 (R2).**
+- 2021–2025 주분석에서 20종 합계 **216구간**이다. KOSPI200 동일노출 4종(069500·102110·122630·114800)은 7–8구간 95–97일로 거의 같다. 같은 지수를 따르기 때문이며, 모델 학습에서는 **중복 표본**으로 다뤄야 한다 (같은 날짜를 분할 경계 양쪽에 두지 않기, 또는 그룹 가중).
+- 급변일이 가장 많은 ETF 는 단기채권 153130 (21구간 269일)·국고채 148070 (19구간 261일)·2차전지 305540 (15구간 197일)·반도체 091230 (19구간 192일)이다.
+- C1 시장 공통 구간 39일과 겹친 날은 반도체·2차전지가 39일 전부, KOSPI200 계열이 37일, 국채·단기채는 2일이다. 같은 '급변' 라벨이라도 시장 공통 충격에서 온 것인지 자산 고유 충격에서 온 것인지 `C1_overlap_days` 로 구분할 수 있다.
+"""),
+        md("## R3. 시장 구간 × ETF 참여"),
+        code(r"""
+# C1(전 기간)·H2·WB 구간마다 각 ETF 가 A20 이었던 일수 (results/model_intervals_market.csv).
+MIV = Y["market_intervals"]  # 시장 구간
+display(MIV.drop(columns=["i0", "i1"]))  # 구간 × 20종
+"""),
+        md(r"""
+**해석 (R3).** C1 의 2024-08 구간(20일)에는 국내 주식·나스닥 계열이 대부분 20일 모두 급변이었고 채권·원자재·통화는 0일이다. 2025-04 구간(17일)에는 금·원유·달러·중국까지 함께였다. 2026 은 C1 이 53일짜리 구간 두 개를 포함해 5구간으로, 주분석과 성격이 다른 해다 (비맹검이라 정의 선택에 쓰지 않는다).
+"""),
+        md(r"""
+## R4. 피처 — 한 날짜에 13개 채널
+
+| # | 피처 | 뜻 | 주의 |
+|---|---|---|---|
+| 1–2 | `r`, `abs_r` | 일간 로그수익률(%)과 절댓값 | |
+| 3–4 | `sigma20`, `sigma60` | 연환산 20·60일 σ (%) | |
+| 5 | `ratio20` | σ20 / 급변 경계 | A20 을 직접 결정 → 같은 날 A20 탐지 과제에서 제외 |
+| 6–7 | `U20`, `U60` | σ 의 엄밀 과거 분위 | U20 도 A20 을 직접 결정 → 동일 |
+| 8–9 | `peer_L`, `peer_UB` | Peer 대비 로그 σ 비율과 그 과거 분위 (09) | |
+| 10 | `breadth` | 같은 날 급변 그룹 수 / 17 | C1 을 직접 결정 → C1 탐지 과제에서 제외 |
+| 11 | `intensity` | 시장 공통 강도 I | 153130 이상치에 민감 |
+| 12–13 | `cusum_R`, `cusum_mask` | W3 SVR–GARCH CUSUM 최대 T/임계 · 값 존재 여부 | 6종·2021–2025 만 |
+
+모든 값은 t 종가까지의 정보다. 정규화는 ETF·피처별로 **train(2021–2023) 날짜 값만** 써서 평균·표준편차를 구했다 (`results/normalization.json`). 정규화 뒤 결측은 0 으로 채우고 위치는 `nan_mask` 에 남겼다.
+"""),
+        fig("g24_input_examples", "G24_model_input_examples"),
+        md(r"""
+**해석 (G24).**
+- KOSPI200 2024-08 사건 창에서는 급변 시작(41번째 칸)에 `r`·`abs_r` 이 한 칸 크게 튀고, 같은 칸부터 σ·분위·폭·강도가 한꺼번에 높아진다. 단일 충격형의 전형이다.
+- 국고채 2022-09 사건 창에서는 시작 전부터 `intensity`·`breadth` 가 서서히 올라가고, σ 가 여러 날에 걸쳐 높아진다. 누적형의 전형이다.
+- 두 유형은 CNN 이 구분해야 할 서로 다른 모양이다.
+"""),
+        md("## R5. 데이터셋 — 창·라벨·분할"),
+        code(r"""
+# 클래스 균형 (embargo 제외) 과 데이터셋 명세.
+display(Y["class_balance"])  # 분할별 표본 수·양성 비율
+print(json.dumps(Y["manifest"]["datasets"], ensure_ascii=False, indent=1))  # 텐서 형태·경로
+"""),
+        fig("g25_dataset_balance", "G25_dataset_balance"),
+        md(r"""
+**해석 (R5).**
+- **D1 슬라이딩** (주 과제 = 다음 5거래일 안 그 ETF 의 A20 발생 예측): 28,180창. 양성 비율은 train 11.5% · val 14.1% · test 16.5% 다. 분할 경계 앞 5거래일(20종 × 5일 × 3경계 = 300창)은 embargo 로 뺐다.
+- **C1 예측은 train 에 양성이 120창(0.8%)뿐**이다. 2021–2023 에 C1 이 2022-10 의 2일밖에 없기 때문이다. 시장 공통 급변을 직접 학습시키기에는 표본이 너무 적다. ETF 단위 A20 을 주 라벨로 쓰고, C1 은 평가용 부분집합으로 쓰는 편이 낫다.
+- **D2 사건 정렬** 267창 (train 128 · val 42 · test 46 · holdout 51): 급변 시작을 41번째 칸에 맞춘 창으로, 유형 분류(단일/누적)와 해석(어느 피처가 먼저 움직였나)에 쓴다.
+- **D3 정상 창** 3,184창 (train 1,992): 창과 다음 5일에 A20 이 전혀 없는 창이다. 오토인코더를 정상 창으로만 학습하고, D1 양성 창의 재구성 오차가 커지는지로 평가한다.
+- **2026 holdout 은 양성 비율이 57.6%** 다. 학습 기간과 분포가 크게 다르므로 일반화 성능이 아니라 '체제 변화' 진단으로 따로 보고해야 한다.
+"""),
+        md("## R6. 불러오기 예시와 정합성 검증"),
+        code(r"""
+# outputs/t19/model_windows_D1.npz 를 읽어 색인과 맞추고, 과제별 피처 제외·분할 필터를 적용하는 예시.
+Z1 = np.load(ROOT / "outputs/t19/model_windows_D1.npz")  # X (N × 60 × 13), nan_mask, features
+I1 = pd.read_csv(RES / "model_dataset_index_D1.csv", dtype={"ticker": str})  # 창 색인 (ETF·창 끝·라벨·분할)
+FEAT = list(Z1["features"])  # 피처 이름 13개
+assert Z1["X"].shape == (len(I1), 60, 13) and FEAT == Y["cfg"]["features"]  # 형태·순서 일치
+keep = [i for i, f in enumerate(FEAT) if f not in Y["cfg"]["task_excluded_features"]["same_day_A20"]]  # 같은 날 A20 탐지 과제라면 ratio20·U20 제외
+tr = (I1["split"] == "train") & (~I1["embargo"]) & I1["y_next5_A20"].notna()  # 주 과제 train 표본
+print("주 과제 train:", int(tr.sum()), "창 · 양성", int(I1.loc[tr, "y_next5_A20"].sum()), "· 같은 날 탐지용 피처", len(keep), "개")  # 요약
+# 정합성: 창의 마지막 행 = 창 끝 날짜의 정규화 피처 (임의 표본 5개).
+NORM = json.loads((RES / "normalization.json").read_text())  # train 정규화 통계
+rng = np.random.default_rng(0)  # 고정 시드
+for i in rng.choice(len(I1), 5, replace=False):  # 표본 5개
+    t, d = I1.loc[i, "ticker"], pd.Timestamp(I1.loc[i, "end_date"])  # ETF·창 끝
+    raw = Y["feats"][t].loc[d, "sigma20"]  # 원래 σ20
+    z = (raw - NORM[t]["sigma20"]["mean"]) / NORM[t]["sigma20"]["std"]  # 정규화
+    assert abs(Z1["X"][i, -1, FEAT.index("sigma20")] - z) < 1e-4  # 마지막 행 정렬
+D3I = pd.read_csv(RES / "model_dataset_index_D3.csv", dtype={"ticker": str})  # 정상 창 색인
+assert len(D3I) == Y["manifest"]["datasets"]["D3"]["n"]  # D3 크기
+print("정합성 OK — 창 끝 정렬, 형태, 피처 순서")  # 확인
+"""),
+        md(r"""
+## R7. 주의
+
+- **라벨 누수**: `ratio20`·`U20` 은 A20 을, `breadth` 는 C1 을 그대로 결정한다. 같은 날 탐지 과제에 넣으면 정답을 입력으로 주는 셈이다. 주 과제(다음 5일 예측)에서는 쓸 수 있지만, 급변이 이미 진행 중이면 '계속될 것' 을 맞히는 쉬운 표본이 섞인다. **급변이 아닌 날에서 시작하는 예측(y_A20_t = 0 인 창만)** 을 별도로 보고하는 것을 권한다.
+- **중복 ETF**: KOSPI200 4종은 같은 사건을 네 번 센다. 그룹 단위 평가나 가중이 필요하다.
+- **2026**: 급변이 절반 이상인 해라 분포가 다르다. 비맹검이므로 성능 보고에서 분리한다.
+- **CUSUM 채널**: 6종·2021–2025 만 있다. 나머지는 `cusum_mask = 0` 이다. W3 에서 CUSUM 은 급변일에 경보가 없었으므로 (11번), 이 채널의 기여는 작을 수 있다.
+- 텐서(`outputs/t19/*.npz`)는 가격에서 역산할 수 있어 Git 에 올리지 않는다. 색인·명세·정규화 통계는 `results/` 에 있다. `scripts/run_t19_pipeline.py` 로 언제든 다시 만들 수 있다.
+"""),
         # ── 12 ──
         md(r"""
 ## 12. 2022년 사례 심층 분석 (E1 — 채권 중심 고변동성)
@@ -829,6 +950,18 @@ CLAIMS = [  # (주장, 관측, 기대)
     ("lock2 시차", (int(LL.loc[LL["corr"].idxmax(), "lag"]), round(float(LL["corr"].max()), 2), round(float(LL.loc[0, "corr"]), 2)), (33, 0.57, 0.38)),  # 본문 D5 대조
     ("lock2 C1 창 이탈", tuple(f"{int(g['window_exit'].sum())}/{len(g)}" for _, g in X["c1_exit"].groupby("interval_id")), ("0/3", "7/7", "4/5")),  # 본문 D6 대조
     ("lock2 2024-08 08-05 진입", int((X["c1_entry"].query("interval_id == 'q20_k9_PRI_002'")["entry_date"].astype(str) == "2024-08-05").sum()), 8),  # 본문 D6 대조
+    ("R 구간 수 전체·주분석", (len(EIV), len(EIP)), (338, 216)),  # 본문 R2 대조
+    ("R KOSPI200 4종 구간·일수", tuple((int(SUMR.loc[t, "구간"].iloc[0]), int(SUMR.loc[t, "일수"].iloc[0])) for t in ("069500", "102110", "122630", "114800")), ((7, 95), (7, 95), (8, 96), (7, 97))),  # 본문 R2 대조
+    ("R 급변일 상위 4종", tuple((int(SUMR.loc[t, "구간"].iloc[0]), int(SUMR.loc[t, "일수"].iloc[0])) for t in ("153130", "148070", "305540", "091230")), ((21, 269), (19, 261), (15, 197), (19, 192))),  # 본문 R2 대조
+    ("R C1 겹친 일수", tuple(int(SUMR.loc[t, "C1겹친일"].iloc[0]) for t in ("091230", "305540", "069500", "148070", "153130")), (39, 39, 37, 2, 2)),  # 본문 R2 대조
+    ("R 시장 구간 수", len(MIV), 15),  # 본문 R3 대조
+    ("R 2026 C1 구간", int(((MIV["label"] == "C1") & (MIV["period"] == "PARTIAL_NON_BLIND")).sum()), 5),  # 본문 R3 대조
+    ("R 데이터셋 크기", tuple(Y["manifest"]["datasets"][k]["n"] for k in ("D1", "D2", "D3")), (28180, 267, 3184)),  # 본문 R5 대조
+    ("R D1 양성 비율 train·val·test·holdout", tuple(round(float(Y["class_balance"].query("dataset == 'D1' and label == 'y_next5_A20' and split == @sp")["rate"].iloc[0]), 3) for sp in ("train", "val", "test", "holdout_non_blind")), (0.115, 0.141, 0.165, 0.576)),  # 본문 R5 대조
+    ("R C1 train 양성", (int(Y["class_balance"].query("dataset == 'D1' and label == 'y_next5_C1' and split == 'train'")["positives"].iloc[0]), round(float(Y["class_balance"].query("dataset == 'D1' and label == 'y_next5_C1' and split == 'train'")["rate"].iloc[0]), 3)), (120, 0.008)),  # 본문 R5 대조
+    ("R embargo 창", int(I1["embargo"].sum()), 300),  # 본문 R5 대조
+    ("R D2 분할", tuple(int((Y["datasets"]["D2"][0]["split"] == sp).sum()) for sp in ("train", "val", "test", "holdout_non_blind")), (128, 42, 46, 51)),  # 본문 R5 대조
+    ("R D3 train", int((D3I["split"] == "train").sum()), 1992),  # 본문 R5 대조
     ("그룹 범주: 주식·비주식", (int(EG.drop_duplicates("exposure_group")["category"].isin(["broad_market", "sector", "theme", "strategy", "leveraged_inverse"]).sum()), int(EG.drop_duplicates("exposure_group")["category"].isin(["rates", "money_market", "commodity", "currency"]).sum())), (12, 5)),  # 본문 §15 대조
     ("2026 주 후보 검열 구간", int(((IV.period == "PARTIAL_NON_BLIND") & IV.candidate.isin(["C1", "C2", "C3", "C4"]) & ((IV.left_censored != False) | (IV.right_censored != False))).sum()), 0),  # 그림 G16 각주 대조  # noqa: E712
 ]  # 끝

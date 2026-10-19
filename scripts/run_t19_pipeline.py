@@ -17,15 +17,18 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from r2h.common_vol import pipeline as P  # noqa: E402
 from r2h.common_vol import lock2 as L  # noqa: E402
-from r2h.common_vol.figures import Figures10L2  # noqa: E402
+from r2h.common_vol import model_input as MI  # noqa: E402
+from r2h.common_vol.figures import Figures10R  # noqa: E402
 
 
 def main() -> None:
     res = P.run(ROOT)
     x2 = L.run(ROOT, res)
-    fg = Figures10L2(res, x2, ROOT)
+    y = MI.run(ROOT, res, x2)
+    fg = Figures10R(res, x2, y, ROOT)
     fg.make_all()
     fg.make_all_l2()
+    fg.make_all_r()
     print("결과", len(P.results_digest(ROOT)), "개 CSV · 주분석 구간", int((res["intervals"]["period"] == "PRIMARY").sum()))
 
 
