@@ -36,15 +36,24 @@ def m_hat(e: np.ndarray, lo: int = 61, hi: int = 252, min_valid: int = 120) -> n
         return np.where(c >= min_valid, (cs[b] - cs[a]) / c, np.nan)
 
 
-def fit0_insample(cfg21: dict, expected_hash: str) -> tuple[np.ndarray, pd.DatetimeIndex, str]:
-    """2019 학습 표본으로 fit 0 를 다시 적합 → 표본내 표준화 잔차 (model_hash 대조)."""
+def fit0_insample(cfg21: dict, expected_hash: str) -> tuple[np.ndarray, pd.DatetimeIndex, str, float]:
+    """2019 학습 표본으로 fit 0 를 다시 적합 → 표본내 표준화 잔차 (model_hash 대조) + 먼 입력에서의 예측 (커널 소실 상수)."""
     m = C.load_market(cfg21, ROOT)
     hist = m.r[: m.eval_start]
     af = fit_annual(hist, round(0.7 * hist.size))
     if af.model_hash != expected_hash:
         raise AssertionError(f"fit 0 model_hash 불일치 {af.model_hash} != {expected_hash}")
     e19 = standardize(hist, insample_variance(af.fit, hist))
-    return e19, m.dates[: m.eval_start], af.model_hash
+    # 학습 범위에서 아주 먼 입력 → RBF 커널 기여가 0 이 되어 절편(역변환)만 남는다
+    est = af.fit.model.estimator
+    far = None
+    for dim in (2, 3, 4, 6):
+        try:
+            far = float(np.ravel(est.predict(np.full((1, dim), 1e6)))[0])
+            break
+        except ValueError:
+            continue
+    return e19, m.dates[: m.eval_start], af.model_hash, far
 
 
 def page_states(e: np.ndarray) -> dict[str, np.ndarray]:
@@ -72,7 +81,7 @@ def build(cfg: dict, aligned: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     e = g["B1"]["residual_std"].to_numpy(float)
     fits = pd.read_csv(ROOT / cfg["frozen_inputs"]["refit_boundary_breaks"].replace("refit_boundary_breaks", "svr_fits"))
     h0 = fits[(fits["pipeline"] == "B1") & (fits["fit_k"] == 0)]["model_hash"].iloc[0]
-    e19, d19, mh = fit0_insample(cfg21, h0)
+    e19, d19, mh, far = fit0_insample(cfg21, h0)
     mh_x1 = m_hat(e)
     sn = C.selfnorm(e)
     full = np.r_[e19, e]
@@ -110,6 +119,8 @@ def build(cfg: dict, aligned: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     chk.update({
         "fit0_model_hash": mh, "fit0_insample_days": int(e19.size), "fit0_insample_valid": int(np.isfinite(e19).sum()),
         "fit0_insample_mean_e2": float(np.nanmean(e19**2)),
+        "fit0_far_input_prediction": far,
+        "fit0_max_vhat_2020": float(np.nanmax(g["B1"]["predicted_variance"].to_numpy()[dates.year == 2020])),
         "x1_first_valid": str(dates[np.flatnonzero(after.to_numpy())[0]].date()), "x1_na_days": int((~after).sum()),
         "x1w_first_valid": str(dates[np.flatnonzero(df["m_hat_X1w"].notna().to_numpy())[0]].date()), "x1w_na_days": int(df["m_hat_X1w"].isna().sum()),
         "x1_vs_x1w_state_equal_from": _equal_from(df["X1_up"].to_numpy(), df["X1w_up"].to_numpy(), dates),
@@ -152,9 +163,11 @@ def event_table(df: pd.DataFrame, events: pd.DataFrame, crit: dict) -> pd.DataFr
 
 
 def forecast_ceiling(svr: pd.DataFrame, min_repeat: int = 5, atol: float = 1e-9) -> pd.DataFrame:
-    """적합별로 같은 예측분산이 정확히 min_repeat 일 이상 반복되는 값 = 예측 상한 고정 (FORECAST_CEILING) 후보.
+    """적합별로 같은 예측분산이 정확히 min_repeat 일 이상 반복되는 날 = 예측 상수 고정 (커널 소실).
 
-    해석 가설: 입력(지연 r²·대용치)이 학습 범위를 벗어나 RBF 커널 기여가 사라지면 예측이 한 값에 고정된다.
+    입력(지연 r²·대용치)이 학습 범위를 벗어나면 RBF 커널 기여가 0 이 되어 예측이 절편 상수에 고정된다
+    (fit 0: 먼 입력 예측 = 고정값, ``x1_checks.json``). '상한'이 아니다 — 같은 적합의 최대 v^ 는 더 크다.
+    열 이름 ``forecast_ceiling`` 은 호환을 위해 유지 (D-11).
     """
     out = svr[["date", "policy_id", "model_fit_id", "predicted_variance"]].copy()
     out["forecast_ceiling"] = False

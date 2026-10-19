@@ -1,1 +1,4 @@
-{"study": "12B", "contract": "12B-lock-1", "phase": "P00", "phases": {"P00_contract": "DONE", "P01_alignment": "TODO", "P02_x1_real": "TODO", "P03_ofat": "TODO", "P04_regimes_events": "TODO", "P05_agreement_info": "TODO", "P06_figures": "TODO", "P07_notebook": "TODO", "P08_release": "TODO"}}
+{"study": "12B", "contract": "12B-lock-1", "phase": "P08_release", "status": "DONE_DESCRIPTIVE",
+ "phases": {"P00_contract": "DONE", "P01_alignment": "DONE", "P02_x1_real": "DONE", "P03_ofat": "DONE", "P04_regimes_events": "DONE", "P05_agreement_info": "DONE", "P06_figures": "DONE", "P07_notebook": "DONE", "P08_release": "DONE"},
+ "counts": {"aligned_rows": 681999, "daily_experiments": 463, "ofat_pairs": 462, "agreement_pairs": 106953, "value_clusters": 73, "figures": 27, "claims": 73, "protected_12_files": 915},
+ "audit": {"blocker": 0, "should_fix_applied": 2}}

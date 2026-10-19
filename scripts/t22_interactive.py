@@ -70,7 +70,7 @@ def main() -> int:
         fig.add_vrect(x0=e["start"], x1=e["end"] + pd.Timedelta(days=1), fillcolor="#e34948", opacity=0.10, line_width=0)
     fig.update_layout(height=1100, hovermode="x unified", template="plotly_white", font={"family": "Pretendard, NanumGothic, sans-serif", "size": 12},
                       title={"text": "R2H 12B — KODEX 200 시장 경로 × CUSUM 정책 탐색기 (관측 서술, N1 귀무 부적합 → 확증 아님)", "x": 0.01},
-                      updatemenus=[{"buttons": buttons, "direction": "down", "x": 0.0, "xanchor": "left", "y": 1.06, "yanchor": "bottom", "showactive": True}],
+                      updatemenus=[{"buttons": buttons, "direction": "down", "x": 1.0, "xanchor": "right", "y": 1.075, "yanchor": "bottom", "showactive": True}], margin={"t": 140},
                       legend={"orientation": "h", "y": -0.05}, bargap=0)
     fig.update_xaxes(rangeslider={"visible": False}, rangeselector={"buttons": [{"count": 1, "label": "1년", "step": "year", "stepmode": "backward"}, {"step": "all", "label": "전체"}]}, row=1, col=1)
     DST.mkdir(parents=True, exist_ok=True)

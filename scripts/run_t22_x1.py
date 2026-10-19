@@ -47,6 +47,17 @@ def main() -> int:
         ceiling_value=("predicted_variance", "first"), days=("date", "size"), first=("date", "min"), last=("date", "max"),
         mean_abs_return=("daily_log_return_pct", lambda x: float(np.mean(np.abs(x)))), mean_rv20=("rolling_vol_20", "mean")).reset_index()
     s.to_csv(BASE / "results/svr_forecast_ceiling_summary.csv", index=False)
+    # B1 경보일과 상수 고정일의 겹침 (인과가 아닌 동시 발생 기술)
+    b1 = al[al["experiment_id"] == "B1"].sort_values("date")
+    alarm = b1["cusum_alarm_a05"].to_numpy(bool)
+    cdays = fc[(fc["policy_id"] == "B1")].sort_values("date")["forecast_ceiling"].to_numpy(bool)
+    pos_c = np.flatnonzero(cdays)
+    near = np.array([bool(((p - pos_c) >= 0).any() and ((p - pos_c)[(p - pos_c) >= 0].min() <= 60)) for p in np.flatnonzero(alarm)])
+    ov = pd.DataFrame([{"alarm_days_a05": int(alarm.sum()), "alarm_on_constant_day": int((alarm & cdays).sum()),
+                        "alarm_within_60d_after_constant_day": int(near.sum()), "constant_days": int(cdays.sum()),
+                        "constant_span_first": str(b1["date"].to_numpy()[pos_c[0]])[:10], "constant_span_last": str(b1["date"].to_numpy()[pos_c[-1]])[:10],
+                        "label": "CO_OCCURRENCE_NOT_CAUSAL"}])
+    ov.to_csv(BASE / "results/b1_alarm_constant_overlap.csv", index=False)
     chk["forecast_ceiling_days_by_policy"] = fc.groupby("policy_id")["forecast_ceiling"].sum().astype(int).to_dict()
     chk["crit"] = {k: {str(a): (list(v) if isinstance(v, tuple) else v) for a, v in d.items()} for k, d in chk["crit"].items()}
     (BASE / "evidence/x1_checks.json").write_text(json.dumps(chk, ensure_ascii=False, indent=2, default=str) + "\n", encoding="utf-8")

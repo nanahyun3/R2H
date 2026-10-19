@@ -17,6 +17,8 @@
   "fit0_insample_days": 245,
   "fit0_insample_valid": 244,
   "fit0_insample_mean_e2": 1.4169865133801889,
+  "fit0_far_input_prediction": 1.1272265921558708,
+  "fit0_max_vhat_2020": 1.920639327555591,
   "x1_first_valid": "2020-09-21",
   "x1_na_days": 180,
   "x1w_first_valid": "2020-01-02",

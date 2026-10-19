@@ -1,5 +1,5 @@
 # ruff: noqa: E501  — 한국어 그림 제목·각주 문자열.
-"""12B 그림 — 시장 지도 · X1 실데이터 · SVR 예측 상한 · 부모–자식 중첩 · 연도별 · 국면 · 이벤트 · 선행후행 · 전체 히트맵 · 합의 · 피처.
+"""12B 그림 — 시장 지도 · X1 실데이터 · SVR 예측 상수 고정 · 부모–자식 중첩 · 연도별 · 국면 · 이벤트 · 선행후행 · 전체 히트맵 · 합의 · 피처.
 
 모든 수치는 정렬 원장(policy_market_aligned)과 결과표에서 읽는다. 그림마다 그린 배열을 ``self.drawn`` 에 남겨 G6(원장 값 일치)를 검사한다.
 저장: PNG 320dpi + SVG (12번과 같은 ``save``). 로그 축 눈금은 일반 숫자 (NanumGothic 에 U+2212 없음).
@@ -128,7 +128,7 @@ class Figures12B:
             self.drawn.setdefault("g01", {})[eid] = y
         ax[3].set_yticks([])
         ax[3].set_ylabel("CUSUM 과거 전용 백분위 (띠 높이 0–1)\n회색 = 통계량 없음 (NA)", labelpad=95)
-        # 변화점·초기화·재학습·예측 상한
+        # 변화점·초기화·재학습·예측 상수 고정
         tr = self.d["triggers"]
         pr = tr[(tr["rule"] == "V20_two") & (tr["q"] == 0.99) & (tr["gap"] == 20) & tr["in_eval"]]
         ax[4].vlines(pr["effect_date"], 3.1, 3.9, color=CAT[1], lw=1.2, label="변화점 트리거 효과일 (V20 양방향 q0.99 gap20)")
@@ -140,8 +140,8 @@ class Figures12B:
         ax[4].vlines(rf, 1.1, 1.9, color=CAT[6], lw=0.6, label="SVR 재학습 (refit21)")
         ce = self.d["ceiling"]
         cb = ce[(ce["policy_id"] == "B1") & ce["forecast_ceiling"]]["date"]
-        ax[4].vlines(cb, 0.1, 0.9, color=CEIL, lw=1.0, label="SVR 예측 상한 고정일 (B1)")
-        ax[4].set_yticks([0.5, 1.5, 2.5, 3.5], ["예측 상한", "재학습", "연초 초기화", "변화점"], fontsize=8)
+        ax[4].vlines(cb, 0.1, 0.9, color=CEIL, lw=1.0, label="SVR 예측 상수 고정일 (B1)")
+        ax[4].set_yticks([0.5, 1.5, 2.5, 3.5], ["예측 상수 고정", "재학습", "연초 초기화", "변화점"], fontsize=8)
         ax[4].legend(fontsize=7, ncol=2, loc="upper right", frameon=False)
         lv = self.d["regime"]
         lv = lv[lv["anchor_w"] == 20].set_index("date").reindex(d)
@@ -253,11 +253,11 @@ class Figures12B:
         for i in (1, 2, 3):
             ax[i, 0].legend(fontsize=7, frameon=False)
         fig.suptitle("X1 사건 확대 — 같은 충격이라도 SVR 예측분산 v^ 가 이미 커져 있으면 e^2 가 작아 Page 가 쌓이지 않는다", x=0.01, ha="left", fontsize=13)
-        footnote(fig, "2020-02-25~ B1 v^ 는 1.127 에 고정(예측 상한)되어 잔차가 사실상 원수익률 / 1.06 이 된다. " + NOTE)
+        footnote(fig, "2020-02-25~ B1 v^ 는 1.127 에 고정(예측 상수 고정)되어 잔차가 사실상 원수익률 / 1.06 이 된다. " + NOTE)
         v = x.loc["2024-08-05"]
         return self._save(fig, "G03_X1_사건확대", {"2024-08-05": {"r": float(v["daily_log_return_pct"]), "v_hat": float(v["predicted_variance_B1"]), "e": float(v["e_B1"]), "e_sn": float(v["e_sn_X1"]), "X1_up_over_h": float(v["X1_up_path_a05"] / crit["page_up_sn"]["0.05"])}})
 
-    # ── G04 SVR 예측 상한 고정 ──
+    # ── G04 SVR 예측 상수 고정 ──
     def g04_forecast_ceiling(self):
         ce = self.d["ceiling"]
         pols = ["B1", "refit63", "refit21", "refitV20_g0", "win252", "adaptiveV20"]
@@ -270,7 +270,7 @@ class Figures12B:
                 ax[i, j].plot(w.index, w["rolling_vol_20"] ** 2, color=CAT[1], lw=1, label="관측 rv20^2 (%^2)")
                 ax[i, j].plot(w.index, w["predicted_variance"], color=INK, lw=1.1, label="SVR v^")
                 c = w["forecast_ceiling"].to_numpy(bool)
-                ax[i, j].scatter(w.index[c], w["predicted_variance"][c], color=CEIL, s=14, zorder=3, label="상한 고정일")
+                ax[i, j].scatter(w.index[c], w["predicted_variance"][c], color=CEIL, s=14, zorder=3, label="상수 고정일")
                 ax[i, j].set_yscale("log")
                 _plainlog(ax[i, j])
                 ax[i, j].xaxis.set_major_formatter(mdates.DateFormatter("%m-%d"))
@@ -279,10 +279,10 @@ class Figures12B:
                     ax[i, j].set_title(lab, loc="left", fontsize=11)
             ax[i, 0].set_ylabel(p, fontsize=9)
         ax[0, 0].legend(fontsize=7, frameon=False, ncol=3)
-        fig.suptitle("SVR 예측 상한 고정 — 같은 예측분산이 소수점 9자리까지 5일 이상 반복 (입력이 학습 범위를 벗어난 날)", x=0.01, ha="left", fontsize=13)
+        fig.suptitle("SVR 예측 상수 고정 — 같은 예측분산이 소수점 9자리까지 5일 이상 반복 (입력이 학습 범위를 벗어난 날)", x=0.01, ha="left", fontsize=13)
         footnote(fig, "해석 가설: 지연 r^2·대용치 입력이 학습 범위를 벗어나면 RBF 커널 기여가 0 에 가까워져 예측이 한 값으로 고정된다. 이 기간의 CUSUM 잔차는 원수익률을 상수로 나눈 값에 가깝다.")
         days = ce.groupby("policy_id")["forecast_ceiling"].sum().astype(int).to_dict()
-        return self._save(fig, "G04_SVR_예측상한고정", {"ceiling_days": days})
+        return self._save(fig, "G04_SVR_예측상수고정", {"ceiling_days": days})
 
     # ── G05 부모–자식 중첩 (그림 B) ──
     def g05_pair(self, parent: str, child: str, label: str, idx: int, scale: str = "auto"):
@@ -639,7 +639,7 @@ class Figures12B:
             cc = ce[(ce["policy_id"] == p) & ce["forecast_ceiling"]]["date"]
             ax[2].scatter(cc, np.full(len(cc), k + 0.5), s=6, color=CEIL, zorder=3)
         ax[2].set_yticks(np.arange(len(pols)) + 0.5, pols, fontsize=8)
-        ax[2].set_ylabel("재학습(선) · 예측 상한(점)")
+        ax[2].set_ylabel("재학습(선) · 예측 상수 고정(점)")
         for a in ax:
             self._events(a)
             style(a)

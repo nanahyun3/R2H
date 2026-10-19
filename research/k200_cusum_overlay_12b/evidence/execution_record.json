@@ -1,9 +1,9 @@
 {
   "notebook": "12B_KODEX200_CUSUM_시장변수_연환산변동성_정렬비교.ipynb",
   "status": "PASS",
-  "start_utc": "2026-10-19T02:39:48.092402+00:00",
-  "end_utc": "2026-10-19T02:42:38.687026+00:00",
-  "seconds": 170.59,
+  "start_utc": "2026-10-19T02:49:50.620779+00:00",
+  "end_utc": "2026-10-19T02:52:22.198112+00:00",
+  "seconds": 151.58,
   "returncode": 0,
   "log": "research/k200_cusum_overlay_12b/evidence/12B_execution.log",
   "python": "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python"

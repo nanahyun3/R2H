@@ -147,28 +147,70 @@
   "round": 2
  },
  {
-  "claim": "B1 예측 상한 값",
+  "claim": "B1 예측 상수 고정 값",
   "file": "svr_forecast_ceiling_summary.csv",
   "expr": "df.loc[(df.policy_id=='B1')&(df.model_fit_id==0),'ceiling_value'].iloc[0]",
   "expected": 1.127,
   "round": 3
  },
  {
-  "claim": "B1 예측 상한 일수",
+  "claim": "B1 예측 상수 고정 일수",
   "file": "svr_forecast_ceiling_summary.csv",
   "expr": "int(df.loc[(df.policy_id=='B1'),'days'].sum())",
   "expected": 32,
   "round": 0
  },
  {
-  "claim": "B1 예측 상한 마지막 날",
+  "claim": "B1 예측 상수 고정 마지막 날",
   "file": "svr_forecast_ceiling_summary.csv",
   "expr": "str(df.loc[(df.policy_id=='B1'),'last'].max())",
   "expected": "2020-08-21",
   "round": 0
  },
  {
-  "claim": "2024-08 상한 정책 수",
+  "claim": "B1 경보 중 고정일 당일",
+  "file": "b1_alarm_constant_overlap.csv",
+  "expr": "int(df.alarm_on_constant_day.iloc[0])",
+  "expected": 13,
+  "round": 0
+ },
+ {
+  "claim": "B1 경보 중 고정일 60일 이내",
+  "file": "b1_alarm_constant_overlap.csv",
+  "expr": "int(df.alarm_within_60d_after_constant_day.iloc[0])",
+  "expected": 43,
+  "round": 0
+ },
+ {
+  "claim": "공통일 X1 양방향 개선",
+  "file": "feature_incremental_information_common_days.csv",
+  "expr": "df[(df.feature=='X1_page_two_sn')&(~df.exclude_2020_train)].rel_mse_gain_pooled.iloc[0]",
+  "expected": 0.027,
+  "round": 3
+ },
+ {
+  "claim": "공통일 X1 하방 개선",
+  "file": "feature_incremental_information_common_days.csv",
+  "expr": "df[(df.feature=='X1_page_down_sn')&(~df.exclude_2020_train)].rel_mse_gain_pooled.iloc[0]",
+  "expected": 0.045,
+  "round": 3
+ },
+ {
+  "claim": "공통일 Page 하방 개선",
+  "file": "feature_incremental_information_common_days.csv",
+  "expr": "df[(df.feature=='E3_page_down')&(~df.exclude_2020_train)].rel_mse_gain_pooled.iloc[0]",
+  "expected": 0.022,
+  "round": 3
+ },
+ {
+  "claim": "원수익률 CoS 높은 수준 유지 대비",
+  "file": "annualized_volatility_response.csv",
+  "expr": "df.set_index('experiment_id').loc['E3_raw_rolling_cos','contrast_HIGHEXT_STABLE_minus_LOWMID_STABLE']",
+  "expected": 0.035,
+  "round": 3
+ },
+ {
+  "claim": "2024-08 상수 고정 정책 수",
   "file": "svr_forecast_ceiling_summary.csv",
   "expr": "int(df[df['first'].astype(str).str.startswith('2024-08')].policy_id.nunique())",
   "expected": 4,
