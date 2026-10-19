@@ -30,6 +30,7 @@ def main() -> int:
     ma = pd.read_parquet(OUT / "market_daily_master.parquet")
     df = df.merge(ma[["date", "close", "daily_log_return_pct", "annualized_vol_20", "annualized_vol_60", "predicted_variance_B1"]], on="date", how="left", validate="1:1")
     df.to_csv(BASE / "results/x1_real_daily.csv", index=False)
+    df.to_parquet(OUT / "x1_real_daily.parquet", index=False)  # CSV 는 마지막 비트가 바뀔 수 있어 그림·검사는 Parquet
     ev = pd.read_csv(BASE / "results/events_table.csv", parse_dates=["start", "end"])
     X.event_table(df, ev, chk["crit"]).to_csv(BASE / "results/x1_event_table.csv", index=False)
     rows = []

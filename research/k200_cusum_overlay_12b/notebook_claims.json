@@ -1,0 +1,471 @@
+[
+ {
+  "claim": "정렬 행 수",
+  "file": "policy_market_alignment_audit.csv",
+  "expr": "int(df.loc[df.check=='aligned_rows','value'].iloc[0])",
+  "expected": 681999,
+  "round": 0
+ },
+ {
+  "claim": "일별 실험 수",
+  "file": "policy_market_alignment_audit.csv",
+  "expr": "int(df.loc[df.check=='daily_experiments','value'].iloc[0])",
+  "expected": 463,
+  "round": 0
+ },
+ {
+  "claim": "정렬 감사 전부 통과",
+  "file": "policy_market_alignment_audit.csv",
+  "expr": "int(df['pass'].astype(str).eq('True').all())",
+  "expected": 1,
+  "round": 0
+ },
+ {
+  "claim": "rv252 결측 일수",
+  "file": "policy_market_alignment_audit.csv",
+  "expr": "int(float(df.loc[df.check=='rv252_na_days','value'].iloc[0]))",
+  "expected": 6,
+  "round": 0
+ },
+ {
+  "claim": "2020 연환산 20일 최대",
+  "file": "market_daily_summary.csv",
+  "expr": "df.loc[df.calendar_year==2020,'ann_vol20_max'].iloc[0]",
+  "expected": 72.68,
+  "round": 2
+ },
+ {
+  "claim": "2020 실현 연변동성",
+  "file": "market_daily_summary.csv",
+  "expr": "df.loc[df.calendar_year==2020,'realized_ann_vol_year'].iloc[0]",
+  "expected": 29.4,
+  "round": 1
+ },
+ {
+  "claim": "2020 SVR 예측 연환산 평균",
+  "file": "market_daily_summary.csv",
+  "expr": "df.loc[df.calendar_year==2020,'pred_ann_vol_B1_mean'].iloc[0]",
+  "expected": 16.05,
+  "round": 2
+ },
+ {
+  "claim": "X1 상방 경보일",
+  "file": "x1_alarm_days.csv",
+  "expr": "int((df.series=='X1_up_alarm_a05').sum())",
+  "expected": 0,
+  "round": 0
+ },
+ {
+  "claim": "X1 하방 경보일",
+  "file": "x1_alarm_days.csv",
+  "expr": "int((df.series=='X1_down_alarm_a05').sum())",
+  "expected": 4,
+  "round": 0
+ },
+ {
+  "claim": "X1 양방향 경보일",
+  "file": "x1_alarm_days.csv",
+  "expr": "int((df.series=='X1_two_alarm_a05').sum())",
+  "expected": 3,
+  "round": 0
+ },
+ {
+  "claim": "원래 Page 상방 경보일",
+  "file": "x1_alarm_days.csv",
+  "expr": "int((df.series=='E3_up_alarm_a05').sum())",
+  "expected": 2,
+  "round": 0
+ },
+ {
+  "claim": "X1w 상방 첫 경보",
+  "file": "x1_alarm_days.csv",
+  "expr": "str(df.loc[df.series=='X1w_up_alarm_a05_REFERENCE','date'].min())",
+  "expected": "2020-03-18",
+  "round": 0
+ },
+ {
+  "claim": "Page 상방 첫 경보",
+  "file": "x1_alarm_days.csv",
+  "expr": "str(df.loc[df.series=='E3_up_alarm_a05','date'].min())",
+  "expected": "2020-03-23",
+  "round": 0
+ },
+ {
+  "claim": "X1 하방 마지막 경보",
+  "file": "x1_alarm_days.csv",
+  "expr": "str(df.loc[df.series=='X1_down_alarm_a05','date'].max())",
+  "expected": "2021-07-01",
+  "round": 0
+ },
+ {
+  "claim": "2021–2025 사건 X1 상방 최대 비율",
+  "file": "x1_event_table.csv",
+  "expr": "df[(df.event_set=='A_t20')&(df.period=='PRIMARY')]['X1_up_path_max_over_h'].max()",
+  "expected": 0.46,
+  "round": 2
+ },
+ {
+  "claim": "2025-11 사건 Page 상방 자유상태 비율",
+  "file": "x1_event_table.csv",
+  "expr": "df.loc[df.interval_id=='069500_q20_011','E3_up_free_max_over_h'].iloc[0]",
+  "expected": 1.56,
+  "round": 2
+ },
+ {
+  "claim": "2025-11 사건 Page 상방 경보경로 비율",
+  "file": "x1_event_table.csv",
+  "expr": "df.loc[df.interval_id=='069500_q20_011','E3_up_path_max_over_h'].iloc[0]",
+  "expected": 0.39,
+  "round": 2
+ },
+ {
+  "claim": "X1 첫 유효일",
+  "file": "x1_real_daily.csv",
+  "expr": "str(df.loc[df.m_hat_X1.notna(),'date'].min())[:10]",
+  "expected": "2020-09-21",
+  "round": 0
+ },
+ {
+  "claim": "2024-08-05 v̂",
+  "file": "x1_real_daily.csv",
+  "expr": "df.loc[df.date.astype(str).str.startswith('2024-08-05'),'predicted_variance_B1'].iloc[0]",
+  "expected": 5.01,
+  "round": 2
+ },
+ {
+  "claim": "2024-08-05 e",
+  "file": "x1_real_daily.csv",
+  "expr": "df.loc[df.date.astype(str).str.startswith('2024-08-05'),'e_B1'].iloc[0]",
+  "expected": -4.3,
+  "round": 2
+ },
+ {
+  "claim": "2020 평균 m̂ X1w",
+  "file": "x1_real_daily.csv",
+  "expr": "df.loc[df.date.astype(str).str.startswith('2020'),'m_hat_X1w'].mean()",
+  "expected": 2.59,
+  "round": 2
+ },
+ {
+  "claim": "B1 예측 상한 값",
+  "file": "svr_forecast_ceiling_summary.csv",
+  "expr": "df.loc[(df.policy_id=='B1')&(df.model_fit_id==0),'ceiling_value'].iloc[0]",
+  "expected": 1.127,
+  "round": 3
+ },
+ {
+  "claim": "B1 예측 상한 일수",
+  "file": "svr_forecast_ceiling_summary.csv",
+  "expr": "int(df.loc[(df.policy_id=='B1'),'days'].sum())",
+  "expected": 32,
+  "round": 0
+ },
+ {
+  "claim": "B1 예측 상한 마지막 날",
+  "file": "svr_forecast_ceiling_summary.csv",
+  "expr": "str(df.loc[(df.policy_id=='B1'),'last'].max())",
+  "expected": "2020-08-21",
+  "round": 0
+ },
+ {
+  "claim": "2024-08 상한 정책 수",
+  "file": "svr_forecast_ceiling_summary.csv",
+  "expr": "int(df[df['first'].astype(str).str.startswith('2024-08')].policy_id.nunique())",
+  "expected": 4,
+  "round": 0
+ },
+ {
+  "claim": "원수익률 CoS 확대−안정",
+  "file": "annualized_volatility_response.csv",
+  "expr": "df.set_index('experiment_id').loc['E3_raw_rolling_cos','contrast_EXPANDING_minus_STABLE']",
+  "expected": 0.27,
+  "round": 2
+ },
+ {
+  "claim": "B1 확대−안정",
+  "file": "annualized_volatility_response.csv",
+  "expr": "df.set_index('experiment_id').loc['B1','contrast_EXPANDING_minus_STABLE']",
+  "expected": 0.194,
+  "round": 3
+ },
+ {
+  "claim": "B1 감소−안정",
+  "file": "annualized_volatility_response.csv",
+  "expr": "df.set_index('experiment_id').loc['B1','contrast_CONTRACTING_minus_STABLE']",
+  "expected": 0.13,
+  "round": 2
+ },
+ {
+  "claim": "Page 상방 높은 수준 유지 대비",
+  "file": "annualized_volatility_response.csv",
+  "expr": "df.set_index('experiment_id').loc['E3_page_up','contrast_HIGHEXT_STABLE_minus_LOWMID_STABLE']",
+  "expected": 0.254,
+  "round": 3
+ },
+ {
+  "claim": "B1 높은 수준 유지 대비",
+  "file": "annualized_volatility_response.csv",
+  "expr": "df.set_index('experiment_id').loc['B1','contrast_HIGHEXT_STABLE_minus_LOWMID_STABLE']",
+  "expected": 0.001,
+  "round": 3
+ },
+ {
+  "claim": "Page 상방 ρ(수준)",
+  "file": "annualized_volatility_response.csv",
+  "expr": "df.set_index('experiment_id').loc['E3_page_up','rho_vol20']",
+  "expected": 0.578,
+  "round": 3
+ },
+ {
+  "claim": "X1 상방 ρ(수준)",
+  "file": "annualized_volatility_response.csv",
+  "expr": "df.set_index('experiment_id').loc['X1_page_up_sn','rho_vol20']",
+  "expected": 0.262,
+  "round": 3
+ },
+ {
+  "claim": "X1 하방 ρ(수준)",
+  "file": "annualized_volatility_response.csv",
+  "expr": "df.set_index('experiment_id').loc['X1_page_down_sn','rho_vol20']",
+  "expected": -0.376,
+  "round": 3
+ },
+ {
+  "claim": "Page 하방 ρ(d5)",
+  "file": "annualized_volatility_response.csv",
+  "expr": "df.set_index('experiment_id').loc['E3_page_down','rho_d5']",
+  "expected": -0.259,
+  "round": 3
+ },
+ {
+  "claim": "2020 제외 시 수준 ρ 부호 변경 수",
+  "file": "annualized_volatility_response.csv",
+  "expr": "int((np.sign(df.rho_vol20)*np.sign(df.rho_vol20_ex2020)<0).sum())",
+  "expected": 0,
+  "round": 0
+ },
+ {
+  "claim": "Page 상방 ρ0",
+  "file": "lead_lag_peak.csv",
+  "expr": "df.set_index('experiment_id').loc['E3_page_up','rho_lag0']",
+  "expected": 0.444,
+  "round": 3
+ },
+ {
+  "claim": "Page 하방 ρ0",
+  "file": "lead_lag_peak.csv",
+  "expr": "df.set_index('experiment_id').loc['E3_page_down','rho_lag0']",
+  "expected": -0.455,
+  "round": 3
+ },
+ {
+  "claim": "X1 하방 ρ0",
+  "file": "lead_lag_peak.csv",
+  "expr": "df.set_index('experiment_id').loc['X1_page_down_sn','rho_lag0']",
+  "expected": -0.453,
+  "round": 3
+ },
+ {
+  "claim": "B1 최대 시차",
+  "file": "lead_lag_peak.csv",
+  "expr": "df.set_index('experiment_id').loc['B1','peak_lag']",
+  "expected": -19.0,
+  "round": 0
+ },
+ {
+  "claim": "OFAT 비교 쌍",
+  "file": "ofat_pair_comparison.csv",
+  "expr": "len(df)",
+  "expected": 462,
+  "round": 0
+ },
+ {
+  "claim": "G4 엄격 불일치",
+  "file": "ofat_pair_comparison.csv",
+  "expr": "int((~df.ofat_consistent.astype(bool)).sum())",
+  "expected": 5,
+  "round": 0
+ },
+ {
+  "claim": "G4 구조 판정 불일치",
+  "file": "ofat_pair_comparison.csv",
+  "expr": "int((~df.ofat_consistent_structural.astype(bool)).sum())",
+  "expected": 0,
+  "round": 0
+ },
+ {
+  "claim": "w20 vs w60 ρ",
+  "file": "ofat_pair_comparison.csv",
+  "expr": "df.set_index('child').loc['E2_w20','raw_spearman']",
+  "expected": 0.072,
+  "round": 3
+ },
+ {
+  "claim": "w252 vs w60 ρ",
+  "file": "ofat_pair_comparison.csv",
+  "expr": "df.set_index('child').loc['E2_w252','raw_spearman']",
+  "expected": 0.351,
+  "round": 3
+ },
+ {
+  "claim": "w252 경보일",
+  "file": "ofat_pair_comparison.csv",
+  "expr": "df.set_index('child').loc['E2_w252','alarm_days_child']",
+  "expected": 159,
+  "round": 0
+ },
+ {
+  "claim": "w252 추가 NA",
+  "file": "ofat_pair_comparison.csv",
+  "expr": "df.set_index('child').loc['E2_w252','added_na_days']",
+  "expected": 192,
+  "round": 0
+ },
+ {
+  "claim": "변화점 초기화 ρ (B1)",
+  "file": "ofat_pair_comparison.csv",
+  "expr": "df.set_index('child').loc['E8_reset_only','raw_spearman']",
+  "expected": 1.0,
+  "round": 3
+ },
+ {
+  "claim": "변화점 초기화 추가 NA (B1)",
+  "file": "ofat_pair_comparison.csv",
+  "expr": "df.set_index('child').loc['E8_reset_only','added_na_days']",
+  "expected": 204,
+  "round": 0
+ },
+ {
+  "claim": "X1 상방 vs Page 상방 ρ",
+  "file": "ofat_pair_comparison.csv",
+  "expr": "df.set_index('child').loc['X1_page_up_sn','raw_spearman']",
+  "expected": -0.247,
+  "round": 3
+ },
+ {
+  "claim": "CoS 초기화 쌍 추가 NA 중앙값",
+  "file": "ofat_pair_comparison.csv",
+  "expr": "df[(df.changed_variable=='reset')&df.child.str.contains('rolling|^B0|E1_(?:half|two|three|every|annual)|E8_reset_only',regex=True)&~df.child.str.contains('page')].added_na_days.median()",
+  "expected": 242.0,
+  "round": 0
+ },
+ {
+  "claim": "값 군집 수",
+  "file": "agreement_clusters.csv",
+  "expr": "int(df.value_cluster.nunique())",
+  "expected": 73,
+  "round": 0
+ },
+ {
+  "claim": "단일 군집 수",
+  "file": "agreement_clusters.csv",
+  "expr": "int((df.groupby('value_cluster').size()==1).sum())",
+  "expected": 29,
+  "round": 0
+ },
+ {
+  "claim": "최대 군집 크기",
+  "file": "agreement_clusters.csv",
+  "expr": "int(df.groupby('value_cluster').size().max())",
+  "expected": 117,
+  "round": 0
+ },
+ {
+  "claim": "B1 과 B0 같은 군집",
+  "file": "agreement_clusters.csv",
+  "expr": "int(df.set_index('experiment_id').loc['B1','value_cluster']==df.set_index('experiment_id').loc['B0','value_cluster'])",
+  "expected": 1,
+  "round": 0
+ },
+ {
+  "claim": "Page 하방 계열 상대 MSE 개선 중앙값",
+  "file": "feature_incremental_information.csv",
+  "expr": "df[(df.coverage_status=='OK')&(df.scale=='past_pct')&(~df.exclude_2020_train)].query('detector_type==\"page_down\"').rel_mse_gain_pooled.median()",
+  "expected": 0.035,
+  "round": 3
+ },
+ {
+  "claim": "Page 하방 계열 개선 해 수 중앙값",
+  "file": "feature_incremental_information.csv",
+  "expr": "df[(df.coverage_status=='OK')&(df.scale=='past_pct')&(~df.exclude_2020_train)].query('detector_type==\"page_down\"').years_positive.median()",
+  "expected": 4,
+  "round": 0
+ },
+ {
+  "claim": "CoS 계열 상대 MSE 개선 중앙값",
+  "file": "feature_incremental_information.csv",
+  "expr": "df[(df.coverage_status=='OK')&(df.scale=='past_pct')&(~df.exclude_2020_train)].query('detector_type==\"rolling_cos\"').rel_mse_gain_pooled.median()",
+  "expected": -0.017,
+  "round": 3
+ },
+ {
+  "claim": "X1 양방향 상대 MSE 개선",
+  "file": "feature_incremental_information.csv",
+  "expr": "df[(df.coverage_status=='OK')&(df.scale=='past_pct')&(~df.exclude_2020_train)].set_index('experiment_id').loc['X1_page_two_sn','rel_mse_gain_pooled']",
+  "expected": 0.081,
+  "round": 3
+ },
+ {
+  "claim": "w252 상대 MSE 개선",
+  "file": "feature_incremental_information.csv",
+  "expr": "df[(df.coverage_status=='OK')&(df.scale=='past_pct')&(~df.exclude_2020_train)].set_index('experiment_id').loc['E2_w252','rel_mse_gain_pooled']",
+  "expected": 0.039,
+  "round": 3
+ },
+ {
+  "claim": "B1 상대 MSE 개선",
+  "file": "feature_incremental_information.csv",
+  "expr": "df[(df.coverage_status=='OK')&(df.scale=='past_pct')&(~df.exclude_2020_train)].set_index('experiment_id').loc['B1','rel_mse_gain_pooled']",
+  "expected": -0.016,
+  "round": 3
+ },
+ {
+  "claim": "Page 하방 2020 학습 제외",
+  "file": "feature_incremental_information.csv",
+  "expr": "df[(df.coverage_status=='OK')&(df.scale=='past_pct')&(df.exclude_2020_train)].set_index('experiment_id').loc['E3_page_down','rel_mse_gain_pooled']",
+  "expected": 0.042,
+  "round": 3
+ },
+ {
+  "claim": "공통 유효일",
+  "file": "feature_incremental_information_common_days.csv",
+  "expr": "int(df.n_common.iloc[0])",
+  "expected": 846,
+  "round": 0
+ },
+ {
+  "claim": "공통일 Page 하방 개선 해 수",
+  "file": "feature_incremental_information_common_days.csv",
+  "expr": "int(df[(df.feature=='E3_page_down')&(~df.exclude_2020_train)].years_positive.iloc[0])",
+  "expected": 5,
+  "round": 0
+ },
+ {
+  "claim": "공통일 Page 상방 개선",
+  "file": "feature_incremental_information_common_days.csv",
+  "expr": "df[(df.feature=='E3_page_up')&(~df.exclude_2020_train)].rel_mse_gain_pooled.iloc[0]",
+  "expected": -0.086,
+  "round": 3
+ },
+ {
+  "claim": "앵커20 EXTREME 일수",
+  "file": "volatility_regime_summary.csv",
+  "expr": "int(df[(df.anchor_w==20)&(df.level_past=='EXTREME')].days.sum())",
+  "expected": 168,
+  "round": 0
+ },
+ {
+  "claim": "앵커20 EXPANDING 일수",
+  "file": "volatility_regime_summary.csv",
+  "expr": "int(df[(df.anchor_w==20)&(df.change_past=='EXPANDING')].days.sum())",
+  "expected": 297,
+  "round": 0
+ },
+ {
+  "claim": "이벤트 B 수",
+  "file": "events_table.csv",
+  "expr": "int((df.event_set=='B_onset').sum())",
+  "expected": 6,
+  "round": 0
+ }
+]

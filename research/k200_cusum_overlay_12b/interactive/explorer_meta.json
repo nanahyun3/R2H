@@ -1,0 +1,48 @@
+{
+ "groups": {
+  "CoS 창 길이 (w20·30·60·120·252)": [
+   "E2_w20",
+   "E2_w30",
+   "B1",
+   "E2_w120",
+   "E2_w252"
+  ],
+  "Page · X1 자기정규화": [
+   "E3_page_up",
+   "E3_page_down",
+   "X1_page_up_sn",
+   "X1_page_down_sn",
+   "X1_page_two_sn"
+  ],
+  "SVR 학습·재학습 (w60 CoS)": [
+   "B1",
+   "E6_win252",
+   "E6_win504",
+   "E6_win756",
+   "E7_refit63",
+   "E7_refit21",
+   "E10_adaptive"
+  ],
+  "초기화 (w60 CoS)": [
+   "B1",
+   "B0",
+   "E1_half_year",
+   "E8_reset_only",
+   "E5_rolling_V20_two_q0.99_g20",
+   "E8_reset_and_refit"
+  ],
+  "공식 (SVR 잔차 vs 원수익률)": [
+   "B1",
+   "E3_raw_rolling_cos",
+   "E3_page_up",
+   "E3_page_down"
+  ]
+ },
+ "scales": {
+  "T_past_pct": "과거 전용 백분위",
+  "cusum_raw_T": "원시 T",
+  "T_over_h": "T / h(α=0.05, 단측)"
+ },
+ "traces": 87,
+ "bytes": 4696729
+}

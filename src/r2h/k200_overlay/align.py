@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import pickle
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -88,7 +89,9 @@ def past_scores(x: np.ndarray, win: int = 252, min_valid: int = 120) -> tuple[np
         less = np.sum(ok & (W < xt), axis=1)
         eq = np.sum(ok & (W == xt), axis=1)
     pct = (less + 0.5 * eq) / np.maximum(cnt, 1)
-    q = np.nanquantile(np.where(ok, W, np.nan), [0.25, 0.5, 0.75], axis=1) if n else np.zeros((3, 0))
+    with warnings.catch_warnings():  # 과거 값이 전부 NaN 인 행은 NaN 으로 두고 경고만 끈다
+        warnings.simplefilter("ignore", RuntimeWarning)
+        q = np.nanquantile(np.where(ok, W, np.nan), [0.25, 0.5, 0.75], axis=1) if n else np.zeros((3, 0))
     iqr = q[2] - q[0]
     code = np.zeros(n, dtype=np.int8)
     code[cnt < min_valid] = 1
