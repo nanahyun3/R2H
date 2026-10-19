@@ -1,0 +1,75 @@
+{
+  "E3_page_up_raw_equal": true,
+  "E3_page_up_alarm_equal": true,
+  "E3_page_down_raw_equal": true,
+  "E3_page_down_alarm_equal": true,
+  "X1_page_up_sn_raw_equal": true,
+  "X1_page_up_sn_alarm_equal": true,
+  "X1_page_down_sn_raw_equal": true,
+  "X1_page_down_sn_alarm_equal": true,
+  "E3_page_two_upper_equal": true,
+  "E3_page_two_lower_equal": true,
+  "E3_page_two_alarm_equal": true,
+  "X1_page_two_sn_upper_equal": true,
+  "X1_page_two_sn_lower_equal": true,
+  "X1_page_two_sn_alarm_equal": true,
+  "fit0_model_hash": "92a29bcd08ac7f81",
+  "fit0_insample_days": 245,
+  "fit0_insample_valid": 244,
+  "fit0_insample_mean_e2": 1.4169865133801889,
+  "x1_first_valid": "2020-09-21",
+  "x1_na_days": 180,
+  "x1w_first_valid": "2020-01-02",
+  "x1w_na_days": 0,
+  "x1_vs_x1w_state_equal_from": "2021-07-28",
+  "crit": {
+    "page_up": {
+      "0.05": 56.99118447823773,
+      "0.2": 25.907815477978204
+    },
+    "page_down": {
+      "0.05": 3.802755207384804,
+      "0.2": 2.7414457838601685
+    },
+    "page_two": {
+      "0.05": [
+        71.23719367494283,
+        4.970239457759928
+      ],
+      "0.2": [
+        41.08553769163294,
+        3.181112837842273
+      ]
+    },
+    "page_up_sn": {
+      "0.05": 14.079045181118989,
+      "0.2": 7.650954337716264
+    },
+    "page_down_sn": {
+      "0.05": 8.36517936967178,
+      "0.2": 4.824556872048849
+    },
+    "page_two_sn": {
+      "0.05": [
+        18.401454227422064,
+        11.432310851289259
+      ],
+      "0.2": [
+        10.149730116101534,
+        6.212643483458187
+      ]
+    }
+  },
+  "forecast_ceiling_days_by_policy": {
+    "B1": 32,
+    "adaptiveV20": 21,
+    "refit21": 9,
+    "refit63": 19,
+    "refitV20_g0": 15,
+    "refitV20_g20": 18,
+    "refitV20_g60": 25,
+    "win252": 37,
+    "win504": 37,
+    "win756": 37
+  }
+}
