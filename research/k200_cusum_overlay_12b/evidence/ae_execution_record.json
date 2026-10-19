@@ -1,0 +1,10 @@
+{
+  "notebook": "12B_AE인계_피처표.ipynb",
+  "status": "PASS",
+  "start_utc": "2026-10-19T03:21:03.114142+00:00",
+  "end_utc": "2026-10-19T03:21:07.327912+00:00",
+  "seconds": 4.21,
+  "returncode": 0,
+  "log": "research/k200_cusum_overlay_12b/evidence/12B_ae_execution.log",
+  "python": "/home/sieg/projects-wsl/hongik_univ_26_2/SA/1012_Annual_SVR–GARCH-CUSUM/R2H/.venv/bin/python"
+}

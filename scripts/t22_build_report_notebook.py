@@ -242,6 +242,10 @@ CoS 창 w20·w30·w120·w252, 원수익률 CoS, SVR 학습창 정책, X1 3종은
 
 넘기지 않는 것: Page 상방 원시 상태(표류, 공통일 −8.6%), CoS 초기화 변형, 경보·p값, 사후 백분위.
 """),
+        code("""
+display(Image(data=preview(BASE / "figures_ae/AE01_인계_피처표.png", width=1400)))  # AE 인계 피처표 (12B_AE인계_피처표.ipynb 가 그린 PNG)
+display(Image(data=preview(BASE / "figures_ae/AE02_보조열.png", width=1100)))  # 함께 넘기는 보조 열
+"""),
         fig("G16_AE피처_증분정보"),
         fig("G17_연도별_안정성"),
         table("T['feature_incremental_information_common_days.csv'].query('~exclude_2020_train')[['feature','n_common','rel_mse_gain_pooled','years_positive','gain_2021','gain_2022','gain_2023','gain_2024','gain_2025']].sort_values('rel_mse_gain_pooled', ascending=False).round(4)", "공통 유효일 846일에서 대표 후보 비교"),
