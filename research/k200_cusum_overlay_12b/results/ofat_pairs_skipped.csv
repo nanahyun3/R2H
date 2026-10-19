@@ -1,0 +1,2 @@
+parent,child,family,changed_variable,reason
+B1,E3_posthoc_full,E3_statistic,detector,NO_DAILY_SERIES:E3_posthoc_full
