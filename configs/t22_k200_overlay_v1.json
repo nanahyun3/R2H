@@ -1,0 +1,95 @@
+{
+  "study": "R2H 12B — KODEX 200 CUSUM x market dynamics alignment (T22)",
+  "contract_id": "12B-lock-1",
+  "base_branch": "research/12_k200_cusum_controlled_gpu",
+  "base_commit": "c8998a6a3e9f70dbc18675d8a4b67c0999a0e03b",
+  "frozen_inputs": {
+    "feature_store": "outputs/t21/feature_store_n1",
+    "null_calibration": "outputs/t21/calib_n1/null_calibration.pkl",
+    "registry": "research/k200_cusum_controlled_12/EXPERIMENT_REGISTRY.csv",
+    "raw_csv": "data/raw/069500.csv",
+    "t21_config": "configs/t21_k200_cusum_controlled_v1.json",
+    "events_11": "research/k200_cusum_controlled_12/results/events_11.csv",
+    "refit_boundary_breaks": "research/k200_cusum_controlled_12/results/refit_boundary_breaks.csv"
+  },
+  "expected": {
+    "eval_days": 1473,
+    "daily_experiments": 463,
+    "registry_experiments": 464,
+    "ledger_rows": 681999,
+    "posthoc_experiment": "E3_posthoc_full"
+  },
+  "market": {
+    "return_unit": "100 * diff(ln Close), % (returns from 2019-01-03, same as T21 load_market)",
+    "rolling_sd": "pandas rolling(w).std(ddof=1) on the full return series from 2019-01-03, then sliced to 2020-01-02..2025-12-30 (same as featurestore.py)",
+    "windows": [5, 20, 60, 120, 252],
+    "annualization": "sqrt(252) * SD, % per year",
+    "index_base_date": "2019-12-30 (last close before evaluation start); indexed_close = 100 * close / close_base; cumulative_log_return = 100 * ln(close_t / close_base)",
+    "predicted_vol": "sqrt(v_hat) where v_hat > 0 (RAW policy allows v_hat <= 0 -> NA, status NONPOSITIVE_FORECAST); annualized = sqrt(252 * v_hat). Label: conditional forecast of r^2, not a demeaned sample SD"
+  },
+  "scales": {
+    "A_raw": "cusum_raw_T unchanged",
+    "B_ratio": "T / h(alpha=0.05) from null_calibration.pkl; page_two: upper_state / h_up and lower_state / h_down separately, never a single scalar; DESCRIPTIVE_CALIBRATION_REFERENCE (N1 null invalid on observed data)",
+    "C_percentile_posthoc": "rank of T within the same experiment's 2020-2025 valid values (average ranks, in (0,1]); POSTHOC_DESCRIPTIVE",
+    "D_past": {
+      "past_window": 252,
+      "min_past_valid": 120,
+      "past_percentile": "share of the experiment's own valid values on days t-252..t-1 (strictly before t) that are <= T_t (ties count 1/2)",
+      "past_robust_score": "(T_t - median_past) / IQR_past over the same strictly-past window; IQR_past <= 1e-12 -> NA with status DEGENERATE_PAST_SCALE",
+      "insufficient": "fewer than 120 valid past values -> NA, status INSUFFICIENT_PAST"
+    }
+  },
+  "regimes": {
+    "anchor": "annualized_vol_20 (alternatives 60, 120 reported as sensitivity)",
+    "level": {
+      "rule": "past-only expanding quantile of the anchor's own values strictly before t (history from 2019, min 252 values)",
+      "cuts": [0.3333333333, 0.6666666667, 0.9],
+      "labels": ["LOW", "MID", "HIGH", "EXTREME"],
+      "posthoc_variant": "same cuts on the full 2020-2025 sample, labelled POSTHOC"
+    },
+    "change": {
+      "d5": "ln(anchor_t / anchor_{t-5})",
+      "d20": "ln(anchor_t / anchor_{t-20})",
+      "rule": "past-only expanding quantile of d20 (min 252 values): >= q0.80 EXPANDING, <= q0.20 CONTRACTING, else STABLE"
+    },
+    "matrix": "level (4) x change (3) = 12 cells; HIGH/EXTREME & STABLE = persistent high state, any level & EXPANDING = expansion"
+  },
+  "events": {
+    "set_A_t20_intervals": "events_11.csv (11 intervals; PILOT 2020, PRIMARY 2021-2025; shock_type 누적형/단일 충격형) — defined independently of CUSUM",
+    "set_B_vol_onsets": "day t where anchor crosses above its past-only expanding q0.90 after >= 20 consecutive days below it (min 252 history)",
+    "phases": {
+      "pre": "[-20, -1] relative to start",
+      "onset": "[0, 5]",
+      "during": "[6, end-start] (empty for 1-day events)",
+      "normalization": "[end-start+1, end-start+40]"
+    },
+    "aligned_window": [-60, 120],
+    "window_exit": "for each single-day |r| top-10 day d in 2020-2025: exit date of a w-window = d + w trading days (w in 20, 60, 120, 252)"
+  },
+  "lead_lag": {
+    "series": "first differences of past_percentile (policy) vs first differences of ln anchor (market); Spearman correlation on days where both valid",
+    "lags": [-20, 20],
+    "sign": "positive lag k = policy at t+k vs market at t (policy lags market)",
+    "label": "DESCRIPTIVE (no inference; serial dependence)"
+  },
+  "agreement": {
+    "value": "Spearman rho of cusum_raw_T between experiments on common valid days (min 250 common days, else NA)",
+    "missingness": "Jaccard similarity of NA patterns, clustered separately",
+    "alarm": "Jaccard similarity of alpha=0.05 alarm day sets (descriptive)",
+    "clustering": "average-linkage hierarchical on 1 - rho, cut at rho >= 0.9 (redundant) — reported, not optimized"
+  },
+  "incremental_information": {
+    "target": "ln of 20-day realized SD of returns t+1..t+20 (future, POSTHOC target)",
+    "baseline": ["ln annualized_vol_5", "ln annualized_vol_20", "ln annualized_vol_60", "ln annualized_vol_120", "ln predicted_vol_B1"],
+    "candidate": "policy past_percentile (and raw T for the representative set)",
+    "evaluation": "leave-one-calendar-year-out OLS, folds 2021..2025, 20-day embargo on both sides of the test year; out-of-sample R^2 gain = R2(base+feat) - R2(base) on the test year, common valid days only",
+    "variants": ["all years as training (2020 in training only)", "2020 excluded from training"],
+    "label": "DESCRIPTIVE incremental information; overlapping target"
+  },
+  "x1_real_data": {
+    "observed": "X1_page_up_sn / X1_page_down_sn / X1_page_two_sn from the ledger (B1 residuals, m_hat over [t-252, t-61], min 120 valid) — no refit",
+    "warm_variant": "X1w (EXPLORATORY_EXTENSION, 12B): same statistic but the reference window may use the 2019 in-sample standardized residuals of fit 0 (insample_variance, information available at 2020-01-02). Raw state only; no calibrated h; X1 h shown only as a reference line",
+    "label": "EXPLORATORY_EXTENSION; observed = NULL_MODEL_INVALID_DESCRIPTIVE"
+  },
+  "compute": "CPU numpy/pandas (no MC, no SVR refit except fit 0 re-fit for X1w in-sample residuals, verified against svr_fits.csv model_hash)"
+}
