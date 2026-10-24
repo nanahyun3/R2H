@@ -218,3 +218,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# 노트북 재실행 시 생성되는 중간 산출물 (공개 결과는 outputs/ 에 있음)
+data/clean/
+data/events/
+data/processed/
+data/quality/
+data/training/
+reports/
+data/raw/069500_fdr_raw.csv
+data/raw/069500_pykrx_check.json

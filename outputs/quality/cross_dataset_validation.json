@@ -1,0 +1,8 @@
+{
+  "dataset_1_events": 64,
+  "dataset_2_events": 64,
+  "dataset_3_events": 64,
+  "all_event_ids_identical": true,
+  "common_fully_valid_events": 64,
+  "note": "채널 수가 다르므로(5·7·5) 전체 복원오차를 단순 비교해 우열을 정하지 않는다. 직접 비교는 공통 유효 사건 집합에서 채널당 지표로."
+}

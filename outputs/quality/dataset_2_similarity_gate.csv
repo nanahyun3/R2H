@@ -1,0 +1,9 @@
+feature,baseline_experiment,baseline_rows,overlap_days,pearson_corr,median_abs_diff,decision
+predicted_variance,B1,1473,1225,0.9643,0.050654,REGISTERED
+svr_cusum_60d,B1,1473,1225,0.9563,0.029829,REGISTERED
+svr_cusum_120d,E2_w120,1473,1225,0.9381,0.030146,REGISTERED
+raw_cusum_60d,E3_raw_rolling_cos,1473,1225,1.0,0.0,REGISTERED
+page_down,E3_page_down,1473,1225,0.8131,0.004893,REJECTED
+x1_page_down,X1_page_down_sn,1473,1225,0.9752,0.05114,REGISTERED
+volatility_10d,none (정의 재계산 검증),0,0,,,REGISTERED
+volatility_120d,none (정의 재계산 검증),0,0,,,REGISTERED

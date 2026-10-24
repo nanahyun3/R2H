@@ -1,0 +1,178 @@
+{
+  "dataset": "dataset_2",
+  "checks": {
+    "svr_train_end_before_predict": true,
+    "future_perturbation_vhat_unchanged": true,
+    "future_perturbation_cusum_page_unchanged": true,
+    "cos_definition_toy": true,
+    "page_definition_toy": true,
+    "vol_recompute": true,
+    "event_alignment_with_dataset_1": true,
+    "no_inf": true,
+    "feature_count": {
+      "expected": 8,
+      "registered": 7,
+      "pass": false
+    },
+    "no_alarm_pvalue_vol20_inputs": true,
+    "missing_masked_not_zero_filled": true,
+    "scaler_not_fitted": true
+  },
+  "fails": [
+    "feature_count"
+  ],
+  "registered": [
+    "volatility_10d",
+    "volatility_120d",
+    "predicted_variance",
+    "raw_cusum_60d",
+    "svr_cusum_60d",
+    "svr_cusum_120d",
+    "x1_page_down"
+  ],
+  "rejected": [
+    "page_down"
+  ],
+  "gate": [
+    {
+      "feature": "predicted_variance",
+      "baseline_experiment": "B1",
+      "baseline_rows": 1473,
+      "overlap_days": 1225,
+      "pearson_corr": 0.9643,
+      "median_abs_diff": 0.050654,
+      "decision": "REGISTERED"
+    },
+    {
+      "feature": "svr_cusum_60d",
+      "baseline_experiment": "B1",
+      "baseline_rows": 1473,
+      "overlap_days": 1225,
+      "pearson_corr": 0.9563,
+      "median_abs_diff": 0.029829,
+      "decision": "REGISTERED"
+    },
+    {
+      "feature": "svr_cusum_120d",
+      "baseline_experiment": "E2_w120",
+      "baseline_rows": 1473,
+      "overlap_days": 1225,
+      "pearson_corr": 0.9381,
+      "median_abs_diff": 0.030146,
+      "decision": "REGISTERED"
+    },
+    {
+      "feature": "raw_cusum_60d",
+      "baseline_experiment": "E3_raw_rolling_cos",
+      "baseline_rows": 1473,
+      "overlap_days": 1225,
+      "pearson_corr": 1.0,
+      "median_abs_diff": 0.0,
+      "decision": "REGISTERED"
+    },
+    {
+      "feature": "page_down",
+      "baseline_experiment": "E3_page_down",
+      "baseline_rows": 1473,
+      "overlap_days": 1225,
+      "pearson_corr": 0.8131,
+      "median_abs_diff": 0.004893,
+      "decision": "REJECTED"
+    },
+    {
+      "feature": "x1_page_down",
+      "baseline_experiment": "X1_page_down_sn",
+      "baseline_rows": 1473,
+      "overlap_days": 1225,
+      "pearson_corr": 0.9752,
+      "median_abs_diff": 0.05114,
+      "decision": "REGISTERED"
+    },
+    {
+      "feature": "volatility_10d",
+      "baseline_experiment": "none (정의 재계산 검증)",
+      "baseline_rows": 0,
+      "overlap_days": 0,
+      "pearson_corr": NaN,
+      "median_abs_diff": NaN,
+      "decision": "REGISTERED"
+    },
+    {
+      "feature": "volatility_120d",
+      "baseline_experiment": "none (정의 재계산 검증)",
+      "baseline_rows": 0,
+      "overlap_days": 0,
+      "pearson_corr": NaN,
+      "median_abs_diff": NaN,
+      "decision": "REGISTERED"
+    }
+  ],
+  "missing": [
+    {
+      "feature": "volatility_10d",
+      "missing_rows": 0,
+      "missing_rate": 0.0,
+      "first_valid_date_daily": "2017-01-16",
+      "reason": "유효 수익률 10개 미만",
+      "skew": 2.54
+    },
+    {
+      "feature": "volatility_120d",
+      "missing_rows": 0,
+      "missing_rate": 0.0,
+      "first_valid_date_daily": "2017-06-29",
+      "reason": "유효 수익률 120개 미만",
+      "skew": 2.47
+    },
+    {
+      "feature": "predicted_variance",
+      "missing_rows": 0,
+      "missing_rate": 0.0,
+      "first_valid_date_daily": "2018-01-02",
+      "reason": "첫 적합(2018) 이전",
+      "skew": 2.81
+    },
+    {
+      "feature": "raw_cusum_60d",
+      "missing_rows": 0,
+      "missing_rate": 0.0,
+      "first_valid_date_daily": "2017-03-30",
+      "reason": "창 유효 < 54",
+      "skew": 0.7
+    },
+    {
+      "feature": "svr_cusum_60d",
+      "missing_rows": 0,
+      "missing_rate": 0.0,
+      "first_valid_date_daily": "2018-03-21",
+      "reason": "창 유효 e < 54 (2018 초 또는 σ̂²≤0)",
+      "skew": 2.34
+    },
+    {
+      "feature": "svr_cusum_120d",
+      "missing_rows": 0,
+      "missing_rate": 0.0,
+      "first_valid_date_daily": "2018-06-11",
+      "reason": "창 유효 e < 108 (2018 상반기)",
+      "skew": 2.85
+    },
+    {
+      "feature": "page_down",
+      "missing_rows": 0,
+      "missing_rate": 0.0,
+      "first_valid_date_daily": "2018-01-02",
+      "reason": "첫 유효 e 이전",
+      "skew": 1.37
+    },
+    {
+      "feature": "x1_page_down",
+      "missing_rows": 0,
+      "missing_rate": 0.0,
+      "first_valid_date_daily": "2018-09-27",
+      "reason": "[t−252, t−61] 유효 e < 120 (2018-01 시작 후 약 181 거래일)",
+      "skew": 2.32
+    }
+  ],
+  "status": "PARTIAL",
+  "split_status": "DEFERRED_UNTIL_MODEL_DESIGN"
+}

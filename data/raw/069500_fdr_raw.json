@@ -1,0 +1,39 @@
+{
+  "ticker": "069500",
+  "source": "FinanceDataReader",
+  "source_version": "0.9.202",
+  "request": {
+    "symbol": "069500",
+    "start": "2017-01-01",
+    "end": "2026-10-23"
+  },
+  "collected_at": "2026-10-24T15:32:06+09:00",
+  "first_date": "2017-01-02",
+  "last_date": "2026-10-23",
+  "rows": 2403,
+  "columns": [
+    "ticker",
+    "date",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume",
+    "change_source",
+    "source",
+    "collected_at",
+    "source_version",
+    "price_adjustment_policy"
+  ],
+  "attempts": [
+    {
+      "source": "FinanceDataReader",
+      "attempt": 1,
+      "ok": true,
+      "rows": 2403,
+      "error": null,
+      "sec": 7.53
+    }
+  ],
+  "sha256": "264b1629b7928c1b9e992ac25a1e95465d37d88a768eae9800a04b564404b642"
+}

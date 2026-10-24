@@ -1,0 +1,35 @@
+{
+  "dataset": "dataset_1",
+  "checks": {
+    "raw_vs_clean_rows": {
+      "raw": 2403,
+      "clean": 2403,
+      "pass": true
+    },
+    "dates_sorted_unique": true,
+    "event_id_unique": true,
+    "event_start_end_rule": true,
+    "length_equals_rows": true,
+    "feature_count": {
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    "feature_dtype_float32": true,
+    "no_inf": true,
+    "missing_in_events": {
+      "count": 0,
+      "reason": "표본 사건은 2019 이후라 직전 종가가 항상 있음 — 결측 0 이어야 함",
+      "pass": true
+    },
+    "no_future_info_recompute_max_diff": 0.0,
+    "future_perturbation_no_effect": true,
+    "normal_no_overlap_with_events": true,
+    "normal_state_all_false": true,
+    "scaler_not_fitted": true,
+    "split_overlap": "N/A — 분할 보류"
+  },
+  "fails": [],
+  "status": "TRAIN_READY",
+  "split_status": "DEFERRED_UNTIL_MODEL_DESIGN"
+}

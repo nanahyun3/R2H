@@ -1,0 +1,192 @@
+{
+  "raw_rows": 2403,
+  "clean_rows": 2403,
+  "duplicate_rows_identical_removed": 0,
+  "conflicting_duplicates": 0,
+  "non_numeric_values_by_column": {
+    "open": 0,
+    "high": 0,
+    "low": 0,
+    "close": 0,
+    "volume": 0,
+    "change_source": 0
+  },
+  "missing_by_column": {
+    "ticker": 0,
+    "date": 0,
+    "open": 0,
+    "high": 0,
+    "low": 0,
+    "close": 0,
+    "volume": 0,
+    "change_source": 0
+  },
+  "price_relation_violations": 0,
+  "price_relation_violation_dates": [],
+  "nonpositive_price_rows": 0,
+  "negative_volume_rows": 0,
+  "zero_volume_rows": 0,
+  "zero_volume_dates": [],
+  "adjustment_basis_same": true,
+  "adjustment_basis_by_year": [
+    {
+      "date": 2017,
+      "gap_median": 0.000968,
+      "close_outside_hl_share": 0.0,
+      "close_over_ks200": 83.677347,
+      "open_over_ks200": 83.660428,
+      "ratio_gap": 0.000202
+    },
+    {
+      "date": 2018,
+      "gap_median": 0.000678,
+      "close_outside_hl_share": 0.0,
+      "close_over_ks200": 85.149839,
+      "open_over_ks200": 85.149245,
+      "ratio_gap": 7e-06
+    },
+    {
+      "date": 2019,
+      "gap_median": 0.000422,
+      "close_outside_hl_share": 0.0,
+      "close_over_ks200": 86.960593,
+      "open_over_ks200": 86.947994,
+      "ratio_gap": 0.000145
+    },
+    {
+      "date": 2020,
+      "gap_median": 0.00214,
+      "close_outside_hl_share": 0.0,
+      "close_over_ks200": 88.870451,
+      "open_over_ks200": 88.799156,
+      "ratio_gap": 0.000802
+    },
+    {
+      "date": 2021,
+      "gap_median": 0.00114,
+      "close_outside_hl_share": 0.0,
+      "close_over_ks200": 90.696672,
+      "open_over_ks200": 90.770777,
+      "ratio_gap": 0.000817
+    },
+    {
+      "date": 2022,
+      "gap_median": 0.000182,
+      "close_outside_hl_share": 0.0,
+      "close_over_ks200": 92.613697,
+      "open_over_ks200": 92.563155,
+      "ratio_gap": 0.000546
+    },
+    {
+      "date": 2023,
+      "gap_median": 0.000761,
+      "close_outside_hl_share": 0.0,
+      "close_over_ks200": 94.66018,
+      "open_over_ks200": 94.613569,
+      "ratio_gap": 0.000492
+    },
+    {
+      "date": 2024,
+      "gap_median": 0.000671,
+      "close_outside_hl_share": 0.0,
+      "close_over_ks200": 96.761467,
+      "open_over_ks200": 96.670577,
+      "ratio_gap": 0.000939
+    },
+    {
+      "date": 2025,
+      "gap_median": 0.002434,
+      "close_outside_hl_share": 0.0,
+      "close_over_ks200": 99.109724,
+      "open_over_ks200": 99.045355,
+      "ratio_gap": 0.000649
+    },
+    {
+      "date": 2026,
+      "gap_median": 0.002183,
+      "close_outside_hl_share": 0.0,
+      "close_over_ks200": 100.311183,
+      "open_over_ks200": 100.238176,
+      "ratio_gap": 0.000728
+    }
+  ],
+  "ks200_check": "CACHED",
+  "removed_or_modified": [],
+  "modification_policy": "값 수정 없음. 동일 중복만 제거 가능, 휴장일 행 생성 없음, 극단값 보존",
+  "preserved_extreme_observations": [
+    {
+      "date": "2020-03-24",
+      "close": 19579.0,
+      "log_return": 0.08876
+    },
+    {
+      "date": "2024-08-05",
+      "close": 32170.0,
+      "log_return": -0.09627
+    },
+    {
+      "date": "2026-03-04",
+      "close": 75412.0,
+      "log_return": -0.13309
+    },
+    {
+      "date": "2026-03-05",
+      "close": 83032.0,
+      "log_return": 0.09626
+    },
+    {
+      "date": "2026-04-01",
+      "close": 81641.0,
+      "log_return": 0.08558
+    },
+    {
+      "date": "2026-06-08",
+      "close": 119319.0,
+      "log_return": -0.09161
+    },
+    {
+      "date": "2026-06-09",
+      "close": 129868.0,
+      "log_return": 0.08472
+    },
+    {
+      "date": "2026-06-23",
+      "close": 132553.0,
+      "log_return": -0.11061
+    },
+    {
+      "date": "2026-07-02",
+      "close": 123281.0,
+      "log_return": -0.08527
+    },
+    {
+      "date": "2026-07-13",
+      "close": 108601.0,
+      "log_return": -0.10282
+    },
+    {
+      "date": "2026-07-28",
+      "close": 95482.0,
+      "log_return": -0.11867
+    },
+    {
+      "date": "2026-07-31",
+      "close": 108820.0,
+      "log_return": 0.21651
+    },
+    {
+      "date": "2026-08-03",
+      "close": 99105.0,
+      "log_return": -0.09352
+    },
+    {
+      "date": "2026-10-15",
+      "close": 87025.0,
+      "log_return": -0.08563
+    }
+  ],
+  "warmup_rows": 487,
+  "analysis_rows": 1916,
+  "clean_content_hash": "79f6751caaca04f2d1a79f36b5c0fe3849d08d9f8e8917cce18e7540a17c8780",
+  "raw_sha256": "264b1629b7928c1b9e992ac25a1e95465d37d88a768eae9800a04b564404b642"
+}

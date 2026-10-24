@@ -1,0 +1,5 @@
+# 결과 파일은 줄바꿈 변환 없이 그대로 (README 의 SHA-256 표 유지)
+*.csv -text
+*.json -text
+*.ipynb -text
+*.parquet binary

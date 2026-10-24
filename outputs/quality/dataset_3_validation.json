@@ -1,0 +1,29 @@
+{
+  "dataset": "dataset_3",
+  "checks": {
+    "no_price_level_features": true,
+    "recompute_from_prices_max_diff": 0.0,
+    "same_as_dataset_1_common_features": true,
+    "event_alignment_d1": true,
+    "event_alignment_d2": true,
+    "no_inf": true,
+    "feature_count": {
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    "missing_with_reason": true,
+    "uses_only_t_and_t_minus_1": true,
+    "scaler_not_fitted": true
+  },
+  "fails": [],
+  "missing": {
+    "return_1d": 0,
+    "gap_1d": 0,
+    "daily_range": 0,
+    "range_change_1d": 0,
+    "volume_change_1d": 0
+  },
+  "status": "TRAIN_READY",
+  "split_status": "DEFERRED_UNTIL_MODEL_DESIGN"
+}
