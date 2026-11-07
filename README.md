@@ -1,9 +1,18 @@
-# R2H
-주가 급등 국면 포착 에이전트 (2026.9~2027.6, 홍익대학교 졸업 프로젝트)
-
----
+# R2H — 주가 급등 국면 포착 에이전트
+(2026.9~2027.6, 홍익대학교 졸업 프로젝트)
+— 국내 상장 ETF 20종, 가제 : 워렌버핏을 이겨라
 
 ## 장기 보유를 이길 수 있는가 — 언제 사고 언제 팔 것인가 (중간 연구 보고)
+
+<p>
+  <img alt="research" src="https://img.shields.io/badge/latest-W2%20(05%C2%B706%C2%B707)%20exploratory-1F5082">
+  <img alt="protocol" src="https://img.shields.io/badge/protocol-W2--lock--1%20frozen%20before%20signals-orange">
+  <img alt="tests" src="https://img.shields.io/badge/local%20pytest-176%20passed-2ea44f">
+  <img alt="lint" src="https://img.shields.io/badge/ruff-W2%20new%200%20%C2%B7%20repo%20debt%20133-lightgrey">
+  <img alt="ci" src="https://img.shields.io/badge/CI-not%20triggered%20on%20this%20branch-lightgrey">
+  <img alt="data" src="https://img.shields.io/badge/raw%20prices-not%20in%20repo-lightgrey">
+  <img alt="license" src="https://img.shields.io/badge/license-undecided%20(D--07)-lightgrey">
+</p>
 
 국내 상장 ETF 20종의 일봉만으로 **언제 사고 언제 팔지** 를 정하는 규칙이 장기 보유(Buy & Hold)를 이길 수 있는지를 검증했다.
 이 브랜치는 증권사 실무진에게 자문을 요청하기 위한 A4 보고서(md · docx · pdf), 보고서의 모든 숫자를 처음부터 다시 계산하는 노트북, 입력 자료와 결과 표 · 그림을 담는다.
