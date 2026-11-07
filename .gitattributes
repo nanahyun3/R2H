@@ -1,0 +1,7 @@
+# 결과 파일은 줄바꿈 변환 없이 그대로
+*.csv -text
+*.json -text
+*.ipynb -text
+*.png binary
+*.pdf binary
+*.docx binary
