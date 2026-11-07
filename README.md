@@ -5,11 +5,6 @@
 ## 장기 보유를 이길 수 있는가 — 언제 사고 언제 팔 것인가 (중간 연구 보고)
 
 <p>
-  <img alt="research" src="https://img.shields.io/badge/latest-W2%20(05%C2%B706%C2%B707)%20exploratory-1F5082">
-  <img alt="protocol" src="https://img.shields.io/badge/protocol-W2--lock--1%20frozen%20before%20signals-orange">
-  <img alt="tests" src="https://img.shields.io/badge/local%20pytest-176%20passed-2ea44f">
-  <img alt="lint" src="https://img.shields.io/badge/ruff-W2%20new%200%20%C2%B7%20repo%20debt%20133-lightgrey">
-  <img alt="ci" src="https://img.shields.io/badge/CI-not%20triggered%20on%20this%20branch-lightgrey">
   <img alt="data" src="https://img.shields.io/badge/raw%20prices-not%20in%20repo-lightgrey">
   <img alt="license" src="https://img.shields.io/badge/license-undecided%20(D--07)-lightgrey">
 </p>
