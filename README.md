@@ -4,14 +4,10 @@
 
 ## 장기 보유를 이길 수 있는가 — 언제 사고 언제 팔 것인가 (중간 연구 보고)
 
-<p>
-  <img alt="data" src="https://img.shields.io/badge/raw%20prices-not%20in%20repo-lightgrey">
-  <img alt="license" src="https://img.shields.io/badge/license-undecided%20(D--07)-lightgrey">
-</p>
-
 국내 상장 ETF 20종의 일봉만으로 **언제 사고 언제 팔지** 를 정하는 규칙이 장기 보유(Buy & Hold)를 이길 수 있는지를 검증했다.
+
 이 브랜치는 증권사 실무진에게 자문을 요청하기 위한 A4 보고서(md · docx · pdf), 보고서의 모든 숫자를 처음부터 다시 계산하는 노트북, 입력 자료와 결과 표 · 그림을 담는다.
-보고서는 자체 검토로 효과가 확인되지 않은 대안을 걸러 내고, 실무 판단이 필요한 쟁점만 질의 사항으로 정리했다.
+보고서는 자체 검토로 실무 판단이 필요한 쟁점만 질의 사항으로 정리했다.
 
 | 항목 | 값 |
 |---|---|
@@ -38,7 +34,7 @@ README.md
 data/
   etf_daily_20261101.csv  입력 일봉 (ETF 20종 + KOSPI · KOSDAQ 지수, 2026-11-01 수집)
 results/
-  report_numbers.json     보고서에 쓴 수치 전부 (노트북이 저장)
+  report_numbers.json     보고서에 쓴 수치 전부 (노트북 저장)
   *.csv                   결과 표 (아래 3절)
 figures/                  보고서 그림 21장 (노트북이 저장)
 src/
