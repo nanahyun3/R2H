@@ -6,8 +6,9 @@ from pathlib import Path
 from markdown_it import MarkdownIt
 from playwright.async_api import async_playwright
 ROOT = Path(__file__).resolve().parents[1]  # report/
+MATH_FONT = Path.home() / ".local/share/fonts/CambriaMath.ttf"  # 수식 글꼴 (OpenType MATH)
 MD = MarkdownIt("commonmark", {"html": True}).enable("table")
-CSS = """
+CSS = (f"@font-face {{ font-family:'BookMath'; src:url('{MATH_FONT.as_uri()}'); }}\n" if MATH_FONT.exists() else "") + """
 @page { size: A4; margin: 19mm 20mm 19mm 20mm; }
 * { box-sizing: border-box; }
 html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -49,24 +50,38 @@ td { border-bottom: .3pt solid #cfcfcf; padding: 2.8pt 5pt; vertical-align: top;
 blockquote { margin: 8pt 0 10pt; padding: 7pt 11pt; background: #edf2fa; border-left: 2.6pt solid #2f5fa8; page-break-inside: avoid; }
 blockquote p:last-child { margin-bottom: 0; }
 .eq { text-align: center; margin: 6pt 0 9pt; page-break-inside: avoid; }
-.eq img { height: auto; max-width: 100%; zoom: .42; }
-img.ieq { zoom: .42; vertical-align: middle; }
+math { font-family: 'BookMath', math; }
+math[display=block] { display: block math; font-size: 112%; }
 figure { margin: 9pt 0 5pt; page-break-inside: avoid; text-align: center; }
 figure img { max-width: 100%; max-height: 78mm; }
 figcaption { font-family: 'NanumBarunGothic','NanumGothic',sans-serif; font-size: 8.2pt; color: #555; margin-top: 3pt; text-align: left; line-height: 1.5; }
+/* ── 정보 위계 ── */
+body { font-size: 10pt; line-height: 1.72; }
+h2 { color: #12355b; font-size: 15pt; border-left: 4pt solid #12355b; padding: 1pt 0 1pt 8pt; margin: 20pt 0 10pt; }
+h2.pb { margin-top: 0; }
+h3 { color: #12355b; font-size: 12pt; border-bottom: .6pt solid #b9c8dc; padding-bottom: 3pt; margin: 18pt 0 8pt; }
+h4 { font-family: 'NanumBarunGothic','NanumGothic',sans-serif; font-size: 10.3pt; font-weight: 700; color: #2b2b2b; margin: 12pt 0 4pt; page-break-after: avoid; }
+ul, ol { margin: 0 0 7pt; padding-left: 14pt; }
+li { margin-bottom: 2.5pt; }
+blockquote { background: #eef3f9; border-left: 3pt solid #12355b; padding: 8pt 12pt; margin: 6pt 0 12pt; font-size: 10pt; }
+blockquote strong { color: #12355b; }
+th { background: #eef3f9; color: #12355b; border-top: 1pt solid #12355b; }
+td strong { color: #12355b; }
+figure { margin: 10pt 0 8pt; }
+figcaption { color: #4a4a4a; }
+em { color: #555; font-size: 9pt; }
 """
 
-def _tex_png(tex, size):  # 수식 → PNG base64 (matplotlib mathtext)
-    import io, matplotlib
-    matplotlib.use("Agg")
-    from matplotlib import mathtext, font_manager
-    from matplotlib.font_manager import FontProperties
-    buf = io.BytesIO()
-    mathtext.math_to_image(f"${tex}$", buf, prop=FontProperties(size=size), dpi=220, format="png")
-    return base64.b64encode(buf.getvalue()).decode()
-def math(s):  # $$…$$ 블록과 $…$ 인라인 수식
-    s = re.sub(r"\$\$(.+?)\$\$", lambda m: f'<div class="eq"><img src="data:image/png;base64,{_tex_png(m[1], 13)}"></div>', s, flags=re.S)
-    s = re.sub(r"(?<![\\$])\$([^$\n]+?)\$", lambda m: f'<img class="ieq" src="data:image/png;base64,{_tex_png(m[1], 11)}">', s)
+def _mathml(tex, block):  # LaTeX → MathML (pandoc)
+    import pypandoc
+    d = "$$" if block else "$"
+    h = pypandoc.convert_text(d + tex + d, "html", format="markdown+tex_math_dollars", extra_args=["--mathml"])
+    m = re.search(r"<math.*?</math>", h, flags=re.S)
+    assert m, tex
+    return m.group(0)
+def math(s):  # $$…$$ 블록과 $…$ 인라인 수식 → MathML
+    s = re.sub(r"\$\$(.+?)\$\$", lambda m: f'<div class="eq">{_mathml(m[1], True)}</div>', s, flags=re.S)
+    s = re.sub(r"(?<![\\$])\$([^$\n]+?)\$", lambda m: _mathml(m[1], False), s)
     return s
 def blocks(s):
     s = math(s)
@@ -86,7 +101,7 @@ def blocks(s):
     m0 = re.match(r"# (.+)\n\n## (.+)\n\n\*\*(.+)\*\*\n", s)  # 표지
     if m0:
         s = f'<div class="cover"><p class="kicker">{m0[3]}</p><p class="title">{m0[1]}</p><p class="sub">{m0[2]}</p></div>\n\n' + s[m0.end():]
-    s = re.sub(r"^## ((?:[2-9]|\d{2})\. .*|붙임 .*)$", lambda m: f'<h2 class="pb">{m[1]}</h2>', s, flags=re.M)  # 장마다 새 쪽
+    s = re.sub(r"^## ([567]\. .*|붙임 1.*)$", lambda m: f'<h2 class="pb">{m[1]}</h2>', s, flags=re.M)  # 결과 장(5 · 6 · 7)과 붙임만 새 쪽  # 장마다 새 쪽
     s = re.sub(r"^## !(.*)$", lambda m: f'<h2 class="pb">{m[1]}</h2>', s, flags=re.M)
     return s
 async def main(src, out, title):
