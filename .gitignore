@@ -218,3 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# 노트북 재실행 시 생성되는 캐시 · 조판 중간 파일
+results/cache/
+build/
+*.html
